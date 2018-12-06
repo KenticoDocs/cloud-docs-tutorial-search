@@ -1,0 +1,27 @@
+{
+  "name": "kentico-cloud-docs-search",
+  "version": "1.0.0",
+  "description": "Kentico Cloud documentation - search service",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kentico/kentico-cloud-docs-search.git"
+  },
+  "author": "Kentico",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kentico/kentico-cloud-docs-search/issues"
+  },
+  "homepage": "https://github.com/Kentico/kentico-cloud-docs-search#readme",
+  "dependencies": {
+    "algoliasearch": "^3.31.0",
+    "kentico-cloud-delivery": "^5.2.1",
+    "remove-markdown": "^0.3.0",
+    "rxjs": "^6.3.3"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
+  }
+}
