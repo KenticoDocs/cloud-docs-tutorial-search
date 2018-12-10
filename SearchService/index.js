@@ -1,6 +1,6 @@
 const kenticoClient = require('./external/kentico');
 const searchIndex = require('./external/search');
-const createSearchableArticleObject = require('./utils/searchableArticleCreator');
+const createIndexableArticle = require('./utils/indexableArticleCreator');
 
 function addArticleObjects() {
   kenticoClient
@@ -16,7 +16,7 @@ function indexData(articles) {
 
 function indexArticle(article) {
   if (article && article.content && article.content.value) {
-    const articleObject = createSearchableArticleObject(article);
+    const articleObject = createIndexableArticle(article);
     if (articleObject[0].description && articleObject[0].title) {
       searchIndex.saveObjects(articleObject);
     }

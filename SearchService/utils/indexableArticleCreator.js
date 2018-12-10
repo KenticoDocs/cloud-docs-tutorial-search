@@ -1,8 +1,8 @@
 const removeMarkdown = require('remove-markdown');
 
-function createSearchableArticleObject(article) {
+function createIndexableArticle(article) {
   const splitContent = article.content.value.split("<h2>");
-  const searchableArticle = [];
+  const indexableArticle = [];
 
   const description = article.description && article.description.value;
   const contentType = article.contentType && article.contentType.value;
@@ -14,7 +14,7 @@ function createSearchableArticleObject(article) {
     content = removeMarkdown(splitContent[i]);
     order = i;
 
-    searchableArticle.push({
+    indexableArticle.push({
       content,
       description,
       contentType,
@@ -22,11 +22,11 @@ function createSearchableArticleObject(article) {
       title,
       codename: codename,
       order: ++order,
-      objectID: codename + '_order_' + order,
+      objectID: codename + '_' + order,
     })
   }
 
-  return searchableArticle;
+  return indexableArticle;
 }
 
-module.exports = createSearchableArticleObject;
+module.exports = createIndexableArticle;
