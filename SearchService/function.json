@@ -2,17 +2,19 @@
   "disabled": false,
   "bindings": [
     {
-      "name": "queueItem",
-      "type": "queueTrigger",
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
       "direction": "in",
-      "queueName": "kcd-queue-search",
-      "connection": "kenticoclouddocs_STORAGE",
-      "dataType":"string"
+      "name": "event",
+      "methods": [
+        "get",
+        "post"
+      ]
     },
     {
-      "name": "response",
       "type": "http",
-      "direction": "out"
+      "direction": "out",
+      "name": "res"
     }
   ]
 }
