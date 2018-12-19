@@ -3,10 +3,10 @@ const kenticoClient = require('./external/kenticoClient');
 const createIndexableArticle = require('./utils/indexableArticleCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
 
-function reindexAllArticles() {
-    searchIndex.clearIndex();
+async function reindexAllArticles() {
+    await searchIndex.clearIndex();
 
-    kenticoClient
+    await kenticoClient
         .items()
         .type('article')
         .queryConfig({
@@ -17,12 +17,12 @@ function reindexAllArticles() {
             response.items.forEach(article => resolveAndIndexArticle(article)));
 }
 
-function indexSpecificArticles(codenames) {
+async function indexSpecificArticles(codenames) {
     codenames.forEach(codename => fetchAndIndexArticle(codename));
 }
 
-function fetchAndIndexArticle(codename) {
-    kenticoClient
+async function fetchAndIndexArticle(codename) {
+    await kenticoClient
         .item(codename)
         .queryConfig({
             richTextResolver: resolveItemInRichText
@@ -31,10 +31,10 @@ function fetchAndIndexArticle(codename) {
         .then(response => resolveAndIndexArticle(response.item));
 }
 
-function resolveAndIndexArticle(article) {
+async function resolveAndIndexArticle(article) {
     if (article.content) {
         const resolvedArticle = resolveItemsInRichText(article);
-        indexArticle(resolvedArticle);
+        await indexArticle(resolvedArticle);
     }
 }
 
@@ -47,17 +47,17 @@ function resolveItemsInRichText(article) {
     }
 }
 
-function indexArticle(article) {
+async function indexArticle(article) {
     const articleObject = createIndexableArticle(article);
-    searchIndex.saveObjects(articleObject);
+    await searchIndex.saveObjects(articleObject);
 }
 
-function deleteIndexedArticles(codenames) {
+async function deleteIndexedArticles(codenames) {
     codenames.map(codename => deleteIndexedArticle(codename));
 }
 
-function deleteIndexedArticle(codename) {
-    searchIndex.deleteBy({
+async function deleteIndexedArticle(codename) {
+    await searchIndex.deleteBy({
         filters: `codename:${codename}`
     });
 }

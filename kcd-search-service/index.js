@@ -7,7 +7,7 @@ function isNonEmptyKenticoEvent(event) {
   return event.eventType === 'kentico' && event.data.items;
 }
 
-module.exports = (context, event) => {
+module.exports = async (context, event) => {
   const singleEvent = event.body[0];
 
   if (singleEvent.eventType === SubscriptionValidationEvent) {
@@ -18,19 +18,24 @@ module.exports = (context, event) => {
     };
 
   } else if (singleEvent.subject && singleEvent.data) {
+    try {
+      if (singleEvent.subject === 'initialize') {
+        await indexers.reindexAllArticles();
 
-    if (singleEvent.subject === 'initialize') {
-      indexers.reindexAllArticles();
+      } else if (isNonEmptyKenticoEvent(singleEvent) && (subject === 'publish' || subject === 'unpublish')) {
+        const codenames = getCodenamesOfItems(singleEvent.data.items, 'article');   
+        await indexers.indexSpecificArticles(codenames);
 
-    } else if (isNonEmptyKenticoEvent(singleEvent) && (subject === 'publish' || subject === 'unpublish')) {
-      const codenames = getCodenamesOfItems(singleEvent.data.items, 'article');
-      indexers.indexSpecificArticles(codenames);
-
-    } else if (isNonEmptyKenticoEvent(singleEvent) && subject === 'archive') {
-
-      const codenames = getCodenamesOfItems(singleEvent.data.items, 'article');
-      indexers.deleteIndexedArticles(codenames);
-      indexers.indexSpecificArticles(codenames);
+      } else if (isNonEmptyKenticoEvent(singleEvent) && subject === 'archive') {
+        const codenames = getCodenamesOfItems(singleEvent.data.items, 'article');
+        await indexers.deleteIndexedArticles(codenames);
+        await indexers.indexSpecificArticles(codenames);
+      }
+    } catch (exception) {
+      context.res = {
+        status: 400,
+        body: 'The request was unsuccessful'
+      }
     }
   }
 
