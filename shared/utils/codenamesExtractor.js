@@ -5,7 +5,7 @@ function getCodenamesOfItems(items, itemType) {
         if (item.type === itemType) {
             codenames.push(item.codename);
         }
-    })
+    });
 
     return codenames;
 }

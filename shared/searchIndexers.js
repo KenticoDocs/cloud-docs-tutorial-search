@@ -1,6 +1,6 @@
 const searchIndex = require('./external/searchIndex');
 const kenticoClient = require('./external/kenticoClient');
-const createIndexableArticle = require('./utils/indexableArticleCreator');
+const createIndexableArticleChunks = require('./utils/indexableArticleCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
 
 async function reindexAllArticles() {
@@ -40,7 +40,7 @@ async function resolveAndIndexArticle(article) {
                 value: article.content.getHtml()
             }
         };
-        const articleChunks = createIndexableArticle(articleWithResolvedRichTextComponents);
+        const articleChunks = createIndexableArticleChunks(articleWithResolvedRichTextComponents);
         await searchIndex.saveObjects(articleChunks);
     }
 }
