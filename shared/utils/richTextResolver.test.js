@@ -9,7 +9,7 @@ const calloutItem = {
     },
     content: {
         name: 'Content',
-        value: 'Features described on this page require the Professional plan or higher.',
+        value: '<p><strong>Premium feature</strong></p>\n<p>Features described on this page require the Professional plan or higher.</p>',
     },
     title: {
         name: 'Title',
@@ -25,11 +25,11 @@ const differentItem = {
         codename: 'premium_feature',
         type: 'article'
     },
-}
+};
 
 describe('resolveItemInRichText', () => {
-    it('returns value of a callout content item', () => {
-        const expectedResult = 'Features described on this page require the Professional plan or higher.'
+    it('returns sanitized value of a callout content item', () => {
+        const expectedResult = '<callout>Premium feature\nFeatures described on this page require the Professional plan or higher.</callout>';
 
         const actualResult = resolveItemInRichText(calloutItem);
 
