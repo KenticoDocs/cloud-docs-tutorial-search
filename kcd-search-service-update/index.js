@@ -8,27 +8,11 @@ function validateEvent(event) {
 }
 
 module.exports = async (context, eventGridEvent) => {
-    try {
-        if (validateEvent(eventGridEvent)) {
-            const codenames = getCodenamesOfItems(eventGridEvent.data.items, 'article');
-            await indexers.deleteIndexedArticles(codenames);
-            await indexers.indexSpecificArticles(codenames);
-        } else {
-          return {
-            status: 400,
-            body: 'Validation failed. Unsupported event.'
-          };
-        }
-      } catch (exception) {
-        context.error(exception.message);
-          
-        return {
-          status: 500,
-          body: 'The request was unsuccessful.'
-        };
-      }
-  
-      return { 
-        status: 200 
-      };
+  if (validateEvent(eventGridEvent)) {
+    const codenames = getCodenamesOfItems(eventGridEvent.data.items, 'article');
+    await indexers.deleteIndexedArticles(codenames);
+    await indexers.indexSpecificArticles(codenames);
+  } else {
+    throw 'Validation failed. Unsupported event.';
+  }
 };

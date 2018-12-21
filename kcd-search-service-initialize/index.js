@@ -5,25 +5,9 @@ function validateEvent(event) {
 }
 
 module.exports = async (context, eventGridEvent) => {
-    try {
-      if (validateEvent(eventGridEvent)) {
-        await indexers.reindexAllArticles();
-      } else {
-        return {
-          status: 400,
-          body: 'Validation failed. Unsupported event.'
-        };
-      }
-    } catch (exception) {
-      context.error(exception.message);
-        
-      return {
-        status: 500,
-        body: 'The request was unsuccessful.'
-      };
-    }
-
-    return { 
-      status: 200 
-    };
+  if (validateEvent(eventGridEvent)) {
+    await indexers.reindexAllArticles();
+  } else {
+    throw 'Validation failed. Unsupported event.';
+  }
 };
