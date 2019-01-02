@@ -5,11 +5,6 @@
         "type": "eventGridTrigger",
         "name": "eventGridEvent",
         "direction": "in"
-      },
-      {
-        "type": "http",
-        "direction": "out",
-        "name": "$return"
       }
     ]
   }
