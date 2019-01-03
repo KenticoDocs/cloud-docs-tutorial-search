@@ -1,4 +1,4 @@
-const searchIndex = require('./external/searchClient');
+const searchIndex = require('./external/searchIndex');
 const kenticoClient = require('./external/kenticoClient');
 const createIndexableArticle = require('./utils/indexableArticleCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
