@@ -17,6 +17,11 @@ async function reindexAllArticles() {
             response.items.forEach(article => resolveAndIndexArticle(article)));
 }
 
+async function reindexSpecificArticles(codenames) {
+    await deleteIndexedArticles(codenames);
+    await indexSpecificArticles(codenames);
+}
+
 async function indexSpecificArticles(codenames) {
     codenames.forEach(codename => fetchAndIndexArticle(codename));
 }
@@ -64,6 +69,5 @@ async function deleteIndexedArticle(codename) {
 
 module.exports = {
     reindexAllArticles,
-    indexSpecificArticles,
-    deleteIndexedArticles,
-}
+    reindexSpecificArticles
+};
