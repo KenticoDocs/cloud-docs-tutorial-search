@@ -1,6 +1,6 @@
 const searchIndex = require('./external/searchIndex');
 const kenticoClient = require('./external/kenticoClient');
-const createIndexableArticleChunks = require('./utils/indexableArticleCreator');
+const createIndexableArticleChunks = require('./utils/indexableArticleChunksCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
 
 async function reindexAllArticles() {
