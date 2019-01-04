@@ -18,53 +18,31 @@ async function reindexAllArticles() {
 }
 
 async function reindexSpecificArticles(codenames) {
-    await deleteIndexedArticles(codenames);
-    await indexSpecificArticles(codenames);
-}
+    await codenames.map(codename => searchIndex.deleteBy({
+        filters: `codename:${codename}`
+    }));
 
-async function indexSpecificArticles(codenames) {
-    codenames.forEach(codename => fetchAndIndexArticle(codename));
-}
-
-async function fetchAndIndexArticle(codename) {
-    await kenticoClient
-        .item(codename)
-        .queryConfig({
-            richTextResolver: resolveItemInRichText
-        })
-        .getPromise()
-        .then(response => resolveAndIndexArticle(response.item));
+    await codenames.forEach(
+         codename => kenticoClient
+            .item(codename)
+            .queryConfig({
+                richTextResolver: resolveItemInRichText
+            })
+            .getPromise()
+            .then(response => resolveAndIndexArticle(response.item)));
 }
 
 async function resolveAndIndexArticle(article) {
     if (article.content) {
-        const resolvedArticle = resolveItemsInRichText(article);
-        await indexArticle(resolvedArticle);
+        const articleWithResolvedRichTextComponents = {
+            ...article,
+            content: {
+                value: article.content.getHtml()
+            }
+        };
+        const articleChunks = createIndexableArticle(articleWithResolvedRichTextComponents);
+        await searchIndex.saveObjects(articleChunks);
     }
-}
-
-function resolveItemsInRichText(article) {
-    return {
-        ...article,
-        content: {
-            value: article.content.getHtml()
-        }
-    }
-}
-
-async function indexArticle(article) {
-    const articleObject = createIndexableArticle(article);
-    await searchIndex.saveObjects(articleObject);
-}
-
-async function deleteIndexedArticles(codenames) {
-    codenames.map(codename => deleteIndexedArticle(codename));
-}
-
-async function deleteIndexedArticle(codename) {
-    await searchIndex.deleteBy({
-        filters: `codename:${codename}`
-    });
 }
 
 module.exports = {

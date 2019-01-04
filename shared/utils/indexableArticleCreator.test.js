@@ -62,11 +62,10 @@ describe('searchableArticleCreator', () => {
     test('creates a correct searchable single article object and sanitizes its content', () => {
         const expectedResult = firstParagraph;
 
-        const actualResult = createIndexableArticle(shortArticle)[0];
+        const actualResult = createIndexableArticle(shortArticle);
 
-        expect(actualResult).toEqual(expectedResult);
-        expect(actualResult.author).toBeNull;
-        expect(actualResult.system).toBeNull;
+        expect(actualResult.length).toBe(1);
+        expect(actualResult[0]).toEqual(expectedResult);
     });
 
     test('splits a longer article into 2 objects and sanitizes their content', () => {
@@ -75,7 +74,5 @@ describe('searchableArticleCreator', () => {
         const actualResult = createIndexableArticle(longArticle);
 
         expect(actualResult).toEqual(expectedResult);
-        expect(actualResult.author).toBeNull;
-        expect(actualResult.system).toBeNull;
     });
 });

@@ -11,8 +11,8 @@ function createIndexableArticle(article) {
   const codename = article.system.codename;
 
   for (i = 0; i < splitContent.length; i++) {
-    content = removeMarkdown(splitContent[i]);
-    order = i;
+    const content = removeMarkdown(splitContent[i]);
+    let order = i;
 
     indexableArticle.push({
       content,
