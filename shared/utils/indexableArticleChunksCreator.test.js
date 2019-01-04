@@ -1,4 +1,4 @@
-const createIndexableArticleChunks = require('./indexableArticleCreator');
+const createIndexableArticleChunks = require('./indexableArticleChunksCreator');
 
 const shortArticle = {
     system: {
