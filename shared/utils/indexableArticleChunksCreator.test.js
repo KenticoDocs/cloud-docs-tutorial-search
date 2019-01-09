@@ -46,7 +46,7 @@ const longArticleWithCallout = {
         name: 'Content',
         value: longArticle.content.value
         + '<callout>New to headless CMS?\nIf you are new to the world of headless CMSs, you might want to start by building a Hello world application. It will only take you about 5 minutes!\nAfter you grasp the core idea behind a headless CMS, everything in the sample application will make a lot more sense much faster.</callout>'
-        + '<h2>Making changes to your project</h2>\n<p>After signing in to your <a href=\"http://app.kenticocloud.com\">Kentico Cloud</a> account you will see your sample project to play around with.</p>\n'
+        + '<h2>Making changes to your project</h2>\n<p>After signing in to your <a href=\"http://some.website.com\">Kentico Cloud</a> account you will see your sample project to play around with.</p>\n'
     }
 };
 
