@@ -6,4 +6,8 @@ deploy:
   - provider: azure_web_apps
     site: kcd-search-service-live-dev
     verbose: true
+    on: develop
+  - provider: azure_web_apps
+    site: kcd-search-service-live-master
+    verbose: true
     on: master
