@@ -3,3 +3,5 @@
 
 # kentico-cloud-docs-search
 Kentico Cloud documentation search service
+
+## A temporary brach to be deleted
