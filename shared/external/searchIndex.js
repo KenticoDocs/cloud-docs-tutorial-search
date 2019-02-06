@@ -1,11 +1,26 @@
-const appKeys = require('./keys'); 
+const appKeys = require('./keys');
 const algoliasearch = require('algoliasearch');
 
-const searchClient = algoliasearch(
-  appKeys.searchAppId,
-  appKeys.adminApiKey,
-);
+let searchClient;
+let searchIndex;
 
-const searchIndex = searchClient.initIndex(appKeys.index);
+function getSearchClient() {
+    if (searchClient === null) {
+        searchClient = algoliasearch(
+            appKeys.searchAppId,
+            appKeys.adminApiKey,
+        );
+    }
 
-module.exports = searchIndex;
+    return searchClient;
+}
+
+function getSearchIndex() {
+    if (searchIndex === null) {
+        searchIndex = getSearchClient().initIndex(appKeys.index);
+    }
+
+    return searchIndex;
+}
+
+module.exports = getSearchIndex;
