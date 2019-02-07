@@ -2,12 +2,7 @@ sudo: required
 language: node_js
 node_js:
   - "10"
-deploy:
-  - provider: azure_web_apps
-    site: kcd-search-service-live-dev
-    verbose: true
-    on: develop
-  - provider: azure_web_apps
-    site: kcd-search-service-live-master
-    verbose: true
-    on: master
+before_install:
+  - chmod +rx .travis/deploy.sh
+script:
+  .travis/deploy.sh
