@@ -39,7 +39,7 @@ update_website() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Skip deployment for pull requests
-if [ "TRAVIS_PULL_REQUEST" != "false" ]; then
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
     exit 0
 fi
 
