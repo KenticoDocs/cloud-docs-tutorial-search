@@ -5,7 +5,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.." \
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-prepare_site_dist_dir() {
+prepare_site_dir() {
     declare -r files=(
         kcd-search-service-initialize
         kcd-search-service-update
@@ -38,6 +38,11 @@ update_website() {
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+# Skip deployment for pull requests
+if [ "TRAVIS_PULL_REQUEST" != "false" ]; then
+    exit 0
+fi
+
 # Only execute the following if the commit is made to the `master` or `develop` branches
 if [ "$TRAVIS_BRANCH" == "master" ]; then
     GIT_DESTINATION=$GIT_DESTINATION_MASTER
@@ -52,7 +57,7 @@ fi
 main () {
     declare -r TMP_DIR="$(mktemp -d XXXXX)"
 
-    prepare_site_dist_dir \
+    prepare_site_dir \
         && update_website
 
     rm -rf "$TMP_DIR"
