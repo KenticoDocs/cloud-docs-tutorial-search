@@ -1,12 +1,12 @@
-const searchIndex = require('./external/searchIndex');
-const kenticoClient = require('./external/kenticoClient');
+const getSearchIndex = require('./external/searchIndex');
+const getKenticoClient = require('./external/kenticoClient');
 const createIndexableArticleChunks = require('./utils/indexableArticleChunksCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
 
 async function reindexAllArticles() {
-    await searchIndex.clearIndex();
+    await getSearchIndex().clearIndex();
 
-    await kenticoClient
+    await getKenticoClient()
         .items()
         .type('article')
         .queryConfig({
@@ -18,12 +18,12 @@ async function reindexAllArticles() {
 }
 
 async function reindexSpecificArticles(codenames) {
-    await codenames.map(codename => searchIndex.deleteBy({
+    await codenames.map(codename => getSearchIndex().deleteBy({
         filters: `codename:${codename}`
     }));
 
     await codenames.forEach(
-         codename => kenticoClient
+         codename => getKenticoClient()
             .item(codename)
             .queryConfig({
                 richTextResolver: resolveItemInRichText
@@ -41,7 +41,7 @@ async function resolveAndIndexArticle(article) {
             }
         };
         const articleChunks = createIndexableArticleChunks(articleWithResolvedRichTextComponents);
-        await searchIndex.saveObjects(articleChunks);
+        await getSearchIndex().saveObjects(articleChunks);
     }
 }
 
