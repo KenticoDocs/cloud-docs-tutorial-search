@@ -1,0 +1,14 @@
+{
+    "plugins": ["jest"],
+    "extends": ["standard", "plugin:jest/recommended"],
+    "rules": {
+        "semi": "off",
+        "indent": "off",
+        "comma-dangle": "off",
+        "operator-linebreak": "off",
+        "space-before-function-paren": "off"
+    },
+    "env": {
+        "jest/globals": true
+    }
+}

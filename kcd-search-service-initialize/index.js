@@ -10,6 +10,6 @@ module.exports = async (context, eventGridEvent) => {
         appKeys.SetupConfiguration(eventGridEvent.isTest);
         await indexers.reindexAllArticles();
     } else {
-        throw 'Validation failed. Unsupported event.';
+        throw new Error('Validation failed. Unsupported event.');
     }
 };

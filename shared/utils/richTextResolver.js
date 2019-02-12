@@ -5,7 +5,7 @@ function resolveItemInRichText(item) {
         const content = removeMarkdown(item.content.value);
         return `<callout>${content}</callout>`;
     } else {
-        return "";
+        return '';
     }
 }
 
