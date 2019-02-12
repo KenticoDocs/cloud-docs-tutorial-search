@@ -1,6 +1,6 @@
 const KenticoCloud = require('kentico-cloud-delivery');
 const Article = require('../models/article');
-const { keys } = require('./keys');
+const { keys } = require('./configuration');
 
 let kenticoClient;
 

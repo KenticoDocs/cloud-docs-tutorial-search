@@ -1,5 +1,5 @@
 const algoliasearch = require('algoliasearch');
-let keys = require('./keys');
+const { keys } = require('./configuration');
 
 let searchClient;
 let searchIndex;
@@ -7,8 +7,8 @@ let searchIndex;
 function getSearchClient() {
     if (searchClient === undefined) {
         searchClient = algoliasearch(
-            keys.keys.searchAppId,
-            keys.keys.adminApiKey,
+            keys.searchAppId,
+            keys.adminApiKey,
         );
     }
 
@@ -17,7 +17,7 @@ function getSearchClient() {
 
 function getSearchIndex() {
     if (searchIndex === undefined) {
-        searchIndex = getSearchClient().initIndex(keys.keys.index);
+        searchIndex = getSearchClient().initIndex(keys.index);
     }
 
     return searchIndex;
