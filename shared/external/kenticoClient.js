@@ -8,7 +8,7 @@ const typeResolvers = [
     new KenticoCloud.TypeResolver('article', () => new Article()),
 ];
 
-function getKenticoClient(){
+function getKenticoClient() {
     if (kenticoClient === null) {
         kenticoClient = new KenticoCloud.DeliveryClient({
             projectId: appKeys.kenticoProjectId,

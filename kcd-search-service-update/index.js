@@ -14,6 +14,6 @@ module.exports = async (context, eventGridEvent) => {
         const codenames = getCodenamesOfItems(eventGridEvent.data.items, 'article');
         await indexers.reindexSpecificArticles(codenames);
     } else {
-        throw 'Validation failed. Unsupported event.';
+        throw new Error('Validation failed. Unsupported event.');
     }
 };
