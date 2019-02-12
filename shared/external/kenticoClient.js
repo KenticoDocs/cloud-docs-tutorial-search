@@ -1,6 +1,6 @@
 const KenticoCloud = require('kentico-cloud-delivery');
-const appKeys = require('./keys');
 const Article = require('../models/article');
+const { keys } = require('./keys');
 
 let kenticoClient;
 
@@ -9,9 +9,9 @@ const typeResolvers = [
 ];
 
 function getKenticoClient() {
-    if (kenticoClient === null) {
+    if (kenticoClient === undefined) {
         kenticoClient = new KenticoCloud.DeliveryClient({
-            projectId: appKeys.kenticoProjectId,
+            projectId: keys.kenticoProjectId,
             typeResolvers: typeResolvers
         });
     }

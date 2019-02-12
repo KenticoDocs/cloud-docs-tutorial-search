@@ -7,7 +7,7 @@ function validateEvent(event) {
 
 module.exports = async (context, eventGridEvent) => {
     if (validateEvent(eventGridEvent)) {
-        appKeys.SetupConfiguration(eventGridEvent.isTest);
+        appKeys.setupConfiguration(eventGridEvent.isTest);
         await indexers.reindexAllArticles();
     } else {
         throw new Error('Validation failed. Unsupported event.');

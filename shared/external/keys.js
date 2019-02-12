@@ -1,19 +1,23 @@
-let kenticoProjectId;
-let searchAppId;
-let adminApiKey;
-let index;
+const keys = {
+    kenticoProjectId: '',
+    searchAppId: '',
+    adminApiKey: '',
+    index: ''
+};
 
-function SetupConfiguration(isTestEvent) {
-    kenticoProjectId = isTestEvent ? process.env['KC.ProjectId.Test'] : process.env['KC.ProjectId'];
-    searchAppId = isTestEvent ? process.env['Search.AppId.Test'] : process.env['Search.AppId'];
-    adminApiKey = isTestEvent ? process.env['Search.ApiKey.Test'] : process.env['Search.ApiKey'];
-    index = isTestEvent ? process.env['Search.IndexName.Test'] : process.env['Search.IndexName'];
+function setupConfiguration(isTestEvent) {
+    const isTest = JSON.parse(isTestEvent);
+
+    keys.kenticoProjectId = getEnvironmentVariable('KC.ProjectId', isTest);
+    keys.searchAppId = getEnvironmentVariable('Search.AppId', isTest);
+    keys.adminApiKey = getEnvironmentVariable('Search.ApiKey', isTest);
+    keys.index = getEnvironmentVariable('Search.IndexName', isTest);
 }
 
+const getEnvironmentVariable = (variableName, isTest) =>
+    process.env[`${variableName}${isTest ? '.Test' : ''}`];
+
 module.exports = {
-    SetupConfiguration,
-    kenticoProjectId,
-    searchAppId,
-    adminApiKey,
-    index,
+    setupConfiguration,
+    keys
 };
