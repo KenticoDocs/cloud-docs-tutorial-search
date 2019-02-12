@@ -12,7 +12,9 @@ function getKenticoClient() {
     if (kenticoClient === undefined) {
         kenticoClient = new KenticoCloud.DeliveryClient({
             projectId: keys.kenticoProjectId,
-            typeResolvers: typeResolvers
+            enableSecuredMode: true,
+            securedApiKey: keys.securedApiKey,
+            typeResolvers,
         });
     }
 
