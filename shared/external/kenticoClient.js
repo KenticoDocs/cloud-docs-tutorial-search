@@ -1,6 +1,6 @@
 const KenticoCloud = require('kentico-cloud-delivery');
-const appKeys = require('./keys');
 const Article = require('../models/article');
+const { keys } = require('./configuration');
 
 let kenticoClient;
 
@@ -9,10 +9,12 @@ const typeResolvers = [
 ];
 
 function getKenticoClient() {
-    if (kenticoClient === null) {
+    if (kenticoClient === undefined) {
         kenticoClient = new KenticoCloud.DeliveryClient({
-            projectId: appKeys.kenticoProjectId,
-            typeResolvers: typeResolvers
+            projectId: keys.kenticoProjectId,
+            enableSecuredMode: true,
+            securedApiKey: keys.securedApiKey,
+            typeResolvers,
         });
     }
 

@@ -32,6 +32,7 @@ It responds to notifications from [Dispatcher](https://github.com/Kentico/kentic
 
 #### Required Keys
 * `KC.ProjectId` - Kentico Cloud project ID
+* `KC.SecuredApiKey` - Kentico Cloud secured delivery API key
 * `Search.ApiKey` - Algolia admin API key
 * `Search.AppId` - Algolia application ID
 * `Search.IndexName` - Index name in Algolia application

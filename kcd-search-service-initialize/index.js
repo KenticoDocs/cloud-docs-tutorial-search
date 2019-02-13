@@ -1,5 +1,5 @@
 const indexers = require('../shared/searchIndexers');
-const appKeys = require('../shared/external/keys');
+const { setupConfiguration } = require('../shared/external/configuration');
 
 function validateEvent(event) {
     return event.subject === 'initialize';
@@ -7,7 +7,7 @@ function validateEvent(event) {
 
 module.exports = async (context, eventGridEvent) => {
     if (validateEvent(eventGridEvent)) {
-        appKeys.SetupConfiguration(eventGridEvent.isTest);
+        setupConfiguration(eventGridEvent.isTest);
         await indexers.reindexAllArticles();
     } else {
         throw new Error('Validation failed. Unsupported event.');
