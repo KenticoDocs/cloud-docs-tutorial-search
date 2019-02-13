@@ -7,7 +7,7 @@ const keys = {
 };
 
 function setupConfiguration(isTestEvent) {
-    const isTest = JSON.parse(isTestEvent);
+    const isTest = isTestEvent === 'true';
 
     keys.kenticoProjectId = getEnvironmentVariable('KC.ProjectId', isTest);
     keys.securedApiKey = getEnvironmentVariable('KC.SecuredApiKey', isTest);
