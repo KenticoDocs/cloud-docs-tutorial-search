@@ -1,15 +1,12 @@
 const indexers = require('../shared/searchIndexers');
 const { setupConfiguration } = require('../shared/external/configuration');
 
-function validateEvent(event) {
-    return event.subject === 'initialize';
-}
+module.exports = async (context, request) => {
+    setupConfiguration(request.query.test);
+    await indexers.reindexAllArticles();
 
-module.exports = async (context, eventGridEvent) => {
-    if (validateEvent(eventGridEvent)) {
-        setupConfiguration(eventGridEvent.isTest);
-        await indexers.reindexAllArticles();
-    } else {
-        throw new Error('Validation failed. Unsupported event.');
-    }
+    context.res = {
+        status: 200,
+        body: 'Initialization successful'
+    };
 };
