@@ -10,7 +10,7 @@ function validateEvent(event) {
 
 module.exports = async (context, eventGridEvent) => {
     if (validateEvent(eventGridEvent)) {
-        setupConfiguration(eventGridEvent.isTest);
+        setupConfiguration(eventGridEvent.test);
         const codenames = getCodenamesOfItems(eventGridEvent.data.items, 'article');
         await indexers.reindexSpecificArticles(codenames);
     } else {
