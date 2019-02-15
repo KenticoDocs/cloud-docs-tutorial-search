@@ -3,7 +3,7 @@ const indexers = require('../shared/searchIndexers');
 const { setupConfiguration } = require('../shared/external/configuration');
 
 function validateEvent(event) {
-    return event.eventType === 'kentico' &&
+    return event.eventType === 'kentico-cloud' &&
         event.data.items &&
         (event.subject === 'publish' || event.subject === 'unpublish' || event.subject === 'archive');
 }
