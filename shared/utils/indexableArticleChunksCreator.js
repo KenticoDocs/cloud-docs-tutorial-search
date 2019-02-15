@@ -53,11 +53,13 @@ function indexContentSplitByCallouts(singleHeadingContent, heading, article) {
 
 function addIndexableArticleChunk(content, heading, article) {
     const title = article.title && article.title.value;
+    const id = article.system.id;
     const codename = article.system.codename;
     const order = indexableArticleChunks.length + 1;
 
     indexableArticleChunks.push({
         content,
+        id,
         title,
         heading,
         codename,
