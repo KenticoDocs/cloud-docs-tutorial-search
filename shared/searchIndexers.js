@@ -13,23 +13,25 @@ async function reindexAllArticles() {
             richTextResolver: resolveItemInRichText
         })
         .getPromise()
-        .then(response =>
-            response.items.forEach(article => resolveAndIndexArticle(article)));
+        .then(response => response.items.forEach(
+            article => resolveAndIndexArticle(article)));
 }
 
 async function reindexSpecificArticles(codenames) {
-    await codenames.map(codename => getSearchIndex().deleteBy({
-        filters: `codename:${codename}`
-    }));
-
     await codenames.forEach(
-         codename => getKenticoClient()
+        codename => getKenticoClient()
             .item(codename)
             .queryConfig({
                 richTextResolver: resolveItemInRichText
             })
             .getPromise()
-            .then(response => resolveAndIndexArticle(response.item)));
+            .then(async response => {
+                await getSearchIndex().deleteBy({
+                    filters: `id:${response.item.system.id}`
+                });
+
+                await resolveAndIndexArticle(response.item)
+            }));
 }
 
 async function resolveAndIndexArticle(article) {
@@ -45,7 +47,20 @@ async function resolveAndIndexArticle(article) {
     }
 }
 
+async function deleteIndexedArticles(codenames) {
+    await codenames.forEach(
+        codename => getKenticoClient()
+            .item(codename)
+            .getPromise()
+            .then(async response => {
+                await getSearchIndex().deleteBy({
+                    filters: `id:${response.item.system.id}`
+                });
+            }));
+}
+
 module.exports = {
     reindexAllArticles,
-    reindexSpecificArticles
+    reindexSpecificArticles,
+    deleteIndexedArticles
 };
