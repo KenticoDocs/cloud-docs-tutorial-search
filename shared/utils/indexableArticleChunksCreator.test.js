@@ -74,6 +74,7 @@ describe('searchableArticleCreator', () => {
         codename: 'first_tutorial',
         order: 1,
         objectID: 'first_tutorial_1',
+        id: '59c40872-521f-4883-ae6e-4d11b77797e4',
     };
 
     const secondParagraph = {
@@ -83,6 +84,7 @@ describe('searchableArticleCreator', () => {
         codename: 'first_tutorial',
         order: 2,
         objectID: 'first_tutorial_2',
+        id: '59c40872-521f-4883-ae6e-4d11b77797e4',
     };
 
     test('creates a correct single article chunk and sanitizes its content', () => {
@@ -111,6 +113,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 3,
             objectID: 'first_tutorial_3',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
             content: 'Making changes to your project\nAfter signing in to your Kentico Cloud account you will see your sample project to play around with.\n',
             title: 'Tutorial',
@@ -118,6 +121,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 4,
             objectID: 'first_tutorial_4',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }];
 
         const actualResult = createIndexableArticleChunks(longArticleWithCallout);
@@ -133,6 +137,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 1,
             objectID: 'first_tutorial_1',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
             content: 'Some paragraph between two callouts',
             title: 'Tutorial',
@@ -140,6 +145,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 2,
             objectID: 'first_tutorial_2',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
             content: 'Heading\nText about Kentico Cloud',
             title: 'Tutorial',
@@ -147,6 +153,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 3,
             objectID: 'first_tutorial_3',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
             content: 'Callout number 2 Very useful advice about KC',
             title: 'Tutorial',
@@ -154,6 +161,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 4,
             objectID: 'first_tutorial_4',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
             content: 'Callout number 3',
             title: 'Tutorial',
@@ -161,6 +169,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 5,
             objectID: 'first_tutorial_5',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
             content: 'Some paragraph between a callout and a heading',
             title: 'Tutorial',
@@ -168,6 +177,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 6,
             objectID: 'first_tutorial_6',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
             content: 'Running the .NET MVC sample application\nBefore going any further, make sure you have the following.',
             title: 'Tutorial',
@@ -175,6 +185,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 7,
             objectID: 'first_tutorial_7',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
             content: 'First run of the sample app\nWhen you run the application for the first time, you will see a Configuration page. Use it to connect the app to your sample project in Kentico Cloud.',
             title: 'Tutorial',
@@ -182,6 +193,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 8,
             objectID: 'first_tutorial_8',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
             content: 'Callout number 4',
             title: 'Tutorial',
@@ -189,6 +201,7 @@ describe('searchableArticleCreator', () => {
             codename: 'first_tutorial',
             order: 9,
             objectID: 'first_tutorial_9',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }];
 
         const actualResult = createIndexableArticleChunks(articleWithMultipleCallouts);
