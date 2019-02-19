@@ -18,7 +18,7 @@ module.exports = async (context, eventGridEvent) => {
         if (eventGridEvent.subject === 'publish' || eventGridEvent.subject === 'upsert') {
             await indexers.reindexSpecificArticles(codenames);
         } else {
-            await indexers.deleteIndexedArticles(codenames);
+            indexers.deleteIndexedArticles(codenames);
         }
     } else {
         throw new Error('Validation failed. Unsupported event.');
