@@ -47,16 +47,10 @@ async function resolveAndIndexArticle(article) {
     }
 }
 
-async function deleteIndexedArticles(codenames) {
-    await codenames.forEach(
-        codename => getKenticoClient()
-            .item(codename)
-            .getPromise()
-            .then(async response => {
-                await getSearchIndex().deleteBy({
-                    filters: `id:${response.item.system.id}`
-                });
-            }));
+function deleteIndexedArticles(codenames) {
+    codenames.forEach(codename => getSearchIndex().deleteBy({
+        filters: `codename:${codename}`
+    }));
 }
 
 module.exports = {
