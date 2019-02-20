@@ -6,8 +6,8 @@ const keys = {
     index: ''
 };
 
-function setupConfiguration(isTestEvent) {
-    const isTest = isTestEvent === 'true';
+function setupConfiguration(test) {
+    const isTest = test === 'enabled';
 
     keys.kenticoProjectId = getEnvironmentVariable('KC.ProjectId', isTest);
     keys.securedApiKey = getEnvironmentVariable('KC.SecuredApiKey', isTest);
