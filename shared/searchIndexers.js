@@ -3,6 +3,16 @@ const getKenticoClient = require('./external/kenticoClient');
 const createIndexableArticleChunks = require('./utils/indexableArticleChunksCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
 
+const EXCLUDED_FROM_SEARCH = 'excluded_from_search';
+
+function isItemExcludedFromSearch(item) {
+    return item
+        .elements
+        .visibility
+        .value
+        .some(taxonomyTerm => taxonomyTerm.codename === EXCLUDED_FROM_SEARCH);
+}
+
 async function reindexAllArticles() {
     await getSearchIndex().clearIndex();
 
@@ -13,8 +23,11 @@ async function reindexAllArticles() {
             richTextResolver: resolveItemInRichText
         })
         .getPromise()
-        .then(response => response.items.forEach(
-            article => resolveAndIndexArticle(article)));
+        .then(response => {
+            const itemsToIndex = response.items.filter(item => !isItemExcludedFromSearch(item));
+
+            itemsToIndex.forEach(article => resolveAndIndexArticle(article));
+        });
 }
 
 async function reindexSpecificArticles(codenames) {
@@ -25,24 +38,34 @@ async function reindexSpecificArticles(codenames) {
                 richTextResolver: resolveItemInRichText
             })
             .getPromise()
-            .then(async response => {
+            .then(async ({ item }) => {
                 await getSearchIndex().deleteBy({
-                    filters: `id:${response.item.system.id}`
+                    filters: `id:${item.system.id}`
                 });
 
-                await resolveAndIndexArticle(response.item)
+                if (!isItemExcludedFromSearch(item)) {
+                    await resolveAndIndexArticle(item)
+                }
             }));
 }
 
 async function resolveAndIndexArticle(article) {
-    if (article.content) {
+    if (article.content || article.introduction) {
         const articleWithResolvedRichTextComponents = {
             ...article,
+            introduction: {
+                value: article.introduction ? article.introduction.getHtml() : ''
+            },
             content: {
-                value: article.content.getHtml()
-            }
+                value: article.content ? article.content.getHtml() : ''
+            },
         };
-        const articleChunks = createIndexableArticleChunks(articleWithResolvedRichTextComponents);
+        const textToIndex =
+            articleWithResolvedRichTextComponents.introduction.value +
+            ' ' +
+            articleWithResolvedRichTextComponents.content.value;
+
+        const articleChunks = createIndexableArticleChunks(articleWithResolvedRichTextComponents, textToIndex);
         await getSearchIndex().saveObjects(articleChunks);
     }
 }
