@@ -2,8 +2,8 @@ const removeMarkdown = require('remove-markdown');
 
 let indexableArticleChunks;
 
-function createIndexableArticleChunks(article) {
-    const contentSplitByHeadings = article.content.value.split('<h2>');
+function createIndexableArticleChunks(article, textToIndex) {
+    const contentSplitByHeadings = textToIndex.split('<h2>');
     indexableArticleChunks = [];
 
     for (let i = 0; i < contentSplitByHeadings.length; i++) {
