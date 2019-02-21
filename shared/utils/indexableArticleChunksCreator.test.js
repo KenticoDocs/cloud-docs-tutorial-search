@@ -90,7 +90,9 @@ describe('searchableArticleCreator', () => {
     test('creates a correct single article chunk and sanitizes its content', () => {
         const expectedResult = [firstParagraph];
 
-        const actualResult = createIndexableArticleChunks(shortArticle);
+        const actualResult = createIndexableArticleChunks(
+            shortArticle,
+            shortArticle.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
@@ -98,7 +100,9 @@ describe('searchableArticleCreator', () => {
     test('splits a longer article into 2 chunks and sanitizes their content', () => {
         const expectedResult = [firstParagraph, secondParagraph];
 
-        const actualResult = createIndexableArticleChunks(longArticle);
+        const actualResult = createIndexableArticleChunks(
+            longArticle,
+            longArticle.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
@@ -124,7 +128,9 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }];
 
-        const actualResult = createIndexableArticleChunks(longArticleWithCallout);
+        const actualResult = createIndexableArticleChunks(
+            longArticleWithCallout,
+            longArticleWithCallout.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
@@ -204,7 +210,9 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }];
 
-        const actualResult = createIndexableArticleChunks(articleWithMultipleCallouts);
+        const actualResult = createIndexableArticleChunks(
+            articleWithMultipleCallouts,
+            articleWithMultipleCallouts.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
