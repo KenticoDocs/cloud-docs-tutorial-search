@@ -51,21 +51,11 @@ async function reindexSpecificArticles(codenames) {
 
 async function resolveAndIndexArticle(article) {
     if (article.content || article.introduction) {
-        const articleWithResolvedRichTextComponents = {
-            ...article,
-            introduction: {
-                value: article.introduction ? article.introduction.getHtml() : ''
-            },
-            content: {
-                value: article.content ? article.content.getHtml() : ''
-            },
-        };
-        const textToIndex =
-            articleWithResolvedRichTextComponents.introduction.value +
-            ' ' +
-            articleWithResolvedRichTextComponents.content.value;
+        const resolvedIntroduction = article.introduction ? article.introduction.getHtml() : '';
+        const resolvedContent = article.content ? article.content.getHtml() : '';
+        const textToIndex = resolvedIntroduction + ' ' + resolvedContent;
 
-        const articleChunks = createIndexableArticleChunks(articleWithResolvedRichTextComponents, textToIndex);
+        const articleChunks = createIndexableArticleChunks(article, textToIndex);
         await getSearchIndex().saveObjects(articleChunks);
     }
 }
