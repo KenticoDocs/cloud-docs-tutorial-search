@@ -119,7 +119,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_3',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
-            content: 'Making changes to your project\nAfter signing in to your Kentico Cloud account you will see your sample project to play around with.\n',
+            content: 'Making changes to your project\nAfter signing in to your Kentico Cloud account you will see your sample project to play around with.',
             title: 'Tutorial',
             heading: 'Making changes to your project',
             codename: 'first_tutorial',
