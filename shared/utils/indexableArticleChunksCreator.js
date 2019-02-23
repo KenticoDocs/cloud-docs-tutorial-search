@@ -15,7 +15,7 @@ function createIndexableArticleChunks(article, textToIndex) {
         if (singleHeadingContent.includes('<callout>')) {
             indexContentSplitByCallouts(singleHeadingContent, heading, article);
         } else {
-            addIndexableArticleChunk(removeMarkdown(singleHeadingContent), heading, article);
+            addIndexableArticleChunk(removeMarkdown(singleHeadingContent).trim(), heading, article);
         }
     }
 
@@ -42,8 +42,8 @@ function indexContentSplitByCallouts(singleHeadingContent, heading, article) {
         }
 
         // Handles any content left between an inserted callout and the next header (i. e. some paragraphs)
-        const otherContent = content.substring(calloutClosingTagIndex).trim();
-        const otherContentWithoutMarkup = removeMarkdown(otherContent);
+        const otherContent = content.substring(calloutClosingTagIndex);
+        const otherContentWithoutMarkup = removeMarkdown(otherContent).trim();
 
         if (isNonEmpty(otherContentWithoutMarkup)) {
             addIndexableArticleChunk(otherContentWithoutMarkup, heading, article);
