@@ -1,9 +1,10 @@
 const getSearchIndex = require('./external/searchIndex');
 const getKenticoClient = require('./external/kenticoClient');
-const createIndexableArticleChunks = require('./utils/indexableArticleChunksCreator');
+const createItemRecords = require('./utils/indexableArticleChunksCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
 
 const EXCLUDED_FROM_SEARCH = 'excluded_from_search';
+const CONTENT_ITEMS_TO_INDEX = ['article', 'scenario'];
 
 function isItemExcludedFromSearch(item) {
     return item
@@ -13,12 +14,12 @@ function isItemExcludedFromSearch(item) {
         .some(taxonomyTerm => taxonomyTerm.codename === EXCLUDED_FROM_SEARCH);
 }
 
-async function reindexAllArticles() {
+async function reindexAllItems() {
     await getSearchIndex().clearIndex();
 
     await getKenticoClient()
         .items()
-        .type('article')
+        .types(CONTENT_ITEMS_TO_INDEX)
         .queryConfig({
             richTextResolver: resolveItemInRichText
         })
@@ -26,11 +27,11 @@ async function reindexAllArticles() {
         .then(response => {
             const itemsToIndex = response.items.filter(item => !isItemExcludedFromSearch(item));
 
-            itemsToIndex.forEach(article => resolveAndIndexArticle(article));
+            itemsToIndex.forEach(item => resolveAndIndexItem(item));
         });
 }
 
-async function reindexSpecificArticles(codenames) {
+async function reindexSpecificItems(codenames) {
     await codenames.forEach(
         codename => getKenticoClient()
             .item(codename)
@@ -44,30 +45,36 @@ async function reindexSpecificArticles(codenames) {
                 });
 
                 if (!isItemExcludedFromSearch(item)) {
-                    await resolveAndIndexArticle(item)
+                    await resolveAndIndexItem(item)
                 }
             }));
 }
 
-async function resolveAndIndexArticle(article) {
-    if (article.content || article.introduction) {
-        const resolvedIntroduction = article.introduction ? article.introduction.getHtml() : '';
-        const resolvedContent = article.content ? article.content.getHtml() : '';
-        const textToIndex = resolvedIntroduction + ' ' + resolvedContent;
+async function resolveAndIndexItem(item) {
+    if (item.content) {
+        let textToIndex = '';
 
-        const articleChunks = createIndexableArticleChunks(article, textToIndex);
-        await getSearchIndex().saveObjects(articleChunks);
+        if (item.system.type === 'article' && item.introduction) {
+            const resolvedIntroduction = item.introduction ? item.introduction.getHtml() : '';
+            const resolvedContent = item.content ? item.content.getHtml() : '';
+            textToIndex = resolvedIntroduction + ' ' + resolvedContent;
+        } else {
+            textToIndex = item.content ? item.content.getHtml() : '';
+        }
+
+        const itemRecords = createItemRecords(item, textToIndex);
+        await getSearchIndex().saveObjects(itemRecords);
     }
 }
 
-function deleteIndexedArticles(codenames) {
+function deleteIndexedItems(codenames) {
     codenames.forEach(codename => getSearchIndex().deleteBy({
         filters: `codename:${codename}`
     }));
 }
 
 module.exports = {
-    reindexAllArticles,
-    reindexSpecificArticles,
-    deleteIndexedArticles
+    reindexAllItems,
+    reindexSpecificItems,
+    deleteIndexedItems
 };
