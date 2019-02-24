@@ -1,6 +1,6 @@
 const getSearchIndex = require('./external/searchIndex');
 const getKenticoClient = require('./external/kenticoClient');
-const createItemRecords = require('./utils/indexableArticleChunksCreator');
+const createItemRecords = require('./utils/itemRecordsCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
 
 const EXCLUDED_FROM_SEARCH = 'excluded_from_search';
