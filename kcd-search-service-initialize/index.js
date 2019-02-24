@@ -3,7 +3,7 @@ const { setupConfiguration } = require('../shared/external/configuration');
 
 module.exports = async (context, request) => {
     setupConfiguration(request.query.test);
-    await indexers.reindexAllArticles();
+    await indexers.reindexAllItems();
 
     context.res = {
         status: 200,

@@ -1,4 +1,4 @@
-const createIndexableArticleChunks = require('./indexableArticleChunksCreator');
+const createItemRecords = require('./indexableArticleChunksCreator');
 
 const shortArticle = {
     system: {
@@ -90,7 +90,7 @@ describe('searchableArticleCreator', () => {
     test('creates a correct single article chunk and sanitizes its content', () => {
         const expectedResult = [firstParagraph];
 
-        const actualResult = createIndexableArticleChunks(
+        const actualResult = createItemRecords(
             shortArticle,
             shortArticle.content.value);
 
@@ -100,7 +100,7 @@ describe('searchableArticleCreator', () => {
     test('splits a longer article into 2 chunks and sanitizes their content', () => {
         const expectedResult = [firstParagraph, secondParagraph];
 
-        const actualResult = createIndexableArticleChunks(
+        const actualResult = createItemRecords(
             longArticle,
             longArticle.content.value);
 
@@ -128,7 +128,7 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }];
 
-        const actualResult = createIndexableArticleChunks(
+        const actualResult = createItemRecords(
             longArticleWithCallout,
             longArticleWithCallout.content.value);
 
@@ -210,7 +210,7 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }];
 
-        const actualResult = createIndexableArticleChunks(
+        const actualResult = createItemRecords(
             articleWithMultipleCallouts,
             articleWithMultipleCallouts.content.value);
 
