@@ -1,10 +1,10 @@
 const removeMarkdown = require('remove-markdown');
 
-let indexableArticleChunks;
+let itemRecords;
 
-function createIndexableArticleChunks(article, textToIndex) {
+function createItemRecords(item, textToIndex) {
     const contentSplitByHeadings = textToIndex.split('<h2>');
-    indexableArticleChunks = [];
+    itemRecords = [];
 
     for (let i = 0; i < contentSplitByHeadings.length; i++) {
         const singleHeadingContent = contentSplitByHeadings[i];
@@ -13,23 +13,23 @@ function createIndexableArticleChunks(article, textToIndex) {
         const heading = hasHeading ? extractHeading(singleHeadingContent) : '';
 
         if (singleHeadingContent.includes('<callout>')) {
-            indexContentSplitByCallouts(singleHeadingContent, heading, article);
+            indexContentSplitByCallouts(singleHeadingContent, heading, item);
         } else {
-            addIndexableArticleChunk(removeMarkdown(singleHeadingContent).trim(), heading, article);
+            addItemRecord(removeMarkdown(singleHeadingContent).trim(), heading, item);
         }
     }
 
-    return indexableArticleChunks;
+    return itemRecords;
 }
 
-function extractHeading(contentChunk) {
-    const headingIndex = contentChunk.indexOf('</h2>');
-    const heading = contentChunk.substring(0, headingIndex);
+function extractHeading(singleHeadingContent) {
+    const headingIndex = singleHeadingContent.indexOf('</h2>');
+    const heading = singleHeadingContent.substring(0, headingIndex);
 
     return heading.trim();
 }
 
-function indexContentSplitByCallouts(singleHeadingContent, heading, article) {
+function indexContentSplitByCallouts(singleHeadingContent, heading, item) {
     const contentSplitByCallouts = singleHeadingContent.split('<callout>');
 
     for (let k = 0; k < contentSplitByCallouts.length; k++) {
@@ -38,7 +38,7 @@ function indexContentSplitByCallouts(singleHeadingContent, heading, article) {
         const calloutContent = content.substring(0, calloutClosingTagIndex).trim();
 
         if (isNonEmpty(calloutContent)) {
-            addIndexableArticleChunk(calloutContent, heading, article);
+            addItemRecord(calloutContent, heading, item);
         }
 
         // Handles any content left between an inserted callout and the next header (i. e. some paragraphs)
@@ -46,18 +46,18 @@ function indexContentSplitByCallouts(singleHeadingContent, heading, article) {
         const otherContentWithoutMarkup = removeMarkdown(otherContent).trim();
 
         if (isNonEmpty(otherContentWithoutMarkup)) {
-            addIndexableArticleChunk(otherContentWithoutMarkup, heading, article);
+            addItemRecord(otherContentWithoutMarkup, heading, item);
         }
     }
 }
 
-function addIndexableArticleChunk(content, heading, article) {
-    const title = article.title && article.title.value;
-    const id = article.system.id;
-    const codename = article.system.codename;
-    const order = indexableArticleChunks.length + 1;
+function addItemRecord(content, heading, item) {
+    const title = item.title && item.title.value;
+    const id = item.system.id;
+    const codename = item.system.codename;
+    const order = itemRecords.length + 1;
 
-    indexableArticleChunks.push({
+    itemRecords.push({
         content,
         id,
         title,
@@ -72,4 +72,4 @@ function isNonEmpty(content) {
     return content !== null && content !== '';
 }
 
-module.exports = createIndexableArticleChunks;
+module.exports = createItemRecords;
