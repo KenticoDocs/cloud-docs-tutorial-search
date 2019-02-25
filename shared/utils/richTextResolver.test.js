@@ -17,6 +17,19 @@ const calloutItem = {
     }
 };
 
+const contentChunkItem = {
+    system: {
+        id: '43e9af9c-569e-4c55-9025-a468bff5018b',
+        language: 'en-US',
+        codename: 'repeated_content',
+        type: 'content_chunk',
+    },
+    content: {
+        name: 'Content',
+        value: '<h2>Repeated content</h2><p>This content is repeated in several Articles</p>',
+    }
+};
+
 const differentItem = {
     ...calloutItem,
     system: {
@@ -40,6 +53,14 @@ describe('resolveItemInRichText', () => {
         const expectedResult = '';
 
         const actualResult = resolveItemInRichText(differentItem);
+
+        expect(actualResult).toEqual(expectedResult);
+    });
+
+    it('returns value of a content chunk content item', () => {
+        const expectedResult = contentChunkItem.content.value;
+
+        const actualResult = resolveItemInRichText(contentChunkItem);
 
         expect(actualResult).toEqual(expectedResult);
     });

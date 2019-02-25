@@ -15,7 +15,10 @@ function createItemRecords(item, textToIndex) {
         if (singleHeadingContent.includes('<callout>')) {
             indexContentSplitByCallouts(singleHeadingContent, heading, item);
         } else {
-            addItemRecord(removeMarkdown(singleHeadingContent).trim(), heading, item);
+            const content = removeMarkdown(singleHeadingContent).trim();
+            if (isNonEmpty(content)) {
+                addItemRecord(content, heading, item);
+            }
         }
     }
 
