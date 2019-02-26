@@ -1,91 +1,93 @@
 const removeMarkdown = require('remove-markdown');
 
-let itemRecords;
+class ItemRecordsCreator {
+    constructor() {
+        this.itemRecords = [];
+    }
 
-function createItemRecords(item, textToIndex) {
-    const contentSplitByHeadings = textToIndex.split('<h2>');
-    itemRecords = [];
+    createItemRecords(item, textToIndex) {
+        const contentSplitByHeadings = textToIndex.split('<h2>');
+        this.itemRecords = [];
 
-    for (let i = 0; i < contentSplitByHeadings.length; i++) {
-        let singleHeadingContent = contentSplitByHeadings[i];
+        contentSplitByHeadings.forEach((singleHeadingContent) => {
+            const { heading, content } = this.splitHeadingAndContent(singleHeadingContent);
 
-        const hasHeading = singleHeadingContent.includes('</h2>');
-        let heading = '';
-
-        if (hasHeading) {
-            heading = extractHeading(singleHeadingContent);
-            singleHeadingContent = singleHeadingContent.replace(heading, '').trim();
-        }
-
-        if (singleHeadingContent.includes('<callout>')) {
-            indexContentSplitByCallouts(singleHeadingContent, heading, item);
-        } else {
-            const content = removeMarkdown(singleHeadingContent).trim();
-            if (isNonEmpty(content)) {
-                addItemRecord(content, heading, item);
+            if (content.includes('<callout>')) {
+                this.indexContentSplitByCallouts(content, heading, item);
+            } else {
+                this.indexLeftoverContentWithoutCallouts(content, heading, item);
             }
+        });
+
+        return this.itemRecords;
+    }
+
+    splitHeadingAndContent(content) {
+        const contentParts = content.split('</h2>');
+
+        return (contentParts.length > 1) ?
+            {
+                heading: removeMarkdown(contentParts[0]).trim(),
+                content: contentParts[1].trim(),
+            } :
+            {
+                heading: '',
+                content: contentParts[0].trim(),
+            }
+    }
+
+    indexContentSplitByCallouts(singleHeadingContent, heading, item) {
+        const contentSplitByCallouts = singleHeadingContent.split('<callout>');
+
+        contentSplitByCallouts.forEach(content => {
+            const calloutClosingTagIndex = content.indexOf('</callout>');
+            const calloutContent = content.substring(0, calloutClosingTagIndex).trim();
+
+            if (this.isNonEmpty(calloutContent)) {
+                this.addItemRecord(calloutContent, heading, item);
+            }
+            const leftoverContent = content.substring(calloutClosingTagIndex);
+
+            this.indexLeftoverContentWithoutCallouts(leftoverContent, heading, item);
+        });
+    }
+
+    indexLeftoverContentWithoutCallouts(leftoverContent, heading, item) {
+        const contentWithoutMarkdown = removeMarkdown(leftoverContent).trim();
+
+        if (this.isNonEmpty(contentWithoutMarkdown)) {
+            this.addItemRecord(contentWithoutMarkdown, heading, item);
         }
     }
 
-    return itemRecords;
-}
+    addItemRecord(content, heading, item) {
+        const title = item.title && item.title.value;
+        const id = item.system.id;
+        const codename = item.system.codename;
+        const order = this.itemRecords.length + 1;
+        const objectID = codename + '_' + order;
 
-function extractHeading(singleHeadingContent) {
-    const headingIndex = singleHeadingContent.indexOf('</h2>');
-    const heading = singleHeadingContent.substring(0, headingIndex);
-    const headingWithoutMarkdown = removeMarkdown(heading);
+        this.itemRecords.push({
+            content: this.sanitizeContent(content),
+            id,
+            title,
+            heading,
+            codename,
+            order,
+            objectID,
+        });
+    }
 
-    return headingWithoutMarkdown.trim();
-}
+    isNonEmpty(content) {
+        return content !== null && content !== '';
+    }
 
-function indexContentSplitByCallouts(singleHeadingContent, heading, item) {
-    const contentSplitByCallouts = singleHeadingContent.split('<callout>');
-
-    for (let k = 0; k < contentSplitByCallouts.length; k++) {
-        const content = contentSplitByCallouts[k];
-        const calloutClosingTagIndex = content.indexOf('</callout>');
-        const calloutContent = content.substring(0, calloutClosingTagIndex).trim();
-
-        if (isNonEmpty(calloutContent)) {
-            addItemRecord(calloutContent, heading, item);
-        }
-
-        // Handles any content left between an inserted callout and the next header (i. e. some paragraphs)
-        const otherContent = content.substring(calloutClosingTagIndex);
-        const otherContentWithoutMarkup = removeMarkdown(otherContent).trim();
-
-        if (isNonEmpty(otherContentWithoutMarkup)) {
-            addItemRecord(otherContentWithoutMarkup, heading, item);
-        }
+    sanitizeContent(content) {
+        return content
+            .replace(/\n/g, ' ')
+            .replace(/\s{2}/g, ' ')
+            .replace(/&nbsp;/g, '');
     }
 }
 
-function addItemRecord(content, heading, item) {
-    const title = item.title && item.title.value;
-    const id = item.system.id;
-    const codename = item.system.codename;
-    const order = itemRecords.length + 1;
-
-    itemRecords.push({
-        content: sanitizeContent(content),
-        id,
-        title,
-        heading,
-        codename,
-        order,
-        objectID: codename + '_' + order,
-    });
-}
-
-function isNonEmpty(content) {
-    return content !== null && content !== '';
-}
-
-function sanitizeContent(content) {
-    return content
-        .replace(/\n/g, ' ')
-        .replace(/\s{2}/g, ' ')
-        .replace(/&nbsp;/g, '');
-}
-
-module.exports = createItemRecords;
+module.exports = ItemRecordsCreator;
