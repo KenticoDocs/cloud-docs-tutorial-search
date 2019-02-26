@@ -1,8 +1,8 @@
-function getCodenamesOfItems(items, itemTypes) {
+function getCodenamesOfItems(items, types) {
     const codenames = [];
 
     items.map(item => {
-        if (itemTypes.includes(item.type)) {
+        if (types.includes(item.type)) {
             codenames.push(item.codename);
         }
     });
