@@ -61,7 +61,7 @@ function addItemRecord(content, heading, item) {
     const order = itemRecords.length + 1;
 
     itemRecords.push({
-        content,
+        content: sanitizeContent(content),
         id,
         title,
         heading,
@@ -73,6 +73,13 @@ function addItemRecord(content, heading, item) {
 
 function isNonEmpty(content) {
     return content !== null && content !== '';
+}
+
+function sanitizeContent(content) {
+    return content
+        .replace(/\n/g,' ')
+        .replace(/\s{2}/g, ' ')
+        .replace(/&nbsp;/g, '');
 }
 
 module.exports = createItemRecords;
