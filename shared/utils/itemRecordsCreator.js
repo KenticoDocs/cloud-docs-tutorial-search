@@ -7,10 +7,15 @@ function createItemRecords(item, textToIndex) {
     itemRecords = [];
 
     for (let i = 0; i < contentSplitByHeadings.length; i++) {
-        const singleHeadingContent = contentSplitByHeadings[i];
+        let singleHeadingContent = contentSplitByHeadings[i];
 
         const hasHeading = singleHeadingContent.includes('</h2>');
-        const heading = hasHeading ? extractHeading(singleHeadingContent) : '';
+        let heading = '';
+
+        if (hasHeading) {
+            heading = extractHeading(singleHeadingContent);
+            singleHeadingContent = singleHeadingContent.replace(heading, '').trim();
+        }
 
         if (singleHeadingContent.includes('<callout>')) {
             indexContentSplitByCallouts(singleHeadingContent, heading, item);
@@ -28,8 +33,9 @@ function createItemRecords(item, textToIndex) {
 function extractHeading(singleHeadingContent) {
     const headingIndex = singleHeadingContent.indexOf('</h2>');
     const heading = singleHeadingContent.substring(0, headingIndex);
+    const headingWithoutMarkdown = removeMarkdown(heading);
 
-    return heading.trim();
+    return headingWithoutMarkdown.trim();
 }
 
 function indexContentSplitByCallouts(singleHeadingContent, heading, item) {
@@ -77,7 +83,7 @@ function isNonEmpty(content) {
 
 function sanitizeContent(content) {
     return content
-        .replace(/\n/g,' ')
+        .replace(/\n/g, ' ')
         .replace(/\s{2}/g, ' ')
         .replace(/&nbsp;/g, '');
 }

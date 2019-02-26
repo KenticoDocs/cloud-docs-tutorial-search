@@ -87,7 +87,7 @@ describe('searchableArticleCreator', () => {
     };
 
     const secondParagraph = {
-        content: 'More options To make further app development easier, we recommend using the Kentico Cloud model generator for .NET to create strongly-typed models representing your content types. To learn more about this approach generally, see Using strongly typed models.',
+        content: 'To make further app development easier, we recommend using the Kentico Cloud model generator for .NET to create strongly-typed models representing your content types. To learn more about this approach generally, see Using strongly typed models.',
         title: 'Tutorial',
         heading: 'More options',
         codename: 'first_tutorial',
@@ -128,7 +128,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_3',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
-            content: 'Making changes to your project After signing in to your Kentico Cloud account you will see your sample project to play around with.',
+            content: 'After signing in to your Kentico Cloud account you will see your sample project to play around with.',
             title: 'Tutorial',
             heading: 'Making changes to your project',
             codename: 'first_tutorial',
@@ -162,7 +162,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_2',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
-            content: 'Heading Text about Kentico Cloud',
+            content: 'Text about Kentico Cloud',
             title: 'Tutorial',
             heading: 'Heading',
             codename: 'first_tutorial',
@@ -194,7 +194,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_6',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
-            content: 'Running the .NET MVC sample application Before going any further, make sure you have the following.',
+            content: 'Before going any further, make sure you have the following.',
             title: 'Tutorial',
             heading: 'Running the .NET MVC sample application',
             codename: 'first_tutorial',
@@ -202,7 +202,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_7',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
-            content: 'First run of the sample app When you run the application for the first time, you will see a Configuration page. Use it to connect the app to your sample project in Kentico Cloud.',
+            content: 'When you run the application for the first time, you will see a Configuration page. Use it to connect the app to your sample project in Kentico Cloud.',
             title: 'Tutorial',
             heading: 'First run of the sample app',
             codename: 'first_tutorial',
@@ -236,7 +236,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_1',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
-            content: 'Some custom heading text after heading',
+            content: 'text after heading',
             title: 'Tutorial',
             heading: 'Some custom heading',
             codename: 'first_tutorial',
