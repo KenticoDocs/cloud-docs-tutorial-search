@@ -19,7 +19,7 @@ module.exports = async (context, eventGridEvent) => {
         const codenames = getCodenamesOfItems(eventGridEvent.data.webhook.items, CONTENT_TYPES_TO_INDEX);
 
         if (VALID_REINDEX_OPERATIONS.includes(eventGridEvent.subject)) {
-            await indexers.reindexSpecificItems(codenames);
+            await indexers.reindexItems(codenames);
         } else {
             indexers.deleteIndexedItems(codenames);
         }

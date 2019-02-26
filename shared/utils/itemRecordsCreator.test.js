@@ -1,4 +1,4 @@
-const createItemRecords = require('./itemRecordsCreator');
+const ItemRecordsCreator = require('./itemRecordsCreator');
 
 const shortArticle = {
     system: {
@@ -96,10 +96,12 @@ describe('searchableArticleCreator', () => {
         id: '59c40872-521f-4883-ae6e-4d11b77797e4',
     };
 
+    const itemRecordsCreator = new ItemRecordsCreator();
+
     test('creates a correct single article chunk and sanitizes its content', () => {
         const expectedResult = [firstParagraph];
 
-        const actualResult = createItemRecords(
+        const actualResult = itemRecordsCreator.createItemRecords(
             shortArticle,
             shortArticle.content.value);
 
@@ -109,7 +111,7 @@ describe('searchableArticleCreator', () => {
     test('splits a longer article into 2 chunks and sanitizes their content', () => {
         const expectedResult = [firstParagraph, secondParagraph];
 
-        const actualResult = createItemRecords(
+        const actualResult = itemRecordsCreator.createItemRecords(
             longArticle,
             longArticle.content.value);
 
@@ -137,7 +139,7 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }];
 
-        const actualResult = createItemRecords(
+        const actualResult = itemRecordsCreator.createItemRecords(
             longArticleWithCallout,
             longArticleWithCallout.content.value);
 
@@ -219,7 +221,7 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }];
 
-        const actualResult = createItemRecords(
+        const actualResult = itemRecordsCreator.createItemRecords(
             articleWithMultipleCallouts,
             articleWithMultipleCallouts.content.value);
 
@@ -261,7 +263,7 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }];
 
-        const actualResult = createItemRecords(
+        const actualResult = itemRecordsCreator.createItemRecords(
             edgeCasesArticle,
             edgeCasesArticle.content.value);
 
