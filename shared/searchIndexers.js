@@ -2,9 +2,9 @@ const getSearchIndex = require('./external/searchIndex');
 const getKenticoClient = require('./external/kenticoClient');
 const createItemRecords = require('./utils/itemRecordsCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
+const { CONTENT_TYPES_TO_INDEX } = require('./external/constants');
 
 const EXCLUDED_FROM_SEARCH = 'excluded_from_search';
-const CONTENT_ITEMS_TO_INDEX = ['article', 'scenario'];
 
 function isItemExcludedFromSearch(item) {
     return item
@@ -19,7 +19,7 @@ async function reindexAllItems() {
 
     await getKenticoClient()
         .items()
-        .types(CONTENT_ITEMS_TO_INDEX)
+        .types(CONTENT_TYPES_TO_INDEX)
         .queryConfig({
             richTextResolver: resolveItemInRichText
         })
@@ -52,14 +52,10 @@ async function reindexSpecificItems(codenames) {
 
 async function resolveAndIndexItem(item) {
     if (item.content) {
-        let textToIndex = '';
+        let textToIndex = item.content.getHtml();
 
         if (item.system.type === 'article' && item.introduction) {
-            const resolvedIntroduction = item.introduction ? item.introduction.getHtml() : '';
-            const resolvedContent = item.content ? item.content.getHtml() : '';
-            textToIndex = resolvedIntroduction + ' ' + resolvedContent;
-        } else {
-            textToIndex = item.content ? item.content.getHtml() : '';
+            textToIndex = item.introduction.getHtml() + ' ' + textToIndex;
         }
 
         const itemRecords = createItemRecords(item, textToIndex);
