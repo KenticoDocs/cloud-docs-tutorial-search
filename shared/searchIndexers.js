@@ -1,6 +1,6 @@
 const getSearchIndex = require('./external/searchIndex');
 const getKenticoClient = require('./external/kenticoClient');
-const createItemRecords = require('./utils/itemRecordsCreator');
+const ItemRecordsCreator = require('./utils/itemRecordsCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
 const { CONTENT_TYPES_TO_INDEX } = require('./external/constants');
 
@@ -24,14 +24,26 @@ async function reindexAllItems() {
             richTextResolver: resolveItemInRichText
         })
         .getPromise()
-        .then(response => {
+        .then(async response => {
             const itemsToIndex = response.items.filter(item => !isItemExcludedFromSearch(item));
 
-            itemsToIndex.forEach(item => resolveAndIndexItem(item));
+            for (const item of itemsToIndex) {
+                await resolveAndIndexItem(item);
+            }
         });
 }
 
-async function reindexSpecificItems(codenames) {
+async function reindexItem(item) {
+    await getSearchIndex().deleteBy({
+        filters: `id:${item.system.id}`
+    });
+
+    if (!isItemExcludedFromSearch(item)) {
+        await resolveAndIndexItem(item)
+    }
+}
+
+async function reindexItems(codenames) {
     await codenames.forEach(
         codename => getKenticoClient()
             .item(codename)
@@ -40,25 +52,20 @@ async function reindexSpecificItems(codenames) {
             })
             .getPromise()
             .then(async ({ item }) => {
-                await getSearchIndex().deleteBy({
-                    filters: `id:${item.system.id}`
-                });
-
-                if (!isItemExcludedFromSearch(item)) {
-                    await resolveAndIndexItem(item)
-                }
+                await reindexItem(item)
             }));
 }
 
 async function resolveAndIndexItem(item) {
     if (item.content) {
+        const itemRecordsCreator = new ItemRecordsCreator();
         let textToIndex = item.content.getHtml();
 
         if (item.system.type === 'article' && item.introduction) {
             textToIndex = item.introduction.getHtml() + ' ' + textToIndex;
         }
 
-        const itemRecords = createItemRecords(item, textToIndex);
+        const itemRecords = itemRecordsCreator.createItemRecords(item, textToIndex);
         await getSearchIndex().saveObjects(itemRecords);
     }
 }
@@ -71,6 +78,6 @@ function deleteIndexedItems(codenames) {
 
 module.exports = {
     reindexAllItems,
-    reindexSpecificItems,
+    reindexItems,
     deleteIndexedItems
 };

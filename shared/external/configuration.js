@@ -6,6 +6,9 @@ const keys = {
     index: ''
 };
 
+const getEnvironmentVariable = (variableName, isTest) =>
+    process.env[`${variableName}${isTest ? '.Test' : ''}`];
+
 function setupConfiguration(test) {
     const isTest = test === 'enabled';
 
@@ -15,9 +18,6 @@ function setupConfiguration(test) {
     keys.adminApiKey = getEnvironmentVariable('Search.ApiKey', isTest);
     keys.index = getEnvironmentVariable('Search.IndexName', isTest);
 }
-
-const getEnvironmentVariable = (variableName, isTest) =>
-    process.env[`${variableName}${isTest ? '.Test' : ''}`];
 
 module.exports = {
     setupConfiguration,
