@@ -28,7 +28,7 @@ const shortArticle = {
     },
     content: {
         name: 'Content',
-        value: '<p>We will start by running a React sample application on your machine and updating an article in the sample project.</p> \n ... '
+        value: '<p>We will start by running a React sample application on your machine and updating an article in the sample project.</p>\n<p>Afterward, we can continue doing this...</p>'
     }
 };
 
@@ -66,9 +66,18 @@ const articleWithMultipleCallouts = {
     }
 };
 
+const edgeCasesArticle = {
+    ...shortArticle,
+    content: {
+        name: 'Content',
+        value: '<p>some text in a paragraph<br>\n</p>\n<p>another paragraph&nbsp;</p>\n<h2>Some custom heading</h2>\n<p>text after heading</p>\n' +
+        '<callout>Premium feature\nhello!</callout></object>\n<p>some text after callout</p>'
+    }
+};
+
 describe('searchableArticleCreator', () => {
     const firstParagraph = {
-        content: 'We will start by running a React sample application on your machine and updating an article in the sample project.\n ...',
+        content: 'We will start by running a React sample application on your machine and updating an article in the sample project. Afterward, we can continue doing this...',
         title: 'Tutorial',
         heading: '',
         codename: 'first_tutorial',
@@ -111,7 +120,7 @@ describe('searchableArticleCreator', () => {
         const expectedResult = [
             firstParagraph,
             secondParagraph, {
-            content: 'New to headless CMS?\nIf you are new to the world of headless CMSs, you might want to start by building a Hello world application. It will only take you about 5 minutes!\nAfter you grasp the core idea behind a headless CMS, everything in the sample application will make a lot more sense much faster.',
+            content: 'New to headless CMS? If you are new to the world of headless CMSs, you might want to start by building a Hello world application. It will only take you about 5 minutes! After you grasp the core idea behind a headless CMS, everything in the sample application will make a lot more sense much faster.',
             title: 'Tutorial',
             heading: 'More options',
             codename: 'first_tutorial',
@@ -119,7 +128,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_3',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
-            content: 'Making changes to your project\nAfter signing in to your Kentico Cloud account you will see your sample project to play around with.',
+            content: 'Making changes to your project After signing in to your Kentico Cloud account you will see your sample project to play around with.',
             title: 'Tutorial',
             heading: 'Making changes to your project',
             codename: 'first_tutorial',
@@ -153,7 +162,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_2',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
-            content: 'Heading\nText about Kentico Cloud',
+            content: 'Heading Text about Kentico Cloud',
             title: 'Tutorial',
             heading: 'Heading',
             codename: 'first_tutorial',
@@ -185,7 +194,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_6',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
-            content: 'Running the .NET MVC sample application\nBefore going any further, make sure you have the following.',
+            content: 'Running the .NET MVC sample application Before going any further, make sure you have the following.',
             title: 'Tutorial',
             heading: 'Running the .NET MVC sample application',
             codename: 'first_tutorial',
@@ -193,7 +202,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_7',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         }, {
-            content: 'First run of the sample app\nWhen you run the application for the first time, you will see a Configuration page. Use it to connect the app to your sample project in Kentico Cloud.',
+            content: 'First run of the sample app When you run the application for the first time, you will see a Configuration page. Use it to connect the app to your sample project in Kentico Cloud.',
             title: 'Tutorial',
             heading: 'First run of the sample app',
             codename: 'first_tutorial',
@@ -213,6 +222,48 @@ describe('searchableArticleCreator', () => {
         const actualResult = createItemRecords(
             articleWithMultipleCallouts,
             articleWithMultipleCallouts.content.value);
+
+        expect(actualResult).toEqual(expectedResult);
+    });
+
+    test('gets rid of special &nbsp; character', () => {
+        const expectedResult = [{
+            content: 'some text in a paragraph another paragraph',
+            title: 'Tutorial',
+            heading: '',
+            codename: 'first_tutorial',
+            order: 1,
+            objectID: 'first_tutorial_1',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+        }, {
+            content: 'Some custom heading text after heading',
+            title: 'Tutorial',
+            heading: 'Some custom heading',
+            codename: 'first_tutorial',
+            order: 2,
+            objectID: 'first_tutorial_2',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+        }, {
+            content: 'Premium feature hello!',
+            title: 'Tutorial',
+            heading: 'Some custom heading',
+            codename: 'first_tutorial',
+            order: 3,
+            objectID: 'first_tutorial_3',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+        }, {
+            content: 'some text after callout',
+            title: 'Tutorial',
+            heading: 'Some custom heading',
+            codename: 'first_tutorial',
+            order: 4,
+            objectID: 'first_tutorial_4',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+        }];
+
+        const actualResult = createItemRecords(
+            edgeCasesArticle,
+            edgeCasesArticle.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
