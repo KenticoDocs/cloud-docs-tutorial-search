@@ -86,7 +86,8 @@ class ItemRecordsCreator {
         return content
             .replace(/\n/g, ' ')
             .replace(/\s{2}/g, ' ')
-            .replace(/&nbsp;/g, '');
+            .replace(/&nbsp;/g, ' ')
+            .trim();
     }
 }
 
