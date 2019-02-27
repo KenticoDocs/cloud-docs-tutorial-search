@@ -14,6 +14,12 @@ function getKenticoClient() {
         enableSecuredMode: true,
         securedApiKey: keys.securedApiKey,
         typeResolvers,
+        globalHeaders: [
+            {
+                header: 'X-KC-Wait-For-Loading-New-Content',
+                value: 'true'
+            }
+        ],
     });
 }
 
