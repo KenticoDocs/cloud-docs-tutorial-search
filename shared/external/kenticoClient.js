@@ -1,11 +1,17 @@
 const KenticoCloud = require('kentico-cloud-delivery');
 const Article = require('../models/article');
 const Scenario = require('../models/scenario');
+const Instructions = require('../models/instructions');
+const CodeSamples = require('../models/code_samples');
+const CodeSample = require('../models/code_sample');
 const { keys } = require('./configuration');
 
 const typeResolvers = [
     new KenticoCloud.TypeResolver('article', () => new Article()),
     new KenticoCloud.TypeResolver('scenario', () => new Scenario()),
+    new KenticoCloud.TypeResolver('instructions', () => new Instructions()),
+    new KenticoCloud.TypeResolver('code_samples', () => new CodeSamples()),
+    new KenticoCloud.TypeResolver('code_sample', () => new CodeSample()),
 ];
 
 function getKenticoClient() {

@@ -2513,21 +2513,21 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-kentico-cloud-core@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/kentico-cloud-core/-/kentico-cloud-core-1.2.0.tgz#88cf93ff2f0ba2f34c9c1a7519313d22d2be3485"
-  integrity sha512-TlhaKR32lWAckXAVE9xJb/W8sMlJMSyoZHx0IByfNQF0OpbAUs4YO2zhdWsXpEHq+nz++l9PT+vO18QcSzB4IQ==
+kentico-cloud-core@1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/kentico-cloud-core/-/kentico-cloud-core-1.4.3.tgz#c40e39bbd8f1c2787e81d18e9eda1633d1357732"
+  integrity sha512-YJHpyCSSXX4fBAyy4126Y9IAsVM0N9AWQ8myOGe9b41ecm3WBMRfUH8D3a/HQB5owHAob5WPgiKlHGQ9kAwUJg==
   dependencies:
     axios "0.18.0"
 
-kentico-cloud-delivery@^5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/kentico-cloud-delivery/-/kentico-cloud-delivery-5.2.1.tgz#c0c85cbd7b4794ed4740475e8b6040f3bd1099cb"
-  integrity sha512-It1PgysQbAr+w+4aeFU/EJ1k+Ra5d/uNXbK/ZbzXJ4dsysmLPt6a03alKW4C64gjhVo3kiZtmjBazhknv1Wkiw==
+kentico-cloud-delivery@^5.7.1:
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/kentico-cloud-delivery/-/kentico-cloud-delivery-5.7.1.tgz#ad29053b8da8bc719743b65fb8191566e686cdf7"
+  integrity sha512-uJpFX9a/XLb6KGIvMpk8E8tKY1dyqbzHMEvprE8S7Y5L5aHH5y9PM2kBwNA8DId5aKlpYx7vr8I4/6OUYTrSFw==
   dependencies:
-    kentico-cloud-core "1.2.0"
+    kentico-cloud-core "1.4.3"
     parse5 "5.1.0"
-    reflect-metadata "0.1.12"
+    reflect-metadata "0.1.13"
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
@@ -3372,10 +3372,10 @@ reduce@^1.0.1:
   dependencies:
     object-keys "~1.0.0"
 
-reflect-metadata@0.1.12:
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.12.tgz#311bf0c6b63cd782f228a81abe146a2bfa9c56f2"
-  integrity sha512-n+IyV+nGz3+0q3/Yf1ra12KpCyi001bi4XFxSjbiWWjfqb52iTTtpGXmCCAOWWIAn9KEuFZKGqBERHmrtScZ3A==
+reflect-metadata@0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
+  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
 
 regenerator-runtime@^0.11.0:
   version "0.11.1"
