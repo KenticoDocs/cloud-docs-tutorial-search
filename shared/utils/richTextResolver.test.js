@@ -30,6 +30,68 @@ const contentChunkItem = {
     }
 };
 
+const codeSampleItem = {
+    system: {
+        id: '0673f30a-cfe3-4bcf-85c4-dbb9c96288e8',
+        language: 'en-US',
+        codename: 'hello_world',
+        type: 'code_sample',
+    },
+    code: {
+        name: 'Code',
+        value: 'alert( \'Hello, World!\' );',
+    }
+};
+
+const codeSamplesItem = {
+    system: {
+        id: 'be3bda65-9857-4cfe-b01d-05eb8bc739be',
+        language: 'en-US',
+        codename: 'hello_world',
+        type: 'code_samples',
+    },
+    elements: {
+        code_samples: {
+            value: [
+                'first_sample',
+                'second_sample',
+                'hello_world',
+            ]
+        }
+    }
+};
+
+const contentSwitcherItem = {
+    system: {
+        id: '75b6d00f-95e3-4311-9d7a-e33915e2b733',
+        language: 'en-US',
+        codename: 'some_content_switcher',
+        type: 'content_switcher',
+    },
+    children: [{
+        system: {
+            id: '75b6d00f-95e3-4311-9d7a-e33915e2b733',
+            language: 'en-US',
+            codename: 'some_instruction',
+            type: 'instructions',
+        },
+    }, {
+        system: {
+            id: '37f3ff4e-a326-4399-8bfd-af46c43f826a',
+            language: 'en-US',
+            codename: 'another_instruction',
+            type: 'instructions',
+        },
+    }, {
+        system: {
+            id: 'eea049fb-9bbc-4b79-a388-12548ec14bb5',
+            language: 'en-US',
+            codename: 'something',
+            type: 'incorrect',
+        },
+    }]
+};
+
 const differentItem = {
     ...calloutItem,
     system: {
@@ -42,7 +104,7 @@ const differentItem = {
 
 describe('resolveItemInRichText', () => {
     it('returns sanitized value of a callout content item', () => {
-        const expectedResult = '<callout>Premium feature\nFeatures described on this page require the Professional plan or higher.</callout>';
+        const expectedResult = `|~innerItem|Premium feature\nFeatures described on this page require the Professional plan or higher.|innerItem~|`;
 
         const actualResult = resolveItemInRichText(calloutItem);
 
@@ -64,4 +126,33 @@ describe('resolveItemInRichText', () => {
 
         expect(actualResult).toEqual(expectedResult);
     });
+
+    it('returns value of a code sample item', () => {
+        const expectedResult = `|~code_sample|${codeSampleItem.system.codename}|code_sample~|`;
+
+        const actualResult = resolveItemInRichText(codeSampleItem);
+
+        expect(actualResult).toEqual(expectedResult);
+    });
+
+    it('resolves code samples item', () => {
+        const expectedResult =
+            '|~code_sample|first_sample|code_sample~|' +
+            '|~code_sample|second_sample|code_sample~|' +
+            '|~code_sample|hello_world|code_sample~|';
+
+        const actualResult = resolveItemInRichText(codeSamplesItem);
+
+        expect(actualResult).toEqual(expectedResult);
+    });
+
+    it('resolves instructions items within content switcher item', () => {
+        const expectedResult =
+            '|~instructions|some_instruction|instructions~|' +
+            '|~instructions|another_instruction|instructions~|';
+
+        const actualResult = resolveItemInRichText(contentSwitcherItem);
+
+        expect(actualResult).toEqual(expectedResult);
+    })
 });

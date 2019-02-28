@@ -12,10 +12,10 @@ class ItemRecordsCreator {
         contentSplitByHeadings.forEach((singleHeadingContent) => {
             const { heading, content } = this.splitHeadingAndContent(singleHeadingContent);
 
-            if (content.includes('<callout>')) {
-                this.indexContentSplitByCallouts(content, heading, item);
+            if (content.includes('|~innerItem|')) {
+                this.indexContentSplitByInnerItems(content, heading, item);
             } else {
-                this.indexLeftoverContentWithoutCallouts(content, heading, item);
+                this.indexLeftoverContentWithoutInnerItems(content, heading, item);
             }
         });
 
@@ -36,23 +36,63 @@ class ItemRecordsCreator {
             }
     }
 
-    indexContentSplitByCallouts(singleHeadingContent, heading, item) {
-        const contentSplitByCallouts = singleHeadingContent.split('<callout>');
+    indexContentSplitByInnerItems(singleHeadingContent, heading, item) {
+        const innerItemClosingLabel = '|innerItem~|';
+        const contentSplitByInnerItems = singleHeadingContent.split('|~innerItem|');
 
-        contentSplitByCallouts.forEach(content => {
-            const calloutClosingTagIndex = content.indexOf('</callout>');
-            const calloutContent = content.substring(0, calloutClosingTagIndex).trim();
+        contentSplitByInnerItems.forEach(content => {
+            const innerItemClosingTagIndex = content.indexOf(innerItemClosingLabel);
+            const innerItemContent = content.substring(0, innerItemClosingTagIndex).trim();
 
-            if (this.isNonEmpty(calloutContent)) {
-                this.addItemRecord(calloutContent, heading, item);
+            if (this.isNonEmpty(innerItemContent)) {
+                this.indexInnerItem(innerItemContent, heading, item);
             }
-            const leftoverContent = content.substring(calloutClosingTagIndex);
+            const leftoverContent = content
+                .substring(innerItemClosingTagIndex)
+                .replace(innerItemClosingLabel, ' ');
 
-            this.indexLeftoverContentWithoutCallouts(leftoverContent, heading, item);
+            this.indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item);
         });
     }
 
-    indexLeftoverContentWithoutCallouts(leftoverContent, heading, item) {
+    indexInnerItem(innerItemContent, heading, item) {
+        if (innerItemContent.includes('|~language|')) {
+            const {
+                contentWithoutLanguageLabel,
+                itemWithLanguage,
+            } = this.resolveInnerItemLanguage(innerItemContent, item);
+            this.addItemRecord(contentWithoutLanguageLabel, heading, itemWithLanguage);
+        } else {
+            this.addItemRecord(innerItemContent, heading, item);
+        }
+    }
+
+    resolveInnerItemLanguage(innerItemContent, item) {
+        const languageExtractor = /\|~language\|([\s|\S]*?)\|language~\|/g;
+        const match = languageExtractor.exec(innerItemContent);
+
+        if (match && match[1]) {
+            const contentWithoutLanguageLabel = innerItemContent.replace(languageExtractor, ' ');
+            return {
+                contentWithoutLanguageLabel,
+                itemWithLanguage: {
+                    ...item,
+                    programmingLanguage: {
+                        value: [{
+                            codename: match[1]
+                        }]
+                    }
+                }
+            };
+        }
+
+        return {
+            innerItemContent,
+            item,
+        };
+    }
+
+    indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item) {
         const contentWithoutMarkdown = removeMarkdown(leftoverContent).trim();
 
         if (this.isNonEmpty(contentWithoutMarkdown)) {
@@ -66,6 +106,7 @@ class ItemRecordsCreator {
         const codename = item.system.codename;
         const order = this.itemRecords.length + 1;
         const objectID = codename + '_' + order;
+        const language = this.getLanguage(item);
 
         this.itemRecords.push({
             content: this.sanitizeContent(content),
@@ -75,7 +116,15 @@ class ItemRecordsCreator {
             codename,
             order,
             objectID,
+            language
         });
+    }
+
+    getLanguage(item) {
+        return item.programmingLanguage &&
+               item.programmingLanguage.value.length === 1
+                    ? item.programmingLanguage.value[0].codename
+                    : '';
     }
 
     isNonEmpty(content) {
