@@ -57,17 +57,10 @@ async function reindexItems(codenames) {
 }
 
 async function resolveAndIndexItem(item) {
-    if (item.content) {
-        const itemRecordsCreator = new ItemRecordsCreator();
-        let textToIndex = item.content.getHtml();
-
-        if (item.system.type === 'article' && item.introduction) {
-            textToIndex = item.introduction.getHtml() + ' ' + textToIndex;
-        }
-
-        const itemRecords = itemRecordsCreator.createItemRecords(item, textToIndex);
-        await getSearchIndex().saveObjects(itemRecords);
-    }
+    const itemRecordsCreator = new ItemRecordsCreator();
+    const textToIndex = item.introduction.getHtml() + ' ' + item.content.getHtml();
+    const itemRecords = itemRecordsCreator.createItemRecords(item, textToIndex);
+    await getSearchIndex().saveObjects(itemRecords);
 }
 
 function deleteIndexedItems(codenames) {
