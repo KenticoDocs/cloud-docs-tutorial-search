@@ -8,7 +8,11 @@ const {
     insertInstructionsContentIntoText
 } = require('./utils/instructionsUtils');
 const { CONTENT_TYPES_TO_INITIALIZE } = require('./external/constants');
-const { getInstructionsLabel } = require('./utils/richTextLabels');
+const {
+    getInstructionsLabel,
+    CodeSampleMarkStart,
+    InstructionsMarkStart,
+} = require('./utils/richTextLabels');
 
 const EXCLUDED_FROM_SEARCH = 'excluded_from_search';
 
@@ -31,9 +35,8 @@ async function reindexAllItems() {
             richTextResolver: resolveItemInRichText
         })
         .getPromise()
-        .then(async response => {
-            const itemsToIndex = response.items.filter(item => !isItemExcludedFromSearch(item));
-            const linkedItems = response.linkedItems;
+        .then(async ({ items, linkedItems }) => {
+            const itemsToIndex = items.filter(item => !isItemExcludedFromSearch(item));
 
             for (const item of itemsToIndex) {
                 await resolveAndIndexItem(item, linkedItems);
@@ -108,11 +111,11 @@ async function getArticleWithInstructionsItem(instruction) {
 async function resolveAndIndexItem(item, linkedItems) {
     let textToIndex = item.introduction.getHtml() + ' ' + item.content.getHtml();
 
-    if (textToIndex.includes('|~code_sample|')) {
+    if (textToIndex.includes(CodeSampleMarkStart)) {
         textToIndex = insertLinkedCodeSamples(textToIndex, linkedItems);
     }
 
-    if (textToIndex.includes('|~instructions|')) {
+    if (textToIndex.includes(InstructionsMarkStart)) {
         await indexLinkedInstructions(textToIndex, item, linkedItems);
     } else {
         await indexItem(item, textToIndex);
@@ -135,7 +138,7 @@ async function indexLinkedInstructions(articleText, articleToIndex, linkedItems)
 
 function resolveInstructionsItemText(articleText, item, linkedItems) {
     let textToIndex = insertInstructionsContentIntoText(articleText, item.content.getHtml());
-    if (textToIndex.includes('|~code_sample|')) {
+    if (textToIndex.includes(CodeSampleMarkStart)) {
         textToIndex = insertLinkedCodeSamples(textToIndex, linkedItems);
     }
 

@@ -1,4 +1,10 @@
 const ItemRecordsCreator = require('./itemRecordsCreator');
+const {
+    LanguageMarkStart,
+    LanguageMarkEnd,
+    InnerItemMarkStart,
+    InnerItemMarkEnd,
+} = require('./richTextLabels');
 
 const shortArticle = {
     system: {
@@ -45,7 +51,7 @@ const longArticleWithCallout = {
     content: {
         name: 'Content',
         value: longArticle.content.value
-            + '|~innerItem|New to headless CMS?\nIf you are new to the world of headless CMSs, you might want to start by building a Hello world application. It will only take you about 5 minutes!\nAfter you grasp the core idea behind a headless CMS, everything in the sample application will make a lot more sense much faster.|innerItem~|'
+            + `${InnerItemMarkStart}New to headless CMS?\nIf you are new to the world of headless CMSs, you might want to start by building a Hello world application. It will only take you about 5 minutes!\nAfter you grasp the core idea behind a headless CMS, everything in the sample application will make a lot more sense much faster.${InnerItemMarkEnd}`
             + '<h2>Making changes to your project</h2>\n<p>After signing in to your <a href="http://some.website.com">Kentico Cloud</a> account you will see your sample project to play around with.</p>\n'
     }
 };
@@ -54,15 +60,15 @@ const articleWithMultipleCallouts = {
     ...shortArticle,
     content: {
         name: 'Content',
-        value: '|~innerItem|Callout number 1|innerItem~|'
+        value: `${InnerItemMarkStart}Callout number 1${InnerItemMarkEnd}`
             + '<p>Some paragraph between two components</p>'
             + '<h2>Heading</h2>\n<p><strong>Text about Kentico Cloud</strong></p>'
-            + '|~innerItem|Callout number 2 Very useful advice about KC|innerItem~|'
-            + '|~innerItem|Callout number 3|innerItem~|'
+            + `${InnerItemMarkStart}Callout number 2 Very useful advice about KC${InnerItemMarkEnd}`
+            + `${InnerItemMarkStart}Callout number 3${InnerItemMarkEnd}`
             + '<p>Some paragraph between a component and a heading</p>'
             + '<h2>Running the .NET MVC sample application</h2>\n<p>Before going any further, make sure you have the following.</p>'
             + '<h2>First run of the sample app</h2>\n<p>When you run the application for the first time, you will see a Configuration page. Use it to connect the app to your sample project in Kentico Cloud.</p>'
-            + '|~innerItem||~language|js|language~|alert( \'Hello, world!\' );|innerItem~|'
+            + `${InnerItemMarkStart}${LanguageMarkStart}js${LanguageMarkEnd}alert('Hello, world!');${InnerItemMarkEnd}`
     }
 };
 
@@ -71,7 +77,7 @@ const edgeCasesArticle = {
     content: {
         name: 'Content',
         value: '<p>some text in a paragraph<br>\n</p>\n<p>another paragraph&nbsp;</p>\n<h2>Some custom heading</h2>\n<p>text after heading</p>\n' +
-            '|~innerItem|Premium feature\nhello!|innerItem~|</object>\n<p>some text after component</p>'
+            `${InnerItemMarkStart}Premium feature\nhello!${InnerItemMarkEnd}</object>\n<p>some text after component</p>`
     }
 };
 
@@ -224,7 +230,7 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             language: '',
         }, {
-            content: 'alert( \'Hello, world!\' );',
+            content: 'alert(\'Hello, world!\');',
             title: 'Tutorial',
             heading: 'First run of the sample app',
             codename: 'first_tutorial',

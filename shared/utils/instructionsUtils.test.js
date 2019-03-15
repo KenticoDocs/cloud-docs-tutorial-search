@@ -1,10 +1,19 @@
-const { parseCodenamesOfInstructionsFromText, insertInstructionsContentIntoText } = require('./instructionsUtils');
+const {
+    parseCodenamesOfInstructionsFromText,
+    insertInstructionsContentIntoText,
+} = require('./instructionsUtils');
+const {
+    InnerItemMarkStart,
+    InnerItemMarkEnd,
+    InstructionsMarkStart,
+    InstructionsMarkEnd,
+} = require('./richTextLabels');
 
 const textWithInstructions =
-    'Let\'s see what we have here:|~instructions|instruction_codename_1|instructions~||~instructions|instruction_codename_2|instructions~|.';
+    `Let's see what we have here:${InstructionsMarkStart}instruction_codename_1${InstructionsMarkEnd}${InstructionsMarkStart}instruction_codename_2${InstructionsMarkEnd}.`;
 
 const textWithoutInstructions =
-    'Let\'s see what we have here:|~innerItem|some_codename|~innerItem||~innerItem|callout_codename|~innerItem|';
+    `Let's see what we have here:${InnerItemMarkStart}some_codename${InnerItemMarkEnd}${InnerItemMarkStart}callout_codename${InnerItemMarkEnd}`;
 
 const instructionText = 'You are supposed to do this...';
 

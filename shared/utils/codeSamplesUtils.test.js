@@ -1,4 +1,12 @@
 const processLinkedCodeSamples = require('./codeSamplesUtils');
+const {
+    LanguageMarkStart,
+    LanguageMarkEnd,
+    InnerItemMarkStart,
+    InnerItemMarkEnd,
+    CodeSampleMarkStart,
+    CodeSampleMarkEnd,
+} = require('./richTextLabels');
 
 const linkedItems = {
     1: {
@@ -55,14 +63,14 @@ const linkedItems = {
     }
 };
 
-const text = 'Hello world: |~code_sample|hello_world|code_sample~|. Start by |~code_sample|first_import|code_sample~| and authetication |~code_sample|authentication|code_sample~|';
-const incorrectText = 'Hello! |~code_sample|hello|code_sample~|. Start by |~code_sample|import|code_sample~|';
+const text = `Hello world: ${CodeSampleMarkStart}hello_world${CodeSampleMarkEnd}. Start by ${CodeSampleMarkStart}first_import${CodeSampleMarkEnd} and authetication ${CodeSampleMarkStart}authentication${CodeSampleMarkEnd}`;
+const incorrectText = `Hello! ${CodeSampleMarkStart}hello${CodeSampleMarkEnd}. Start by ${CodeSampleMarkStart}import${CodeSampleMarkEnd}`;
 
 describe('processLinkedCodeSamples', () => {
     it('adds code sample content with languages to content', () => {
-        const dotNetLanguageLabel = '|~language|_net|language~|';
-        const jsLanguageLabel = '|~language|js|language~|';
-        const expectedResult = `Hello world: |~innerItem|${dotNetLanguageLabel}${linkedItems[1].code.value}|innerItem~|. Start by |~innerItem|${jsLanguageLabel}${linkedItems[2].code.value}|innerItem~| and authetication |~innerItem|Authorization: Bearer <YOUR_API_KEY>|innerItem~|`;
+        const dotNetLanguageLabel = `${LanguageMarkStart}_net${LanguageMarkEnd}`;
+        const jsLanguageLabel = `${LanguageMarkStart}js${LanguageMarkEnd}`;
+        const expectedResult = `Hello world: ${InnerItemMarkStart}${dotNetLanguageLabel}${linkedItems[1].code.value}${InnerItemMarkEnd}. Start by ${InnerItemMarkStart}${jsLanguageLabel}${linkedItems[2].code.value}${InnerItemMarkEnd} and authetication ${InnerItemMarkStart}Authorization: Bearer <YOUR_API_KEY>${InnerItemMarkEnd}`;
 
         const actualResult = processLinkedCodeSamples(text, linkedItems);
 

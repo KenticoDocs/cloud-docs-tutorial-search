@@ -1,4 +1,10 @@
 const removeMarkdown = require('remove-markdown');
+const {
+    LanguageMarkStart,
+    LanguageMarkEnd,
+    InnerItemMarkStart,
+    InnerItemMarkEnd,
+} = require('./richTextLabels');
 
 class ItemRecordsCreator {
     constructor() {
@@ -12,7 +18,7 @@ class ItemRecordsCreator {
         contentSplitByHeadings.forEach((singleHeadingContent) => {
             const { heading, content } = this.splitHeadingAndContent(singleHeadingContent);
 
-            if (content.includes('|~innerItem|')) {
+            if (content.includes(InnerItemMarkStart)) {
                 this.indexContentSplitByInnerItems(content, heading, item);
             } else {
                 this.indexLeftoverContentWithoutInnerItems(content, heading, item);
@@ -37,11 +43,10 @@ class ItemRecordsCreator {
     }
 
     indexContentSplitByInnerItems(singleHeadingContent, heading, item) {
-        const innerItemClosingLabel = '|innerItem~|';
-        const contentSplitByInnerItems = singleHeadingContent.split('|~innerItem|');
+        const contentSplitByInnerItems = singleHeadingContent.split(InnerItemMarkStart);
 
         contentSplitByInnerItems.forEach(content => {
-            const innerItemClosingTagIndex = content.indexOf(innerItemClosingLabel);
+            const innerItemClosingTagIndex = content.indexOf(InnerItemMarkEnd);
             const innerItemContent = content.substring(0, innerItemClosingTagIndex).trim();
 
             if (this.isNonEmpty(innerItemContent)) {
@@ -49,14 +54,14 @@ class ItemRecordsCreator {
             }
             const leftoverContent = content
                 .substring(innerItemClosingTagIndex)
-                .replace(innerItemClosingLabel, ' ');
+                .replace(InnerItemMarkEnd, ' ');
 
             this.indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item);
         });
     }
 
     indexInnerItem(innerItemContent, heading, item) {
-        if (innerItemContent.includes('|~language|')) {
+        if (innerItemContent.includes(LanguageMarkStart)) {
             const {
                 contentWithoutLanguageLabel,
                 itemWithLanguage,
@@ -68,7 +73,7 @@ class ItemRecordsCreator {
     }
 
     resolveInnerItemLanguage(innerItemContent, item) {
-        const languageExtractor = /\|~language\|([\s|\S]*?)\|language~\|/g;
+        const languageExtractor = new RegExp(`${LanguageMarkStart}([\\s|\\S]*?)${LanguageMarkEnd}`, 'g');
         const match = languageExtractor.exec(innerItemContent);
 
         if (match && match[1]) {
