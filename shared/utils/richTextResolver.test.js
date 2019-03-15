@@ -1,4 +1,12 @@
 const resolveItemInRichText = require('./richTextResolver');
+const {
+    InnerItemMarkStart,
+    InnerItemMarkEnd,
+    CodeSampleMarkStart,
+    CodeSampleMarkEnd,
+    InstructionsMarkStart,
+    InstructionsMarkEnd,
+} = require('./richTextLabels');
 
 const calloutItem = {
     system: {
@@ -104,7 +112,7 @@ const differentItem = {
 
 describe('resolveItemInRichText', () => {
     it('returns sanitized value of a callout content item', () => {
-        const expectedResult = `|~innerItem|Premium feature\nFeatures described on this page require the Professional plan or higher.|innerItem~|`;
+        const expectedResult = `${InnerItemMarkStart}Premium feature\nFeatures described on this page require the Professional plan or higher.${InnerItemMarkEnd}`;
 
         const actualResult = resolveItemInRichText(calloutItem);
 
@@ -128,7 +136,7 @@ describe('resolveItemInRichText', () => {
     });
 
     it('returns value of a code sample item', () => {
-        const expectedResult = `|~code_sample|${codeSampleItem.system.codename}|code_sample~|`;
+        const expectedResult = `${CodeSampleMarkStart}${codeSampleItem.system.codename}${CodeSampleMarkEnd}`;
 
         const actualResult = resolveItemInRichText(codeSampleItem);
 
@@ -137,9 +145,9 @@ describe('resolveItemInRichText', () => {
 
     it('resolves code samples item', () => {
         const expectedResult =
-            '|~code_sample|first_sample|code_sample~|' +
-            '|~code_sample|second_sample|code_sample~|' +
-            '|~code_sample|hello_world|code_sample~|';
+            `${CodeSampleMarkStart}first_sample${CodeSampleMarkEnd}` +
+            `${CodeSampleMarkStart}second_sample${CodeSampleMarkEnd}` +
+            `${CodeSampleMarkStart}hello_world${CodeSampleMarkEnd}`;
 
         const actualResult = resolveItemInRichText(codeSamplesItem);
 
@@ -148,8 +156,8 @@ describe('resolveItemInRichText', () => {
 
     it('resolves instructions items within content switcher item', () => {
         const expectedResult =
-            '|~instructions|some_instruction|instructions~|' +
-            '|~instructions|another_instruction|instructions~|';
+            `${InstructionsMarkStart}some_instruction${InstructionsMarkEnd}` +
+            `${InstructionsMarkStart}another_instruction${InstructionsMarkEnd}`;
 
         const actualResult = resolveItemInRichText(contentSwitcherItem);
 

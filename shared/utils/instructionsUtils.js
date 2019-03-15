@@ -1,5 +1,10 @@
+const {
+    InstructionsMarkStart,
+    InstructionsMarkEnd,
+} = require('./richTextLabels');
+
 function parseCodenamesOfInstructionsFromText(text) {
-    const instructionsCodenamesExtractor = /\|~instructions\|([\s|\S]*?)\|instructions~\|/g;
+    const instructionsCodenamesExtractor = new RegExp(`${InstructionsMarkStart}([\\s|\\S]*?)${InstructionsMarkEnd}`, 'g');
     const codenames = [];
 
     let match = instructionsCodenamesExtractor.exec(text);
@@ -12,9 +17,9 @@ function parseCodenamesOfInstructionsFromText(text) {
 }
 
 function insertInstructionsContentIntoText(text, instructionsText) {
-    if (text.includes('|~instructions|') && text.includes('|instructions~|')) {
-        const start = text.indexOf('|~instructions|');
-        const end = text.lastIndexOf('|instructions~|') + '|instructions~|'.length;
+    if (text.includes(InstructionsMarkStart) && text.includes(InstructionsMarkEnd)) {
+        const start = text.indexOf(InstructionsMarkStart);
+        const end = text.lastIndexOf(InstructionsMarkEnd) + InstructionsMarkEnd.length;
 
         return text.substring(0, start) + ` ${instructionsText} ` + text.substring(end);
     }
