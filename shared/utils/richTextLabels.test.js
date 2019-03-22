@@ -1,24 +1,21 @@
 const {
-    getLanguageLabel,
+    getPlatformLabel,
     getInnerItemLabel,
     getCodeSampleLabel,
-    getInstructionsLabel,
-    LanguageMarkStart,
-    LanguageMarkEnd,
+    PlatformMarkStart,
+    PlatformMarkEnd,
     InnerItemMarkStart,
     InnerItemMarkEnd,
     CodeSampleMarkStart,
     CodeSampleMarkEnd,
-    InstructionsMarkStart,
-    InstructionsMarkEnd,
 } = require('./richTextLabels');
 
-describe('getLanguageLabel', () => {
-    it('labels the language correctly', () => {
-        const language = '_net';
-        const expectedResult = `${LanguageMarkStart}_net${LanguageMarkEnd}`;
+describe('getPlatformLabel', () => {
+    it('labels the platform correctly', () => {
+        const platform = '_net';
+        const expectedResult = `${PlatformMarkStart}_net${PlatformMarkEnd}`;
 
-        const actualResult = getLanguageLabel(language);
+        const actualResult = getPlatformLabel(platform);
 
         expect(actualResult).toEqual(expectedResult);
     })
@@ -41,17 +38,6 @@ describe('getCodeSampleLabel', () => {
         const expectedResult = `${CodeSampleMarkStart}hello_world${CodeSampleMarkEnd}`;
 
         const actualResult = getCodeSampleLabel(codeSampleCodename);
-
-        expect(actualResult).toEqual(expectedResult);
-    })
-});
-
-describe('getInstructionsLabel', () => {
-    it('labels the codename correctly', () => {
-        const instructionsCodename = 'tutorial_in_react';
-        const expectedResult = `${InstructionsMarkStart}tutorial_in_react${InstructionsMarkEnd}`;
-
-        const actualResult = getInstructionsLabel(instructionsCodename);
 
         expect(actualResult).toEqual(expectedResult);
     })

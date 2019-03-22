@@ -2,7 +2,6 @@ const removeMarkdown = require('remove-markdown');
 const {
     getInnerItemLabel,
     getCodeSampleLabel,
-    getInstructionsLabel
 } = require('./richTextLabels');
 
 function resolveItemInRichText(item) {
@@ -16,8 +15,6 @@ function resolveItemInRichText(item) {
             return getCodeSampleLabel(item.system.codename);
         case 'code_samples':
             return resolveCodeSamplesItem(item);
-        case 'content_switcher':
-            return resolveContentSwitcherItem(item);
         default:
             return '';
     }
@@ -31,18 +28,6 @@ function resolveCodeSamplesItem(item) {
     });
 
     return codeSamplesContent;
-}
-
-function resolveContentSwitcherItem(item) {
-    let contentSwitcherContent = '';
-
-    item.children.forEach(linkedItem => {
-        if (linkedItem.system.type === 'instructions') {
-            contentSwitcherContent += getInstructionsLabel(linkedItem.system.codename);
-        }
-    });
-
-    return contentSwitcherContent;
 }
 
 module.exports = resolveItemInRichText;

@@ -1,5 +1,5 @@
 const {
-    getLanguageLabel,
+    getPlatformLabel,
     getCodeSampleLabel,
     getInnerItemLabel
 } = require('./richTextLabels');
@@ -21,11 +21,11 @@ function insertLinkedCodeSamples(text, linkedItems) {
 }
 
 function insertCodeSampleContent(codeSample) {
-    if (codeSample.programmingLanguage.value.length === 1) {
-        const language = codeSample.programmingLanguage.value[0].codename;
-        const languageLabel = getLanguageLabel(language);
+    if (codeSample.platform.value.length === 1) {
+        const platform = codeSample.platform.value[0].codename;
+        const platformLabel = getPlatformLabel(platform);
 
-        return getInnerItemLabel(languageLabel + codeSample.code.value);
+        return getInnerItemLabel(platformLabel + codeSample.code.value);
     } else {
         return getInnerItemLabel(codeSample.code.value);
     }

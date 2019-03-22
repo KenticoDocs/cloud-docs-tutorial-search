@@ -1,7 +1,7 @@
 const removeMarkdown = require('remove-markdown');
 const {
-    LanguageMarkStart,
-    LanguageMarkEnd,
+    PlatformMarkStart,
+    PlatformMarkEnd,
     InnerItemMarkStart,
     InnerItemMarkEnd,
 } = require('./richTextLabels');
@@ -61,28 +61,28 @@ class ItemRecordsCreator {
     }
 
     indexInnerItem(innerItemContent, heading, item) {
-        if (innerItemContent.includes(LanguageMarkStart)) {
+        if (innerItemContent.includes(PlatformMarkStart)) {
             const {
-                contentWithoutLanguageLabel,
-                itemWithLanguage,
-            } = this.resolveInnerItemLanguage(innerItemContent, item);
-            this.addItemRecord(contentWithoutLanguageLabel, heading, itemWithLanguage);
+                contentWithoutPlatformLabel,
+                itemWithPlatform,
+            } = this.resolveInnerItemPlatform(innerItemContent, item);
+            this.addItemRecord(contentWithoutPlatformLabel, heading, itemWithPlatform);
         } else {
             this.addItemRecord(innerItemContent, heading, item);
         }
     }
 
-    resolveInnerItemLanguage(innerItemContent, item) {
-        const languageExtractor = new RegExp(`${LanguageMarkStart}([\\s|\\S]*?)${LanguageMarkEnd}`, 'g');
-        const match = languageExtractor.exec(innerItemContent);
+    resolveInnerItemPlatform(innerItemContent, item) {
+        const platformExtractor = new RegExp(`${PlatformMarkStart}([\\s|\\S]*?)${PlatformMarkEnd}`, 'g');
+        const match = platformExtractor.exec(innerItemContent);
 
         if (match && match[1]) {
-            const contentWithoutLanguageLabel = innerItemContent.replace(languageExtractor, ' ');
+            const contentWithoutPlatformLabel = innerItemContent.replace(platformExtractor, ' ');
             return {
-                contentWithoutLanguageLabel,
-                itemWithLanguage: {
+                contentWithoutPlatformLabel,
+                itemWithPlatform: {
                     ...item,
-                    programmingLanguage: {
+                    platform: {
                         value: [{
                             codename: match[1]
                         }]
@@ -111,7 +111,7 @@ class ItemRecordsCreator {
         const codename = item.system.codename;
         const order = this.itemRecords.length + 1;
         const objectID = codename + '_' + order;
-        const language = this.getLanguage(item);
+        const platforms = this.getPlatforms(item);
 
         this.itemRecords.push({
             content: this.sanitizeContent(content),
@@ -121,15 +121,19 @@ class ItemRecordsCreator {
             codename,
             order,
             objectID,
-            language
+            platforms
         });
     }
 
-    getLanguage(item) {
-        return item.programmingLanguage &&
-               item.programmingLanguage.value.length === 1
-                    ? item.programmingLanguage.value[0].codename
-                    : '';
+    getPlatforms(item) {
+        const platforms = [];
+
+        if (item.platform) {
+            item.platform.value.forEach(
+                platform => platforms.push(platform.codename));
+        }
+
+        return platforms;
     }
 
     isNonEmpty(content) {

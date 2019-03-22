@@ -1,14 +1,12 @@
-const LanguageMarkStart = '#~language#';
-const LanguageMarkEnd = '#language~#';
+const PlatformMarkStart = '#~platform#';
+const PlatformMarkEnd = '#platform~#';
 const InnerItemMarkStart = '#~inner_item#';
 const InnerItemMarkEnd = '#inner_item~#';
 const CodeSampleMarkStart = '#~code_sample#';
 const CodeSampleMarkEnd = '#code_sample~#';
-const InstructionsMarkStart = '#~instructions#';
-const InstructionsMarkEnd = '#instructions~#';
 
-function getLanguageLabel(language) {
-    return LanguageMarkStart + language + LanguageMarkEnd;
+function getPlatformLabel(platform) {
+    return PlatformMarkStart + platform + PlatformMarkEnd;
 }
 
 function getInnerItemLabel(content) {
@@ -19,21 +17,14 @@ function getCodeSampleLabel(codename) {
     return CodeSampleMarkStart + codename + CodeSampleMarkEnd;
 }
 
-function getInstructionsLabel(codename) {
-    return InstructionsMarkStart + codename + InstructionsMarkEnd;
-}
-
 module.exports = {
-    getLanguageLabel,
+    getPlatformLabel,
     getInnerItemLabel,
     getCodeSampleLabel,
-    getInstructionsLabel,
-    LanguageMarkStart,
-    LanguageMarkEnd,
+    PlatformMarkStart,
+    PlatformMarkEnd,
     InnerItemMarkStart,
     InnerItemMarkEnd,
     CodeSampleMarkStart,
     CodeSampleMarkEnd,
-    InstructionsMarkStart,
-    InstructionsMarkEnd,
 };
