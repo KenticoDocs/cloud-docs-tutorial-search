@@ -4,8 +4,6 @@ const {
     InnerItemMarkEnd,
     CodeSampleMarkStart,
     CodeSampleMarkEnd,
-    InstructionsMarkStart,
-    InstructionsMarkEnd,
 } = require('./richTextLabels');
 
 const calloutItem = {
@@ -69,37 +67,6 @@ const codeSamplesItem = {
     }
 };
 
-const contentSwitcherItem = {
-    system: {
-        id: '75b6d00f-95e3-4311-9d7a-e33915e2b733',
-        language: 'en-US',
-        codename: 'some_content_switcher',
-        type: 'content_switcher',
-    },
-    children: [{
-        system: {
-            id: '75b6d00f-95e3-4311-9d7a-e33915e2b733',
-            language: 'en-US',
-            codename: 'some_instruction',
-            type: 'instructions',
-        },
-    }, {
-        system: {
-            id: '37f3ff4e-a326-4399-8bfd-af46c43f826a',
-            language: 'en-US',
-            codename: 'another_instruction',
-            type: 'instructions',
-        },
-    }, {
-        system: {
-            id: 'eea049fb-9bbc-4b79-a388-12548ec14bb5',
-            language: 'en-US',
-            codename: 'something',
-            type: 'incorrect',
-        },
-    }]
-};
-
 const differentItem = {
     ...calloutItem,
     system: {
@@ -153,14 +120,4 @@ describe('resolveItemInRichText', () => {
 
         expect(actualResult).toEqual(expectedResult);
     });
-
-    it('resolves instructions items within content switcher item', () => {
-        const expectedResult =
-            `${InstructionsMarkStart}some_instruction${InstructionsMarkEnd}` +
-            `${InstructionsMarkStart}another_instruction${InstructionsMarkEnd}`;
-
-        const actualResult = resolveItemInRichText(contentSwitcherItem);
-
-        expect(actualResult).toEqual(expectedResult);
-    })
 });

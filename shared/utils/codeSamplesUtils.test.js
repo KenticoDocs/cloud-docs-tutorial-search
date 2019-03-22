@@ -1,7 +1,7 @@
 const processLinkedCodeSamples = require('./codeSamplesUtils');
 const {
-    LanguageMarkStart,
-    LanguageMarkEnd,
+    PlatformMarkStart,
+    PlatformMarkEnd,
     InnerItemMarkStart,
     InnerItemMarkEnd,
     CodeSampleMarkStart,
@@ -17,7 +17,7 @@ const linkedItems = {
         code: {
             value: 'Console.WriteLine("Hello World!");'
         },
-        programmingLanguage: {
+        platform: {
             value: [{
                 codename: '_net'
             }]
@@ -31,7 +31,7 @@ const linkedItems = {
         code: {
             value: 'import { DeliveryClient } from \'kentico-cloud-delivery\';'
         },
-        programmingLanguage: {
+        platform: {
             value: [{
                 codename: 'js'
             }]
@@ -45,7 +45,7 @@ const linkedItems = {
         code: {
             value: 'this is definitely not code sample'
         },
-        programmingLanguage: {
+        platform: {
             value: []
         }
     },
@@ -57,7 +57,7 @@ const linkedItems = {
         code: {
             value: 'Authorization: Bearer <YOUR_API_KEY>'
         },
-        programmingLanguage: {
+        platform: {
             value: []
         }
     }
@@ -67,10 +67,10 @@ const text = `Hello world: ${CodeSampleMarkStart}hello_world${CodeSampleMarkEnd}
 const incorrectText = `Hello! ${CodeSampleMarkStart}hello${CodeSampleMarkEnd}. Start by ${CodeSampleMarkStart}import${CodeSampleMarkEnd}`;
 
 describe('processLinkedCodeSamples', () => {
-    it('adds code sample content with languages to content', () => {
-        const dotNetLanguageLabel = `${LanguageMarkStart}_net${LanguageMarkEnd}`;
-        const jsLanguageLabel = `${LanguageMarkStart}js${LanguageMarkEnd}`;
-        const expectedResult = `Hello world: ${InnerItemMarkStart}${dotNetLanguageLabel}${linkedItems[1].code.value}${InnerItemMarkEnd}. Start by ${InnerItemMarkStart}${jsLanguageLabel}${linkedItems[2].code.value}${InnerItemMarkEnd} and authetication ${InnerItemMarkStart}Authorization: Bearer <YOUR_API_KEY>${InnerItemMarkEnd}`;
+    it('adds code sample content with platforms to content', () => {
+        const dotNetPlatformLabel = `${PlatformMarkStart}_net${PlatformMarkEnd}`;
+        const jsPlatformLabel = `${PlatformMarkStart}js${PlatformMarkEnd}`;
+        const expectedResult = `Hello world: ${InnerItemMarkStart}${dotNetPlatformLabel}${linkedItems[1].code.value}${InnerItemMarkEnd}. Start by ${InnerItemMarkStart}${jsPlatformLabel}${linkedItems[2].code.value}${InnerItemMarkEnd} and authetication ${InnerItemMarkStart}Authorization: Bearer <YOUR_API_KEY>${InnerItemMarkEnd}`;
 
         const actualResult = processLinkedCodeSamples(text, linkedItems);
 

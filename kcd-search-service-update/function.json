@@ -1,10 +1,10 @@
 {
     "disabled": false,
     "bindings": [
-      {
-        "type": "eventGridTrigger",
-        "name": "eventGridEvent",
-        "direction": "in"
-      }
+        {
+            "type": "eventGridTrigger",
+            "name": "eventGridEvent",
+            "direction": "in"
+        }
     ]
-  }
+}
