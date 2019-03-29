@@ -6,9 +6,10 @@ const {
 
 function resolveItemInRichText(item) {
     switch (item.system.type) {
-        case 'callout':
+        case 'callout': {
             const content = removeMarkdown(item.content.value);
             return getInnerItemLabel(content);
+        }
         case 'content_chunk':
             return item.content.value;
         case 'code_sample':

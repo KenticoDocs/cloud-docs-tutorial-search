@@ -27,12 +27,14 @@ async function reindexAllItems() {
             richTextResolver: resolveItemInRichText
         })
         .getPromise()
-        .then(async ({ items, linkedItems }) => {
-            const itemsToIndex = items.filter(item => !isItemExcludedFromSearch(item));
+        .then(async (response) => {
+            const itemsToIndex = response.items.filter(item => !isItemExcludedFromSearch(item));
 
             for (const item of itemsToIndex) {
-                await resolveAndIndexItem(item, linkedItems);
+                await resolveAndIndexItem(item, response.linkedItems);
             }
+
+            return response;
         });
 }
 
@@ -45,8 +47,10 @@ async function reindexItems(codenames) {
                 richTextResolver: resolveItemInRichText
             })
             .getPromise()
-            .then(async ({ item, linkedItems }) => {
-                await reindexItem(item, linkedItems);
+            .then(async (response) => {
+                await reindexItem(response.item, response.linkedItems);
+
+                return response;
             }));
 }
 
