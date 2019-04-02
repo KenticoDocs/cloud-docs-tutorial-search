@@ -1,10 +1,10 @@
-const getCodenamesOfItems = require('../shared/utils/codenamesExtractor');
+const getCodenamesAndTypesOfItems = require('../shared/utils/codenamesExtractor');
 const indexers = require('../shared/searchIndexers');
 const { setupConfiguration } = require('../shared/external/configuration');
 const {
     VALID_OPERATIONS,
     VALID_REINDEX_OPERATIONS,
-    CONTENT_TYPES_TO_INDEX
+    ALL_CONTENT_TYPES
 } = require('../shared/external/constants');
 
 function validateEvent(event) {
@@ -16,12 +16,12 @@ function validateEvent(event) {
 module.exports = async (context, eventGridEvent) => {
     if (validateEvent(eventGridEvent)) {
         setupConfiguration(eventGridEvent.data.test);
-        const codenames = getCodenamesOfItems(eventGridEvent.data.webhook.items, CONTENT_TYPES_TO_INDEX);
+        const items = getCodenamesAndTypesOfItems(eventGridEvent.data.webhook.items, ALL_CONTENT_TYPES);
 
         if (VALID_REINDEX_OPERATIONS.includes(eventGridEvent.subject)) {
-            await indexers.reindexItems(codenames);
+            await indexers.reindexItems(items);
         } else {
-            indexers.deleteIndexedItems(codenames);
+            indexers.deleteIndexedItems(items);
         }
     } else {
         throw new Error('Validation failed. Unsupported event.');
