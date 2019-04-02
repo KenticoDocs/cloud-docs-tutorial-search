@@ -1,13 +1,16 @@
-function getCodenamesOfItems(items, types) {
-    const codenames = [];
+function getCodenamesAndTypesOfItems(items, types) {
+    const codenamesAndTypes = [];
 
     items.map(item => {
         if (types.includes(item.type)) {
-            codenames.push(item.codename);
+            codenamesAndTypes.push({
+                type: item.type,
+                codename: item.codename
+            });
         }
     });
 
-    return codenames;
+    return codenamesAndTypes;
 }
 
-module.exports = getCodenamesOfItems;
+module.exports = getCodenamesAndTypesOfItems;

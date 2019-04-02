@@ -3,25 +3,18 @@ const getKenticoClient = require('./external/kenticoClient');
 const ItemRecordsCreator = require('./utils/itemRecordsCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
 const insertLinkedCodeSamples = require('./utils/codeSamplesUtils');
-const { CONTENT_TYPES_TO_INDEX } = require('./external/constants');
+const getRootCodenamesOfSingleItem = require('./utils/rootItemsGetter');
+const { ROOT_CONTENT_TYPES, ALL_CONTENT_TYPES } = require('./external/constants');
 const { CodeSampleMarkStart } = require('./utils/richTextLabels');
 
 const EXCLUDED_FROM_SEARCH = 'excluded_from_search';
-
-function isItemExcludedFromSearch(item) {
-    return item
-        .elements
-        .visibility
-        .value
-        .some(taxonomyTerm => taxonomyTerm.codename === EXCLUDED_FROM_SEARCH);
-}
 
 async function reindexAllItems() {
     await getSearchIndex().clearIndex();
 
     await getKenticoClient()
         .items()
-        .types(CONTENT_TYPES_TO_INDEX)
+        .types(ROOT_CONTENT_TYPES)
         .depthParameter(4)
         .queryConfig({
             richTextResolver: resolveItemInRichText
@@ -38,7 +31,9 @@ async function reindexAllItems() {
         });
 }
 
-async function reindexItems(codenames) {
+async function reindexItems(items) {
+    const codenames = await getCodenamesOfRootItemsToIndex(items);
+
     await codenames.forEach(
         codename => getKenticoClient()
             .item(codename)
@@ -52,6 +47,29 @@ async function reindexItems(codenames) {
 
                 return response;
             }));
+}
+
+async function getCodenamesOfRootItemsToIndex(items) {
+    const allItems = await getAllItems();
+    const rootCodenames = new Set();
+
+    items.forEach((item) => {
+        const roots = getRootCodenamesOfSingleItem(item, allItems);
+        roots.forEach(codename => rootCodenames.add(codename));
+    });
+
+    return rootCodenames;
+}
+
+async function getAllItems() {
+    return getKenticoClient()
+        .items()
+        .types(ALL_CONTENT_TYPES)
+        .depthParameter(0)
+        .getPromise()
+        .then(response =>
+            response.linkedItems.concat(response.items)
+        );
 }
 
 async function reindexItem(item, linkedItems) {
@@ -79,15 +97,23 @@ async function indexItem(item, text) {
     await getSearchIndex().saveObjects(itemRecords);
 }
 
+function isItemExcludedFromSearch(item) {
+    return item
+        .elements
+        .visibility
+        .value
+        .some(taxonomyTerm => taxonomyTerm.codename === EXCLUDED_FROM_SEARCH);
+}
+
 async function deleteIndexedItem(item) {
     await getSearchIndex().deleteBy({
         filters: `id:${item.system.id}`
     });
 }
 
-function deleteIndexedItems(codenames) {
-    codenames.forEach(codename => getSearchIndex().deleteBy({
-        filters: `codename:${codename}`
+function deleteIndexedItems(items) {
+    items.forEach(item => getSearchIndex().deleteBy({
+        filters: `codename:${item.codename}`
     }));
 }
 
