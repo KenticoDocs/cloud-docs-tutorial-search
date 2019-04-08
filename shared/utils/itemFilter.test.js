@@ -1,30 +1,30 @@
-const getRelevantItems = require('./codenamesExtractor');
+const getRelevantItems = require('./itemFilter');
 
 const items = [
     {
         language: 'default',
         codename: 'article_i',
-        type: 'article'
+        type: 'article',
     },
     {
         language: 'default',
         codename: 'article_ii',
-        type: 'article'
+        type: 'article',
     },
     {
         language: 'default',
         codename: 'article_iii',
-        type: 'article'
+        type: 'article',
     },
     {
         language: 'default',
         codename: 'scenario_i',
-        type: 'scenario'
+        type: 'scenario',
     },
     {
         language: 'default',
         codename: 'used_in_article',
-        type: 'callout'
+        type: 'callout',
     }
 ];
 
@@ -33,13 +33,13 @@ describe('getRelevantItems', () => {
         const contentTypes = ['article', 'scenario'];
         const expectedResult = [{
             type: 'article',
-            codename: 'article_i'
+            codename: 'article_i',
         }, {
             type: 'article',
-            codename: 'article_ii'
+            codename: 'article_ii',
         }, {
             type: 'article',
-            codename: 'article_iii'
+            codename: 'article_iii',
         }, {
             type: 'scenario',
             codename: 'scenario_i',

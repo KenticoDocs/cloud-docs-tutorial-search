@@ -1,78 +1,63 @@
 const { ROOT_CONTENT_TYPES } = require('./../external/constants');
 
 function getRootCodenamesOfSingleItem(item, allItems) {
-    const rootCodenames = [];
+    if (ROOT_CONTENT_TYPES.includes(item.type)) {
+        return [item.codename];
+    }
 
-    if (!ROOT_CONTENT_TYPES.includes(item.type)) {
-        const rootItems = getRootItemsCodenames(item.codename, allItems);
-        rootItems.forEach(item => rootCodenames.push(item));
+    return getRootParents(item.codename, allItems);
+}
+
+function getRootParents(codename, allItems) {
+    let itemsToVisit = getDirectParents(codename, allItems);
+    const visitedItems = [];
+    const rootItemCodenames = [];
+
+    while (itemsToVisit.length > 0) {
+        const newItemsToVisit = [];
+
+        itemsToVisit.forEach(item =>
+            processItem(item, { visitedItems, rootItemCodenames, newItemsToVisit, allItems }));
+
+        itemsToVisit = newItemsToVisit;
+    }
+
+    return rootItemCodenames;
+}
+
+function processItem(item, context) {
+    const itemCodename = item.system.codename;
+
+    if (context.visitedItems.includes(itemCodename)) {
+        return;
+    }
+    context.visitedItems.push(itemCodename);
+
+    if (ROOT_CONTENT_TYPES.includes(item.system.type)) {
+        context.rootItemCodenames.push(itemCodename);
     } else {
-        rootCodenames.push(item.codename);
+        const parents = getDirectParents(itemCodename, context.allItems);
+        parents.forEach(item => context.newItemsToVisit.push(item));
     }
-
-    return rootCodenames;
 }
 
-function getRootItemsCodenames(codename, allItems) {
-    let invariant = getParents(codename, allItems);
-    let parents = [];
-    const rootItems = [];
-
-    do {
-        parents = invariant;
-        invariant = [];
-
-        const parentsKeys = Object.keys(parents);
-
-        for (const key in parentsKeys) {
-            const item = parents[key];
-
-            saveCodenameIfItemIsRoot(item.system.codename, item.system.type, rootItems);
-            invariant = invariant.concat(getParents(item.system.codename, allItems));
-        }
-    }
-    while (invariant.length !== 0);
-
-    return rootItems;
-}
-
-function getParents(codename, allItems) {
-    const parents = [];
-
-    for (const item of allItems) {
-        const parent = checkIfItemIsParent(item, codename);
-        if (parent !== null) {
-            parents.push(parent);
-        }
-    }
-
-    return parents;
+function getDirectParents(codename, allItems) {
+    return allItems.filter(item => checkIfItemIsParent(item, codename));
 }
 
 function checkIfItemIsParent(item, codename) {
-    if (item.system.type === 'code_samples') {
-        if (item.elements.code_samples && item.elements.code_samples.value.includes(codename)) {
-            return item;
-        }
-    } else if (itemHasChildItemWithCodename(item, codename)) {
-        return item;
-    }
-
-    return null;
-}
-
-function itemHasChildItemWithCodename(item, codename) {
-    return (item.elements.content
-        && item.elements.content.modular_content
-        && item.elements.content.modular_content.includes(codename))
-        || (item.elements.introduction
-            && item.elements.introduction.modular_content
-            && item.elements.introduction.modular_content.includes(codename));
-}
-
-function saveCodenameIfItemIsRoot(codename, type, rootItems) {
-    if (ROOT_CONTENT_TYPES.includes(type)) {
-        rootItems.push(codename);
+    switch (item.system.type) {
+        case 'code_samples':
+            return item.elements.code_samples.value.includes(codename);
+        case 'article':
+        case 'scenario':
+            return item.elements.content.modular_content.includes(codename) ||
+                   item.elements.introduction.modular_content.includes(codename);
+        case 'callout':
+        case 'content_chunk':
+            return item.elements.content.modular_content.includes(codename);
+        default:
+            return false;
     }
 }
 
