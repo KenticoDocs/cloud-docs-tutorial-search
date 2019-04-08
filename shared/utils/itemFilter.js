@@ -1,4 +1,4 @@
-function getCodenamesAndTypesOfItems(items, types) {
+function getRelevantItems(items, types) {
     const codenamesAndTypes = [];
 
     items.map(item => {
@@ -13,4 +13,4 @@ function getCodenamesAndTypesOfItems(items, types) {
     return codenamesAndTypes;
 }
 
-module.exports = getCodenamesAndTypesOfItems;
+module.exports = getRelevantItems;

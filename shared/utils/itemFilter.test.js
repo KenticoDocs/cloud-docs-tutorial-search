@@ -1,4 +1,4 @@
-const getCodenamesAndTypesOfItems = require('./codenamesExtractor');
+const getRelevantItems = require('./codenamesExtractor');
 
 const items = [
     {
@@ -28,7 +28,7 @@ const items = [
     }
 ];
 
-describe('getCodenamesAndTypesOfItems', () => {
+describe('getRelevantItems', () => {
     it('extracts codenames and types of items correctly', () => {
         const contentTypes = ['article', 'scenario'];
         const expectedResult = [{
@@ -45,7 +45,7 @@ describe('getCodenamesAndTypesOfItems', () => {
             codename: 'scenario_i',
         }];
 
-        const actualResult = getCodenamesAndTypesOfItems(items, contentTypes);
+        const actualResult = getRelevantItems(items, contentTypes);
 
         expect(actualResult).toEqual(expectedResult);
     });
@@ -54,7 +54,7 @@ describe('getCodenamesAndTypesOfItems', () => {
         const contentTypes = ['document'];
         const expectedResult = [];
 
-        const actualResult = getCodenamesAndTypesOfItems(items, contentTypes);
+        const actualResult = getRelevantItems(items, contentTypes);
 
         expect(actualResult).toEqual(expectedResult);
     });
