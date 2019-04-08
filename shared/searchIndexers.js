@@ -68,7 +68,7 @@ async function getAllItems() {
         .depthParameter(0)
         .getPromise()
         .then(response =>
-            response.linkedItems.concat(response.items)
+            response.items.concat(response.linkedItems)
         );
 }
 

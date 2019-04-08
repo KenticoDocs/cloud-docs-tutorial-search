@@ -1,16 +1,12 @@
 function getRelevantItems(items, types) {
-    const codenamesAndTypes = [];
-
-    items.map(item => {
-        if (types.includes(item.type)) {
-            codenamesAndTypes.push({
+    return items
+        .filter(item => types.includes(item.type))
+        .map(item => {
+            return {
                 type: item.type,
-                codename: item.codename
-            });
-        }
-    });
-
-    return codenamesAndTypes;
+                codename: item.codename,
+            };
+        });
 }
 
 module.exports = getRelevantItems;
