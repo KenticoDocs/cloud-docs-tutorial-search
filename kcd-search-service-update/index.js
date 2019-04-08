@@ -1,4 +1,4 @@
-const getCodenamesAndTypesOfItems = require('../shared/utils/codenamesExtractor');
+const getRelevantItems = require('../shared/utils/itemFilter');
 const indexers = require('../shared/searchIndexers');
 const { setupConfiguration } = require('../shared/external/configuration');
 const {
@@ -16,7 +16,7 @@ function validateEvent(event) {
 module.exports = async (context, eventGridEvent) => {
     if (validateEvent(eventGridEvent)) {
         setupConfiguration(eventGridEvent.data.test);
-        const items = getCodenamesAndTypesOfItems(eventGridEvent.data.webhook.items, ALL_CONTENT_TYPES);
+        const items = getRelevantItems(eventGridEvent.data.webhook.items, ALL_CONTENT_TYPES);
 
         if (VALID_REINDEX_OPERATIONS.includes(eventGridEvent.subject)) {
             await indexers.reindexItems(items);
