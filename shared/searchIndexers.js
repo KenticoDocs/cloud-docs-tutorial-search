@@ -46,7 +46,8 @@ async function reindexItems(items) {
                 await reindexItem(response.item, response.linkedItems);
 
                 return response;
-            }));
+            })
+            .catch((error) => handleError(error, codename)));
 }
 
 async function getCodenamesOfRootItemsToIndex(items) {
@@ -111,14 +112,21 @@ async function deleteIndexedItem(item) {
     });
 }
 
-function deleteIndexedItems(items) {
-    items.forEach(item => getSearchIndex().deleteBy({
-        filters: `codename:${item.codename}`
-    }));
+async function handleError(error, codename) {
+    if (error.errorCode === 100) {
+        await deleteIndexedItemByCodename(codename);
+    } else {
+        throw error;
+    }
+}
+
+async function deleteIndexedItemByCodename(codename) {
+    await getSearchIndex().deleteBy({
+        filters: `codename:${codename}`
+    });
 }
 
 module.exports = {
     reindexAllItems,
     reindexItems,
-    deleteIndexedItems
 };
