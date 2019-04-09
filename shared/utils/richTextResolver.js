@@ -1,4 +1,4 @@
-const removeMarkdown = require('remove-markdown');
+const striptags = require('striptags');
 const {
     getInnerItemLabel,
     getCodeSampleLabel,
@@ -7,7 +7,7 @@ const {
 function resolveItemInRichText(item) {
     switch (item.system.type) {
         case 'callout': {
-            const content = removeMarkdown(item.content.value);
+            const content = striptags(item.content.value);
             return getInnerItemLabel(content);
         }
         case 'content_chunk':
