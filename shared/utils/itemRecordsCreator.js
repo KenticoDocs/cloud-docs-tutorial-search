@@ -1,4 +1,4 @@
-const removeMarkdown = require('remove-markdown');
+const striptags = require('striptags');
 const {
     PlatformMarkStart,
     PlatformMarkEnd,
@@ -33,7 +33,7 @@ class ItemRecordsCreator {
 
         return (contentParts.length > 1) ?
             {
-                heading: removeMarkdown(contentParts[0]).trim(),
+                heading: striptags(contentParts[0]).trim(),
                 content: contentParts[1].trim(),
             } :
             {
@@ -98,7 +98,7 @@ class ItemRecordsCreator {
     }
 
     indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item) {
-        const contentWithoutMarkdown = removeMarkdown(leftoverContent).trim();
+        const contentWithoutMarkdown = striptags(leftoverContent).trim();
 
         if (this.isNonEmpty(contentWithoutMarkdown)) {
             this.addItemRecord(contentWithoutMarkdown, heading, item);
@@ -145,6 +145,7 @@ class ItemRecordsCreator {
             .replace(/\n/g, ' ')
             .replace(/\s{2}/g, ' ')
             .replace(/&nbsp;/g, ' ')
+            .replace(/&amp;/g, '&')
             .trim();
     }
 }
