@@ -1,7 +1,11 @@
 const striptags = require('striptags');
 const {
-    getInnerItemLabel,
+    getContentChunkLabel,
     getCodeSampleLabel,
+    getPlatformLabel,
+    getInnerItemLabel,
+    ContentChunkHeadingMarkStart,
+    ContentChunkHeadingMarkEnd,
 } = require('./richTextLabels');
 
 function resolveItemInRichText(item) {
@@ -11,7 +15,7 @@ function resolveItemInRichText(item) {
             return getInnerItemLabel(content);
         }
         case 'content_chunk':
-            return item.content.value;
+            return resolveContentChunkItem(item);
         case 'code_sample':
             return getCodeSampleLabel(item.system.codename);
         case 'code_samples':
@@ -19,6 +23,20 @@ function resolveItemInRichText(item) {
         default:
             return '';
     }
+}
+
+function resolveContentChunkItem(item) {
+    const labelledPlatforms = getPlatformLabel(item.platform.value);
+    const contentWithPlatforms = labelledPlatforms + item.content.value;
+    const contentWithResolvedHeadings = resolveContentChunkHeadings(contentWithPlatforms);
+
+    return getContentChunkLabel(contentWithResolvedHeadings);
+}
+
+function resolveContentChunkHeadings(content) {
+    return content
+        .replace(/<h2>/g, ContentChunkHeadingMarkStart)
+        .replace(/<\/h2>/g, ContentChunkHeadingMarkEnd);
 }
 
 function resolveCodeSamplesItem(item) {

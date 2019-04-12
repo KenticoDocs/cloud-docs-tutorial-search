@@ -4,6 +4,10 @@ const {
     PlatformMarkEnd,
     InnerItemMarkStart,
     InnerItemMarkEnd,
+    ContentChunkMarkStart,
+    ContentChunkMarkEnd,
+    ContentChunkHeadingMarkStart,
+    ContentChunkHeadingMarkEnd,
 } = require('./richTextLabels');
 
 const shortArticle = {
@@ -14,36 +18,36 @@ const shortArticle = {
     },
     title: {
         name: 'Title',
-        value: 'Tutorial'
+        value: 'Tutorial',
     },
     shortTitle: {
         name: 'Short title',
-        value: 'We will show you the basics'
+        value: 'We will show you the basics',
     },
     author: {
         name: 'Author',
-        value: 'smart guy'
+        value: 'smart guy',
     },
     description: {
         name: 'Description',
-        value: 'This article explains how to do stuff'
+        value: 'This article explains how to do stuff',
     },
     contentType: {
         name: 'Content type',
-        value: 'article'
+        value: 'article',
     },
     content: {
         name: 'Content',
-        value: '<p>We will start by running a React sample application on your machine and updating an article in the sample project.</p>\n<p>Afterward, we can continue doing this...</p>'
-    }
+        value: '<p>We will start by running a React sample application on your machine and updating an article in the sample project.</p>\n<p>Afterward, we can continue doing this...</p>',
+    },
 };
 
 const longArticle = {
     ...shortArticle,
     content: {
         name: 'Content',
-        value: shortArticle.content.value + '<h2>More options</h2> <p>To make further app development easier, we recommend using the Kentico Cloud model generator for .NET to create strongly-typed models representing your content types. To learn more about this approach generally, see <a href="https://developer.kenticocloud.com/docs/strongly-typed-models">Using strongly typed models</a>.</p>'
-    }
+        value: shortArticle.content.value + '<h2>More options</h2> <p>To make further app development easier, we recommend using the Kentico Cloud model generator for .NET to create strongly-typed models representing your content types. To learn more about this approach generally, see <a href="https://developer.kenticocloud.com/docs/strongly-typed-models">Using strongly typed models</a>.</p>',
+    },
 };
 
 const articleWithInnerItemAndMultiplePlatforms = {
@@ -52,7 +56,7 @@ const articleWithInnerItemAndMultiplePlatforms = {
         name: 'Content',
         value: longArticle.content.value
             + `${InnerItemMarkStart}New to headless CMS?\nIf you are new to the world of headless CMSs, you might want to start by building a Hello world application. It will only take you about 5 minutes!\nAfter you grasp the core idea behind a headless CMS, everything in the sample application will make a lot more sense much faster.${InnerItemMarkEnd}`
-            + '<h2>Making changes to your project</h2>\n<p>After signing in to your <a href="http://some.website.com">Kentico Cloud</a> account you will see your sample project to play around with.</p>\n'
+            + '<h2>Making changes to your project</h2>\n<p>After signing in to your <a href="http://some.website.com">Kentico Cloud</a> account you will see your sample project to play around with.</p>\n',
     },
     platform: {
         type: 'taxonomy',
@@ -60,14 +64,14 @@ const articleWithInnerItemAndMultiplePlatforms = {
         value: [
             {
                 name: 'JavaScript',
-                codename: 'javascript'
+                codename: 'javascript',
             },
             {
                 name: 'Java',
-                codename: 'java'
+                codename: 'java',
             },
-        ]
-    }
+        ],
+    },
 };
 
 const articleWithMultipleCallouts = {
@@ -82,8 +86,22 @@ const articleWithMultipleCallouts = {
             + '<p>Some paragraph between a component and a heading</p>'
             + '<h2>Running the .NET MVC sample application</h2>\n<p>Before going any further, make sure you have the following.</p>'
             + '<h2>First run of the sample app</h2>\n<p>When you run the application for the first time, you will see a Configuration page. Use it to connect the app to your sample project in Kentico Cloud.</p>'
-            + `${InnerItemMarkStart}${PlatformMarkStart}js${PlatformMarkEnd}alert('Hello, world!');${InnerItemMarkEnd}`
-    }
+            + `${InnerItemMarkStart}${PlatformMarkStart}js${PlatformMarkEnd}alert('Hello, world!');${InnerItemMarkEnd}`,
+    },
+};
+
+const articleWithContentChunkAndCodeSample = {
+    ...shortArticle,
+    content: {
+        name: 'Content',
+        value: `start of an article`
+            + `${ContentChunkMarkStart}${PlatformMarkStart}java,javascript,_net${PlatformMarkEnd}`
+            + `${ContentChunkHeadingMarkStart}Content chunk heading${ContentChunkHeadingMarkEnd}content chunk text`
+            + `${InnerItemMarkStart}Callout inside a content chunk item${InnerItemMarkEnd}`
+            + `${InnerItemMarkStart}${PlatformMarkStart}typescript${PlatformMarkEnd}Code sample inside of a content chunk item ${InnerItemMarkEnd}`
+            + `${ContentChunkHeadingMarkStart}Another content chunk heading${ContentChunkHeadingMarkEnd}Text that ends a content chunk. ${ContentChunkMarkEnd}`
+            + `end of an article`,
+    },
 };
 
 const edgeCasesArticle = {
@@ -91,8 +109,8 @@ const edgeCasesArticle = {
     content: {
         name: 'Content',
         value: '<p>some text in a paragraph<br>\n</p>\n<p>another paragraph&nbsp;</p>\n<h2>Some custom heading</h2>\n<p>text after heading</p>\n' +
-            `${InnerItemMarkStart}Premium feature\nhello!${InnerItemMarkEnd}</object>\n<p>some text after component</p>`
-    }
+            `${InnerItemMarkStart}Premium feature\nhello!${InnerItemMarkEnd}</object>\n<p>&amp; some text after component</p>`,
+    },
 };
 
 describe('searchableArticleCreator', () => {
@@ -146,14 +164,14 @@ describe('searchableArticleCreator', () => {
                 ...firstParagraph,
                 platforms: [
                     'javascript',
-                    'java'
+                    'java',
                 ],
             },
             {
                 ...secondParagraph,
                 platforms: [
                     'javascript',
-                    'java'
+                    'java',
                 ],
             }, {
                 content: 'New to headless CMS? If you are new to the world of headless CMSs, you might want to start by building a Hello world application. It will only take you about 5 minutes! After you grasp the core idea behind a headless CMS, everything in the sample application will make a lot more sense much faster.',
@@ -165,7 +183,7 @@ describe('searchableArticleCreator', () => {
                 id: '59c40872-521f-4883-ae6e-4d11b77797e4',
                 platforms: [
                     'javascript',
-                    'java'
+                    'java',
                 ],
             }, {
                 content: 'After signing in to your Kentico Cloud account you will see your sample project to play around with.',
@@ -177,7 +195,7 @@ describe('searchableArticleCreator', () => {
                 id: '59c40872-521f-4883-ae6e-4d11b77797e4',
                 platforms: [
                     'javascript',
-                    'java'
+                    'java',
                 ],
             }];
 
@@ -279,7 +297,71 @@ describe('searchableArticleCreator', () => {
         expect(actualResult).toEqual(expectedResult);
     });
 
-    test('gets rid of special &nbsp; character', () => {
+    test('handles indexing of content chunk item, assigns platform element and headings within content chunk correctly', () => {
+        const expectedResult = [{
+            content: 'start of an article',
+            title: 'Tutorial',
+            heading: '',
+            codename: 'first_tutorial',
+            order: 1,
+            objectID: 'first_tutorial_1',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            platforms: [],
+        }, {
+            content: 'content chunk text',
+            title: 'Tutorial',
+            heading: 'Content chunk heading',
+            codename: 'first_tutorial',
+            order: 2,
+            objectID: 'first_tutorial_2',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            platforms: ['java', 'javascript', '_net'],
+        }, {
+            content: 'Callout inside a content chunk item',
+            title: 'Tutorial',
+            heading: 'Content chunk heading',
+            codename: 'first_tutorial',
+            order: 3,
+            objectID: 'first_tutorial_3',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            platforms: ['java', 'javascript', '_net'],
+        }, {
+            content: 'Code sample inside of a content chunk item',
+            title: 'Tutorial',
+            heading: 'Content chunk heading',
+            codename: 'first_tutorial',
+            order: 4,
+            objectID: 'first_tutorial_4',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            platforms: ['typescript'],
+        }, {
+            content: 'Text that ends a content chunk.',
+            title: 'Tutorial',
+            heading: 'Another content chunk heading',
+            codename: 'first_tutorial',
+            order: 5,
+            objectID: 'first_tutorial_5',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            platforms: ['java', 'javascript', '_net'],
+        }, {
+            content: 'end of an article',
+            title: 'Tutorial',
+            heading: 'Another content chunk heading',
+            codename: 'first_tutorial',
+            order: 6,
+            objectID: 'first_tutorial_6',
+            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            platforms: [],
+        }];
+
+        const actualResult = itemRecordsCreator.createItemRecords(
+            articleWithContentChunkAndCodeSample,
+            articleWithContentChunkAndCodeSample.content.value);
+
+        expect(actualResult).toEqual(expectedResult);
+    });
+
+    test('gets rid of special &nbsp; and &amp; characters', () => {
         const expectedResult = [{
             content: 'some text in a paragraph another paragraph',
             title: 'Tutorial',
@@ -308,7 +390,7 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
         }, {
-            content: 'some text after component',
+            content: '& some text after component',
             title: 'Tutorial',
             heading: 'Some custom heading',
             codename: 'first_tutorial',

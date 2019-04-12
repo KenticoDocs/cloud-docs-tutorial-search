@@ -4,9 +4,19 @@ const InnerItemMarkStart = '#~inner_item#';
 const InnerItemMarkEnd = '#inner_item~#';
 const CodeSampleMarkStart = '#~code_sample#';
 const CodeSampleMarkEnd = '#code_sample~#';
+const ContentChunkMarkStart = '#~content_chunk#';
+const ContentChunkMarkEnd = '#content_chunk~#';
+const ContentChunkHeadingMarkStart = '#~content_chunk_heading#';
+const ContentChunkHeadingMarkEnd = '#content_chunk_heading~#';
 
 function getPlatformLabel(platform) {
-    return PlatformMarkStart + platform + PlatformMarkEnd;
+    const platformCodenames = platform.map(item => item.codename);
+
+    return PlatformMarkStart + platformCodenames.join() + PlatformMarkEnd;
+}
+
+function getContentChunkLabel(content) {
+    return ContentChunkMarkStart + content + ContentChunkMarkEnd;
 }
 
 function getInnerItemLabel(content) {
@@ -21,10 +31,15 @@ module.exports = {
     getPlatformLabel,
     getInnerItemLabel,
     getCodeSampleLabel,
+    getContentChunkLabel,
     PlatformMarkStart,
     PlatformMarkEnd,
     InnerItemMarkStart,
     InnerItemMarkEnd,
     CodeSampleMarkStart,
     CodeSampleMarkEnd,
+    ContentChunkMarkStart,
+    ContentChunkMarkEnd,
+    ContentChunkHeadingMarkStart,
+    ContentChunkHeadingMarkEnd,
 };

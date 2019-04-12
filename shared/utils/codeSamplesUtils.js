@@ -22,7 +22,7 @@ function insertLinkedCodeSamples(text, linkedItems) {
 
 function insertCodeSampleContent(codeSample) {
     if (codeSample.platform.value.length === 1) {
-        const platform = codeSample.platform.value[0].codename;
+        const platform = codeSample.platform.value;
         const platformLabel = getPlatformLabel(platform);
 
         return getInnerItemLabel(platformLabel + codeSample.code.value);
