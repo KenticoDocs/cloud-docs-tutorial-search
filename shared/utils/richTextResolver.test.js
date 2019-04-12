@@ -4,6 +4,12 @@ const {
     InnerItemMarkEnd,
     CodeSampleMarkStart,
     CodeSampleMarkEnd,
+    PlatformMarkStart,
+    PlatformMarkEnd,
+    ContentChunkMarkStart,
+    ContentChunkMarkEnd,
+    ContentChunkHeadingMarkStart,
+    ContentChunkHeadingMarkEnd,
 } = require('./richTextLabels');
 
 const calloutItem = {
@@ -33,6 +39,15 @@ const contentChunkItem = {
     content: {
         name: 'Content',
         value: '<h2>Repeated content</h2><p>This content is repeated in several Articles</p>',
+    },
+    platform: {
+        value: [{
+            codename: 'js'
+        }, {
+            codename: 'typescript'
+        }, {
+            codename: 'android'
+        }]
     }
 };
 
@@ -94,8 +109,10 @@ describe('resolveItemInRichText', () => {
         expect(actualResult).toEqual(expectedResult);
     });
 
-    it('returns value of a content chunk content item', () => {
-        const expectedResult = contentChunkItem.content.value;
+    it('returns value of a content chunk content item with a correctly marked heading', () => {
+        const expectedResult = `${ContentChunkMarkStart}${PlatformMarkStart}js,typescript,android${PlatformMarkEnd}`
+            + `${ContentChunkHeadingMarkStart}Repeated content${ContentChunkHeadingMarkEnd}`
+            + `<p>This content is repeated in several Articles</p>${ContentChunkMarkEnd}`;
 
         const actualResult = resolveItemInRichText(contentChunkItem);
 
