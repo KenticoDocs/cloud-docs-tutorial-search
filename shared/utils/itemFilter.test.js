@@ -25,7 +25,7 @@ const items = [
         language: 'default',
         codename: 'used_in_article',
         type: 'callout',
-    }
+    },
 ];
 
 describe('getRelevantItems', () => {

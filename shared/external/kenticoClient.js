@@ -21,8 +21,8 @@ function getKenticoClient() {
         globalHeaders: [
             {
                 header: 'X-KC-Wait-For-Loading-New-Content',
-                value: 'true'
-            }
+                value: 'true',
+            },
         ],
     });
 }

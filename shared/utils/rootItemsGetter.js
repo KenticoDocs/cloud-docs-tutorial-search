@@ -52,7 +52,7 @@ function checkIfItemIsParent(item, codename) {
         case 'article':
         case 'scenario':
             return item.elements.content.modular_content.includes(codename) ||
-                   item.elements.introduction.modular_content.includes(codename);
+                item.elements.introduction.modular_content.includes(codename);
         case 'callout':
         case 'content_chunk':
             return item.elements.content.modular_content.includes(codename);

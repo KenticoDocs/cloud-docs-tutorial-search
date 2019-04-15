@@ -10,7 +10,7 @@ const allItems = [{
             value: 'callout content',
             modular_content: [],
         },
-    }
+    },
 }, {
     system: {
         codename: 'some_chunk',
@@ -20,7 +20,7 @@ const allItems = [{
         content: {
             modular_content: ['hello_world'],
         },
-    }
+    },
 }, {
     system: {
         codename: 'root_article',
@@ -58,7 +58,7 @@ const allItemsWithCodeSamples = [{
         code_samples: {
             value: ['hello_world'],
         },
-    }
+    },
 }, {
     system: {
         codename: 'code_sample_chunk',
@@ -71,7 +71,7 @@ const allItemsWithCodeSamples = [{
         introduction: {
             modular_content: [],
         },
-    }
+    },
 }, {
     system: {
         codename: 'main_article',
@@ -91,7 +91,7 @@ describe('getRootCodenamesOfSingleItem', () => {
     it('returns both root items - article and scenario', () => {
         const item = {
             codename: 'hello_world',
-            type: 'callout'
+            type: 'callout',
         };
         const expectedResult = ['root_scenario', 'root_article'];
 
@@ -103,7 +103,7 @@ describe('getRootCodenamesOfSingleItem', () => {
     it('returns root of a nested code_sample item', () => {
         const item = {
             codename: 'hello_world',
-            type: 'code_sample'
+            type: 'code_sample',
         };
         const expectedResult = ['main_article'];
 
@@ -115,7 +115,7 @@ describe('getRootCodenamesOfSingleItem', () => {
     it('returns an empty array when it finds no root items', () => {
         const item = {
             codename: 'some_codename',
-            type: 'some_type'
+            type: 'some_type',
         };
         const expectedResult = [];
 

@@ -154,13 +154,13 @@ class ItemRecordsCreator {
             const itemWithPlatform = {
                 ...item,
                 platform: {
-                    value: []
-                }
+                    value: [],
+                },
             };
 
             for (const platformCodename of platformsCodenames) {
                 itemWithPlatform.platform.value.push({
-                    codename: platformCodename
+                    codename: platformCodename,
                 })
             }
 
@@ -192,7 +192,7 @@ class ItemRecordsCreator {
             codename,
             order,
             objectID,
-            platforms
+            platforms,
         });
     }
 

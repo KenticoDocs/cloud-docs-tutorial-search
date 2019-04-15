@@ -11,7 +11,7 @@ class CodeSamples extends KenticoCloud.ContentItem {
                     return 'codeSamples';
                 }
                 return fieldName;
-            })
+            }),
         });
     }
 }
