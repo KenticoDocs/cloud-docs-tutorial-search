@@ -17,7 +17,7 @@ async function reindexAllItems() {
         .types(ROOT_CONTENT_TYPES)
         .depthParameter(4)
         .queryConfig({
-            richTextResolver: resolveItemInRichText
+            richTextResolver: resolveItemInRichText,
         })
         .getPromise()
         .then(async (response) => {
@@ -39,7 +39,7 @@ async function reindexItems(items) {
             .item(codename)
             .depthParameter(4)
             .queryConfig({
-                richTextResolver: resolveItemInRichText
+                richTextResolver: resolveItemInRichText,
             })
             .getPromise()
             .then(async (response) => {
@@ -69,7 +69,7 @@ async function getAllItems() {
         .depthParameter(0)
         .getPromise()
         .then(response =>
-            response.items.concat(response.linkedItems)
+            response.items.concat(response.linkedItems),
         );
 }
 
@@ -108,7 +108,7 @@ function isItemExcludedFromSearch(item) {
 
 async function deleteIndexedItem(item) {
     await getSearchIndex().deleteBy({
-        filters: `id:${item.system.id}`
+        filters: `id:${item.system.id}`,
     });
 }
 
@@ -122,7 +122,7 @@ async function handleError(error, codename) {
 
 async function deleteIndexedItemByCodename(codename) {
     await getSearchIndex().deleteBy({
-        filters: `codename:${codename}`
+        filters: `codename:${codename}`,
     });
 }
 

@@ -17,7 +17,7 @@ const calloutItem = {
         id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         language: 'en-US',
         codename: 'premium_feature',
-        type: 'callout'
+        type: 'callout',
     },
     content: {
         name: 'Content',
@@ -25,8 +25,8 @@ const calloutItem = {
     },
     title: {
         name: 'Title',
-        value: 'Premium feature'
-    }
+        value: 'Premium feature',
+    },
 };
 
 const contentChunkItem = {
@@ -42,13 +42,13 @@ const contentChunkItem = {
     },
     platform: {
         value: [{
-            codename: 'js'
+            codename: 'js',
         }, {
-            codename: 'typescript'
+            codename: 'typescript',
         }, {
-            codename: 'android'
-        }]
-    }
+            codename: 'android',
+        }],
+    },
 };
 
 const codeSampleItem = {
@@ -61,7 +61,7 @@ const codeSampleItem = {
     code: {
         name: 'Code',
         value: 'alert( \'Hello, World!\' );',
-    }
+    },
 };
 
 const codeSamplesItem = {
@@ -77,9 +77,9 @@ const codeSamplesItem = {
                 'first_sample',
                 'second_sample',
                 'hello_world',
-            ]
-        }
-    }
+            ],
+        },
+    },
 };
 
 const differentItem = {
@@ -88,7 +88,7 @@ const differentItem = {
         id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         language: 'en-US',
         codename: 'premium_feature',
-        type: 'article'
+        type: 'article',
     },
 };
 

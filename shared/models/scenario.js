@@ -17,7 +17,7 @@ class Scenario extends KenticoCloud.ContentItem {
                     return 'vanityUrls';
                 }
                 return fieldName;
-            })
+            }),
         });
     }
 }

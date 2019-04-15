@@ -1,7 +1,7 @@
 const {
     getPlatformLabel,
     getCodeSampleLabel,
-    getInnerItemLabel
+    getInnerItemLabel,
 } = require('./richTextLabels');
 
 function insertLinkedCodeSamples(text, linkedItems) {

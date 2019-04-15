@@ -12,55 +12,55 @@ const linkedItems = {
     1: {
         system: {
             type: 'code_sample',
-            codename: 'hello_world'
+            codename: 'hello_world',
         },
         code: {
-            value: 'Console.WriteLine("Hello World!");'
+            value: 'Console.WriteLine("Hello World!");',
         },
         platform: {
             value: [{
-                codename: '_net'
-            }]
-        }
+                codename: '_net',
+            }],
+        },
     },
     2: {
         system: {
             type: 'code_sample',
-            codename: 'first_import'
+            codename: 'first_import',
         },
         code: {
-            value: 'import { DeliveryClient } from \'kentico-cloud-delivery\';'
+            value: 'import { DeliveryClient } from \'kentico-cloud-delivery\';',
         },
         platform: {
             value: [{
-                codename: 'js'
-            }]
-        }
+                codename: 'js',
+            }],
+        },
     },
     3: {
         system: {
             type: 'invalid',
-            codename: 'great_sample'
+            codename: 'great_sample',
         },
         code: {
-            value: 'this is definitely not code sample'
+            value: 'this is definitely not code sample',
         },
         platform: {
-            value: []
-        }
+            value: [],
+        },
     },
     4: {
         system: {
             type: 'code_sample',
-            codename: 'authentication'
+            codename: 'authentication',
         },
         code: {
-            value: 'Authorization: Bearer <YOUR_API_KEY>'
+            value: 'Authorization: Bearer <YOUR_API_KEY>',
         },
         platform: {
-            value: []
-        }
-    }
+            value: [],
+        },
+    },
 };
 
 const text = `Hello world: ${CodeSampleMarkStart}hello_world${CodeSampleMarkEnd}. Start by ${CodeSampleMarkStart}first_import${CodeSampleMarkEnd} and authetication ${CodeSampleMarkStart}authentication${CodeSampleMarkEnd}`;

@@ -23,7 +23,7 @@ class Article extends KenticoCloud.ContentItem {
                     return 'programmingLanguage';
                 }
                 return fieldName;
-            })
+            }),
         });
     }
 }

@@ -16,7 +16,7 @@ const {
 describe('getPlatformLabel', () => {
     it('labels a single platform correctly', () => {
         const platform = [{
-            codename: '_net'
+            codename: '_net',
         }];
         const expectedResult = `${PlatformMarkStart}_net${PlatformMarkEnd}`;
 
@@ -27,11 +27,11 @@ describe('getPlatformLabel', () => {
 
     it('labels multiple platforms correctly', () => {
         const platform = [{
-            codename: '_net'
+            codename: '_net',
         }, {
-            codename: 'android'
+            codename: 'android',
         }, {
-            codename: 'javascript'
+            codename: 'javascript',
         }];
         const expectedResult = `${PlatformMarkStart}_net,android,javascript${PlatformMarkEnd}`;
 
