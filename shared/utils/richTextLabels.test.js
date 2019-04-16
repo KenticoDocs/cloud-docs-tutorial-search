@@ -39,6 +39,15 @@ describe('getPlatformLabel', () => {
 
         expect(actualResult).toEqual(expectedResult);
     });
+
+    it('returns empty string for an empty platform array', () => {
+        const platform = [];
+        const expectedResult = '';
+
+        const actualResult = getPlatformLabel(platform);
+
+        expect(actualResult).toEqual(expectedResult);
+    });
 });
 
 describe('getContentChunkLabel', () => {
