@@ -27,10 +27,9 @@ function resolveItemInRichText(item) {
 
 function resolveContentChunkItem(item) {
     const labelledPlatforms = getPlatformLabel(item.platform.value);
-    const contentWithPlatforms = labelledPlatforms + item.content.value;
-    const contentWithResolvedHeadings = resolveContentChunkHeadings(contentWithPlatforms);
+    const contentWithResolvedHeadings = resolveContentChunkHeadings(item.content.value);
 
-    return getContentChunkLabel(contentWithResolvedHeadings);
+    return getContentChunkLabel(labelledPlatforms + contentWithResolvedHeadings);
 }
 
 function resolveContentChunkHeadings(content) {
