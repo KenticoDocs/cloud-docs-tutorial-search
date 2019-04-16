@@ -10,9 +10,13 @@ const ContentChunkHeadingMarkStart = '#~content_chunk_heading#';
 const ContentChunkHeadingMarkEnd = '#content_chunk_heading~#';
 
 function getPlatformLabel(platform) {
-    const platformCodenames = platform.map(item => item.codename);
+    if (platform.length > 0) {
+        const platformCodenames = platform.map(item => item.codename);
 
-    return PlatformMarkStart + platformCodenames.join() + PlatformMarkEnd;
+        return PlatformMarkStart + platformCodenames.join() + PlatformMarkEnd;
+    }
+
+    return '';
 }
 
 function getContentChunkLabel(content) {
