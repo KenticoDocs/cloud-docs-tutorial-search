@@ -4,16 +4,16 @@
 
 
 # Kentico Cloud Documentation - Search Service
-Backend service for Kentico Cloud documentation portal, which utilizes [Kentico Cloud](https://app.kenticocloud.com/) as a source of its content.
+Backend service for Kentico Cloud [documentation portal](https://docs.kenticocloud.com/), which utilizes Kentico Cloud as a source of its content.
 
-The service is responsible for indexing content of the documentation portal, in order to provide an exquisite search experience.
+In order to provide an exquisite search experience, this service is responsible for indexing content of the documentation portal.
 It responds to notifications from [Dispatcher](https://github.com/Kentico/kentico-cloud-docs-dispatcher) and indexes updated content on [Algolia](https://www.algolia.com/) accordingly.
 
 ## Overview
 1. This project is a JavaScript Azure Functions application.
 2. It is subscribed to an Azure [Event Grid](https://azure.microsoft.com/en-us/services/event-grid/) topic and listens for events. Each event contains information about the content that was changed.
 3. After receiving an event, it fetches the content from Kentico Cloud using [Kentico Cloud Delivery SDK](https://github.com/Kentico/kentico-cloud-js/tree/master/packages/delivery).
-4. The fetched content is then split into smaller chunks and finally indexed on Algolia with [algoliasearch](https://github.com/algolia/algoliasearch-client-javascript).
+4. The fetched content is then split into smaller records and finally indexed on Algolia with [algoliasearch](https://github.com/algolia/algoliasearch-client-javascript).
 
 ## Setup
 
