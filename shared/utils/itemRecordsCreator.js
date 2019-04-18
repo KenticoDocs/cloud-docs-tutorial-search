@@ -48,11 +48,11 @@ class ItemRecordsCreator {
 
     indexContentSplitByContentChunks(content, heading, item) {
         const contentSplitByContentChunks = content.split(ContentChunkMarkStart);
+        let lastContentChunkHeading = heading;
 
-        contentSplitByContentChunks.forEach(singleContentChunkContent => {
+            contentSplitByContentChunks.forEach(singleContentChunkContent => {
             const contentChunkClosingTagIndex = singleContentChunkContent.indexOf(ContentChunkMarkEnd);
             const contentChunkContent = this.retrieveItemContent(singleContentChunkContent, contentChunkClosingTagIndex);
-            let lastContentChunkHeading = '';
 
             if (this.isNonEmpty(contentChunkContent)) {
                 lastContentChunkHeading = this.indexContentChunkItem(contentChunkContent, item, lastContentChunkHeading);
@@ -83,7 +83,9 @@ class ItemRecordsCreator {
 
         contentChunkContentSplitByHeadings.forEach(singleHeadingContentChunkContent => {
             const { heading, content } = this.splitHeadingAndContent(singleHeadingContentChunkContent, ContentChunkHeadingMarkEnd);
-            this.indexContentSplitByInnerItems(content, heading, itemWithPlatform);
+            const currentHeading = this.isNonEmpty(heading) ? heading : lastContentChunkHeading;
+
+            this.indexContentSplitByInnerItems(content, currentHeading, itemWithPlatform);
             lastContentChunkHeading = heading;
         });
 
