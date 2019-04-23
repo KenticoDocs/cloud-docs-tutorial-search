@@ -13,11 +13,15 @@ function validateEvent(event) {
 }
 
 module.exports = async (context, eventGridEvent) => {
-    if (validateEvent(eventGridEvent)) {
-        setupConfiguration(eventGridEvent.data.test);
-        const items = getRelevantItems(eventGridEvent.data.webhook.items, ALL_CONTENT_TYPES);
-        await indexers.reindexItems(items);
-    } else {
-        throw new Error('Validation failed. Unsupported event.');
+    try {
+        if (validateEvent(eventGridEvent)) {
+            setupConfiguration(eventGridEvent.data.test);
+            const items = getRelevantItems(eventGridEvent.data.webhook.items, ALL_CONTENT_TYPES);
+            await indexers.reindexItems(items);
+        } else {
+            throw new Error('Validation failed. Unsupported event.');
+        }
+    } catch (error) {
+        throw error;
     }
 };
