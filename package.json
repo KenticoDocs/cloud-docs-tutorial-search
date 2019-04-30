@@ -18,9 +18,9 @@
   "homepage": "https://github.com/Kentico/kentico-cloud-docs-search#readme",
   "dependencies": {
     "algoliasearch": "^3.31.0",
-    "kentico-cloud-delivery": "^5.2.1",
-    "remove-markdown": "^0.3.0",
-    "rxjs": "^6.3.3"
+    "kentico-cloud-delivery": "5.7.1",
+    "rxjs": "^6.3.3",
+    "striptags": "^3.1.1"
   },
   "devDependencies": {
     "eslint": "^5.13.0",

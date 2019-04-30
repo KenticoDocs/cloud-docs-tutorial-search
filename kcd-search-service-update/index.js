@@ -1,10 +1,9 @@
-const getCodenamesOfItems = require('../shared/utils/codenamesExtractor');
+const getRelevantItems = require('../shared/utils/itemFilter');
 const indexers = require('../shared/searchIndexers');
 const { setupConfiguration } = require('../shared/external/configuration');
 const {
     VALID_OPERATIONS,
-    VALID_REINDEX_OPERATIONS,
-    CONTENT_TYPES_TO_INDEX
+    ALL_CONTENT_TYPES,
 } = require('../shared/external/constants');
 
 function validateEvent(event) {
@@ -14,16 +13,16 @@ function validateEvent(event) {
 }
 
 module.exports = async (context, eventGridEvent) => {
-    if (validateEvent(eventGridEvent)) {
-        setupConfiguration(eventGridEvent.data.test);
-        const codenames = getCodenamesOfItems(eventGridEvent.data.webhook.items, CONTENT_TYPES_TO_INDEX);
-
-        if (VALID_REINDEX_OPERATIONS.includes(eventGridEvent.subject)) {
-            await indexers.reindexItems(codenames);
+    try {
+        if (validateEvent(eventGridEvent)) {
+            setupConfiguration(eventGridEvent.data.test);
+            const items = getRelevantItems(eventGridEvent.data.webhook.items, ALL_CONTENT_TYPES);
+            await indexers.reindexItems(items);
         } else {
-            indexers.deleteIndexedItems(codenames);
+            throw new Error('Validation failed. Unsupported event.');
         }
-    } else {
-        throw new Error('Validation failed. Unsupported event.');
+    } catch (error) {
+        /** This try-catch is required for correct logging of exceptions in Azure */
+        throw error;
     }
 };

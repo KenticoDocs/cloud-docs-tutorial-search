@@ -2,11 +2,16 @@ const indexers = require('../shared/searchIndexers');
 const { setupConfiguration } = require('../shared/external/configuration');
 
 module.exports = async (context, request) => {
-    setupConfiguration(request.query.test);
-    await indexers.reindexAllItems();
+    try {
+        setupConfiguration(request.query.test);
+        await indexers.reindexAllItems();
 
-    context.res = {
-        status: 200,
-        body: 'Initialization successful'
-    };
+        context.res = {
+            status: 200,
+            body: 'Initialization successful',
+        };
+    } catch (error) {
+        /** This try-catch is required for correct logging of exceptions in Azure */
+        throw error;
+    }
 };

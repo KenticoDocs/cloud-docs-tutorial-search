@@ -3,7 +3,7 @@ const keys = {
     securedApiKey: '',
     searchAppId: '',
     adminApiKey: '',
-    index: ''
+    index: '',
 };
 
 const getEnvironmentVariable = (variableName, isTest) =>
@@ -21,5 +21,5 @@ function setupConfiguration(test) {
 
 module.exports = {
     setupConfiguration,
-    keys
+    keys,
 };
