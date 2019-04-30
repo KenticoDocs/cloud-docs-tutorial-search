@@ -108,8 +108,9 @@ const edgeCasesArticle = {
     ...shortArticle,
     content: {
         name: 'Content',
-        value: '<p>some text in a paragraph<br>\n</p>\n<p>another paragraph&nbsp;</p>\n<h2>Some custom heading</h2>\n<p>text after heading</p>\n' +
-            `${InnerItemMarkStart}Premium feature\nhello!${InnerItemMarkEnd}</object>\n<p>&amp; some text after component</p>`,
+        value: '<p>some text in a paragraph<br>\n</p>\n<p>another paragraph&nbsp;&gt;&lt;</p>\n<h2>Some custom heading</h2>\n<p>text after heading</p>\n' +
+            `${InnerItemMarkStart}Premium feature\nhello!${InnerItemMarkEnd}</object>\n` +
+            `<p>&amp; {~some text~} after component{@icon-check@}{@icon-calendar@}{@icon-light-bulb@}{@icon-cancel@}</p>`,
     },
 };
 
@@ -361,9 +362,9 @@ describe('searchableArticleCreator', () => {
         expect(actualResult).toEqual(expectedResult);
     });
 
-    test('gets rid of special &nbsp; and &amp; characters', () => {
+    test('sanitizes content', () => {
         const expectedResult = [{
-            content: 'some text in a paragraph another paragraph',
+            content: 'some text in a paragraph another paragraph ><',
             title: 'Tutorial',
             heading: '',
             codename: 'first_tutorial',

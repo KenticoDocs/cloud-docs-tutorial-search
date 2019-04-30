@@ -219,6 +219,14 @@ class ItemRecordsCreator {
             .replace(/\s{2}/g, ' ')
             .replace(/&nbsp;/g, ' ')
             .replace(/&amp;/g, '&')
+            .replace(/&gt;/g, '>')
+            .replace(/&lt;/g, '<')
+            .replace(/{~/g, '')
+            .replace(/~}/g, '')
+            .replace(/{@icon-check@}/g, ' ')
+            .replace(/{@icon-calendar@}/g, ' ')
+            .replace(/{@icon-light-bulb@}/g, ' ')
+            .replace(/{@icon-cancel@}/g, ' ')
             .trim();
     }
 }
