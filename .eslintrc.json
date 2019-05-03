@@ -6,7 +6,8 @@
         "indent": "off",
         "comma-dangle": "off",
         "operator-linebreak": "off",
-        "space-before-function-paren": "off"
+        "space-before-function-paren": "off",
+        "no-throw-literal": "off"
     },
     "env": {
         "jest/globals": true
