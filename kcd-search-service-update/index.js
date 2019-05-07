@@ -23,6 +23,6 @@ module.exports = async (context, eventGridEvent) => {
         }
     } catch (error) {
         /** This try-catch is required for correct logging of exceptions in Azure */
-        throw error;
+        throw `Message: ${error.message} \nStack Trace: ${error.stack}`;
     }
 };
