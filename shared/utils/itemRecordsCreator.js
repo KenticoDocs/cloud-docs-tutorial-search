@@ -50,7 +50,7 @@ class ItemRecordsCreator {
         const contentSplitByContentChunks = content.split(ContentChunkMarkStart);
         let lastContentChunkHeading = heading;
 
-            contentSplitByContentChunks.forEach(singleContentChunkContent => {
+        contentSplitByContentChunks.forEach(singleContentChunkContent => {
             const contentChunkClosingTagIndex = singleContentChunkContent.indexOf(ContentChunkMarkEnd);
             const contentChunkContent = this.retrieveItemContent(singleContentChunkContent, contentChunkClosingTagIndex);
 
@@ -214,7 +214,9 @@ class ItemRecordsCreator {
     }
 
     sanitizeContent(content) {
-        return content
+        const contentWithoutIcons = this.removeIcons(content);
+
+        return contentWithoutIcons
             .replace(/\n/g, ' ')
             .replace(/\s{2}/g, ' ')
             .replace(/&nbsp;/g, ' ')
@@ -223,11 +225,20 @@ class ItemRecordsCreator {
             .replace(/&lt;/g, '<')
             .replace(/{~/g, '')
             .replace(/~}/g, '')
-            .replace(/{@icon-check@}/g, ' ')
-            .replace(/{@icon-calendar@}/g, ' ')
-            .replace(/{@icon-light-bulb@}/g, ' ')
-            .replace(/{@icon-cancel@}/g, ' ')
             .trim();
+    }
+
+    removeIcons(content) {
+        const iconExtractor = new RegExp(`{@icon-[\\s\\S-]*?@}`, 'g');
+        const matches = content.match(iconExtractor);
+        if (matches) {
+            const iconsToRemove = matches.join('|');
+            const iconsToRemoveRegex = new RegExp(iconsToRemove, 'g');
+
+            return content.replace(iconsToRemoveRegex, '');
+        }
+
+        return content;
     }
 }
 

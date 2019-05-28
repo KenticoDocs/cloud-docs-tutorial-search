@@ -110,7 +110,7 @@ const edgeCasesArticle = {
         name: 'Content',
         value: '<p>some text in a paragraph<br>\n</p>\n<p>another paragraph&nbsp;&gt;&lt;</p>\n<h2>Some custom heading</h2>\n<p>text after heading</p>\n' +
             `${InnerItemMarkStart}Premium feature\nhello!${InnerItemMarkEnd}</object>\n` +
-            `<p>&amp; {~some text~} after component{@icon-check@}{@icon-calendar@}{@icon-light-bulb@}{@icon-cancel@}</p>`,
+            `<p>&amp; {~some text~} after component{@icon-check@} {@icon-calendar@}{@icon-copy@} {@icon-codename@} {@icon-content-and-assets@} {@icon-light-bulb@}{@icon-cancel@}</p>`,
     },
 };
 
