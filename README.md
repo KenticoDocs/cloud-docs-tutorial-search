@@ -36,6 +36,7 @@ It responds to notifications from [Dispatcher](https://github.com/Kentico/kentic
 * `Search.ApiKey` - Algolia admin API key
 * `Search.AppId` - Algolia application ID
 * `Search.IndexName` - Index name in Algolia application
+* `SanitizeContentEndpoint` - Endpoint of the [`kcd-sanitize-content` Azure function](https://github.com/KenticoDocs/cloud-docs-common-utils)
 
 ## Testing
 * Run `yarn run test` in the terminal.

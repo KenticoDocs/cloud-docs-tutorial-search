@@ -1,4 +1,4 @@
-const ItemRecordsCreator = require('./itemRecordsCreator');
+const { ItemRecordsCreator } = require('./itemRecordsCreator');
 const {
     PlatformMarkStart,
     PlatformMarkEnd,
@@ -9,6 +9,10 @@ const {
     ContentChunkHeadingMarkStart,
     ContentChunkHeadingMarkEnd,
 } = require('./richTextLabels');
+
+async function sanitizeContent(content) {
+    return content;
+}
 
 const shortArticle = {
     system: {
@@ -104,19 +108,9 @@ const articleWithContentChunkAndCodeSample = {
     },
 };
 
-const edgeCasesArticle = {
-    ...shortArticle,
-    content: {
-        name: 'Content',
-        value: '<p>some text in a paragraph<br>\n</p>\n<p>another paragraph&nbsp;&gt;&lt;</p>\n<h2>Some custom heading</h2>\n<p>text after heading</p>\n' +
-            `${InnerItemMarkStart}Premium feature\nhello!${InnerItemMarkEnd}</object>\n` +
-            `<p>&amp; {~some text~} after component{@icon-check@}{@icon-calendar@}{@icon-light-bulb@}{@icon-cancel@}</p>`,
-    },
-};
-
 describe('searchableArticleCreator', () => {
     const firstParagraph = {
-        content: 'We will start by running a React sample application on your machine and updating an article in the sample project. Afterward, we can continue doing this...',
+        content: 'We will start by running a React sample application on your machine and updating an article in the sample project.\nAfterward, we can continue doing this...',
         title: 'Tutorial',
         heading: '',
         codename: 'first_tutorial',
@@ -137,29 +131,29 @@ describe('searchableArticleCreator', () => {
         platforms: [],
     };
 
-    const itemRecordsCreator = new ItemRecordsCreator();
+    const itemRecordsCreator = new ItemRecordsCreator(sanitizeContent);
 
-    test('creates a correct single article chunk and sanitizes its content', () => {
+    test('creates a correct single article chunk and sanitizes its content', async () => {
         const expectedResult = [firstParagraph];
 
-        const actualResult = itemRecordsCreator.createItemRecords(
+        const actualResult = await itemRecordsCreator.createItemRecords(
             shortArticle,
             shortArticle.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
 
-    test('splits a longer article into 2 chunks and sanitizes their content', () => {
+    test('splits a longer article into 2 chunks and sanitizes their content', async () => {
         const expectedResult = [firstParagraph, secondParagraph];
 
-        const actualResult = itemRecordsCreator.createItemRecords(
+        const actualResult = await itemRecordsCreator.createItemRecords(
             longArticle,
             longArticle.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
 
-    test('splits article with an inner item and multiple platforms correctly', () => {
+    test('splits article with an inner item and multiple platforms correctly', async () => {
         const expectedResult = [
             {
                 ...firstParagraph,
@@ -175,7 +169,7 @@ describe('searchableArticleCreator', () => {
                     'java',
                 ],
             }, {
-                content: 'New to headless CMS? If you are new to the world of headless CMSs, you might want to start by building a Hello world application. It will only take you about 5 minutes! After you grasp the core idea behind a headless CMS, everything in the sample application will make a lot more sense much faster.',
+                content: 'New to headless CMS?\nIf you are new to the world of headless CMSs, you might want to start by building a Hello world application. It will only take you about 5 minutes!\nAfter you grasp the core idea behind a headless CMS, everything in the sample application will make a lot more sense much faster.',
                 title: 'Tutorial',
                 heading: 'More options',
                 codename: 'first_tutorial',
@@ -200,14 +194,14 @@ describe('searchableArticleCreator', () => {
                 ],
             }];
 
-        const actualResult = itemRecordsCreator.createItemRecords(
+        const actualResult = await itemRecordsCreator.createItemRecords(
             articleWithInnerItemAndMultiplePlatforms,
             articleWithInnerItemAndMultiplePlatforms.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
 
-    test('handles indexing of multiple components in an article', () => {
+    test('handles indexing of multiple components in an article', async () => {
         const expectedResult = [{
             content: 'Callout number 1',
             title: 'Tutorial',
@@ -281,7 +275,7 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
         }, {
-            content: 'alert(\'Hello, world!\');',
+            content: ' alert(\'Hello, world!\');',
             title: 'Tutorial',
             heading: 'First run of the sample app',
             codename: 'first_tutorial',
@@ -291,14 +285,14 @@ describe('searchableArticleCreator', () => {
             platforms: ['js'],
         }];
 
-        const actualResult = itemRecordsCreator.createItemRecords(
+        const actualResult = await itemRecordsCreator.createItemRecords(
             articleWithMultipleCallouts,
             articleWithMultipleCallouts.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
 
-    test('handles indexing of content chunk item, assigns platform element and headings within content chunk correctly', () => {
+    test('handles indexing of content chunk item, assigns platform element and headings within content chunk correctly', async () => {
         const expectedResult = [{
             content: 'start of an article',
             title: 'Tutorial',
@@ -327,7 +321,7 @@ describe('searchableArticleCreator', () => {
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: ['java', 'javascript', '_net'],
         }, {
-            content: 'Code sample inside of a content chunk item',
+            content: ' Code sample inside of a content chunk item',
             title: 'Tutorial',
             heading: 'Content chunk heading',
             codename: 'first_tutorial',
@@ -355,55 +349,9 @@ describe('searchableArticleCreator', () => {
             platforms: [],
         }];
 
-        const actualResult = itemRecordsCreator.createItemRecords(
+        const actualResult = await itemRecordsCreator.createItemRecords(
             articleWithContentChunkAndCodeSample,
             articleWithContentChunkAndCodeSample.content.value);
-
-        expect(actualResult).toEqual(expectedResult);
-    });
-
-    test('sanitizes content', () => {
-        const expectedResult = [{
-            content: 'some text in a paragraph another paragraph ><',
-            title: 'Tutorial',
-            heading: '',
-            codename: 'first_tutorial',
-            order: 1,
-            objectID: 'first_tutorial_1',
-            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
-            platforms: [],
-        }, {
-            content: 'text after heading',
-            title: 'Tutorial',
-            heading: 'Some custom heading',
-            codename: 'first_tutorial',
-            order: 2,
-            objectID: 'first_tutorial_2',
-            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
-            platforms: [],
-        }, {
-            content: 'Premium feature hello!',
-            title: 'Tutorial',
-            heading: 'Some custom heading',
-            codename: 'first_tutorial',
-            order: 3,
-            objectID: 'first_tutorial_3',
-            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
-            platforms: [],
-        }, {
-            content: '& some text after component',
-            title: 'Tutorial',
-            heading: 'Some custom heading',
-            codename: 'first_tutorial',
-            order: 4,
-            objectID: 'first_tutorial_4',
-            id: '59c40872-521f-4883-ae6e-4d11b77797e4',
-            platforms: [],
-        }];
-
-        const actualResult = itemRecordsCreator.createItemRecords(
-            edgeCasesArticle,
-            edgeCasesArticle.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
