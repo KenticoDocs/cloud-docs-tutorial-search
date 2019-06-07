@@ -1,4 +1,6 @@
 const {
+    CodeSampleHeadingMarkStart,
+    CodeSampleHeadingMarkEnd,
     getPlatformLabel,
     getCodeSampleLabel,
     getInnerItemLabel,
@@ -12,7 +14,7 @@ function insertLinkedCodeSamples(text, linkedItems) {
 
         if (linkedItem.system.type === 'code_sample') {
             const codeSampleIdentifier = getCodeSampleLabel(linkedItem.system.codename);
-            const codeSampleContent = insertCodeSampleContent(linkedItem);
+            const codeSampleContent = insertLabelledCodeSampleContent(linkedItem);
 
             text = text.replace(codeSampleIdentifier, codeSampleContent);
         }
@@ -20,15 +22,35 @@ function insertLinkedCodeSamples(text, linkedItems) {
     return text;
 }
 
-function insertCodeSampleContent(codeSample) {
+function insertLabelledCodeSampleContent(codeSample) {
+    const content = replaceHeadingTagsWithMarks(codeSample.code.value);
+
     if (codeSample.platform.value.length === 1) {
         const platform = codeSample.platform.value;
         const platformLabel = getPlatformLabel(platform);
 
-        return getInnerItemLabel(platformLabel + codeSample.code.value);
+        return getInnerItemLabel(platformLabel + content);
     } else {
-        return getInnerItemLabel(codeSample.code.value);
+        return getInnerItemLabel(content);
     }
 }
 
-module.exports = insertLinkedCodeSamples;
+function replaceHeadingTagsWithMarks(content) {
+    return content
+        .replace(/<h2>/g, CodeSampleHeadingMarkStart)
+        .replace(/<\/h2>/g, CodeSampleHeadingMarkEnd);
+}
+
+function replaceHeadingMarksWithTags(content) {
+    const headingMarkStartRegex = new RegExp(CodeSampleHeadingMarkStart, 'g');
+    const headingMarkEndRegex = new RegExp(CodeSampleHeadingMarkEnd, 'g');
+
+    return content
+        .replace(headingMarkStartRegex, '<h2>')
+        .replace(headingMarkEndRegex, '</h2>');
+}
+
+module.exports = {
+    insertLinkedCodeSamples,
+    replaceHeadingMarksWithTags,
+};

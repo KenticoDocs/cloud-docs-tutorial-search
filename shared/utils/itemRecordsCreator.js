@@ -1,3 +1,4 @@
+const { replaceHeadingMarksWithTags } = require('./codeSamplesUtils');
 const striptags = require('striptags');
 const sanitizeContent = require('./../external/sanitizeContent');
 const {
@@ -154,14 +155,16 @@ class ItemRecordsCreator {
     }
 
     async indexInnerItem(innerItemContent, heading, item) {
-        if (innerItemContent.includes(PlatformMarkStart)) {
+        const contentWithHeadingsInCodeSamples = replaceHeadingMarksWithTags(innerItemContent);
+
+        if (contentWithHeadingsInCodeSamples.includes(PlatformMarkStart)) {
             const {
                 contentWithoutPlatformLabel,
                 itemWithPlatform,
-            } = this.resolvePlatformElement(innerItemContent, item);
+            } = this.resolvePlatformElement(contentWithHeadingsInCodeSamples, item);
             await this.addItemRecord(contentWithoutPlatformLabel, heading, itemWithPlatform);
         } else {
-            await this.addItemRecord(innerItemContent, heading, item);
+            await this.addItemRecord(contentWithHeadingsInCodeSamples, heading, item);
         }
     }
 

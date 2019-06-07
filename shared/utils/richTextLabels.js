@@ -4,6 +4,8 @@ const InnerItemMarkStart = '#~inner_item#';
 const InnerItemMarkEnd = '#inner_item~#';
 const CodeSampleMarkStart = '#~code_sample#';
 const CodeSampleMarkEnd = '#code_sample~#';
+const CodeSampleHeadingMarkStart = '#~code_sample_heading#';
+const CodeSampleHeadingMarkEnd = '#code_sample_heading~#';
 const ContentChunkMarkStart = '#~content_chunk#';
 const ContentChunkMarkEnd = '#content_chunk~#';
 const ContentChunkHeadingMarkStart = '#~content_chunk_heading#';
@@ -42,6 +44,8 @@ module.exports = {
     InnerItemMarkEnd,
     CodeSampleMarkStart,
     CodeSampleMarkEnd,
+    CodeSampleHeadingMarkStart,
+    CodeSampleHeadingMarkEnd,
     ContentChunkMarkStart,
     ContentChunkMarkEnd,
     ContentChunkHeadingMarkStart,
