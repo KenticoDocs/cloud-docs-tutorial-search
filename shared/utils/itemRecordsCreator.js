@@ -1,4 +1,6 @@
+const { replaceHeadingMarksWithTags } = require('./codeSamplesUtils');
 const striptags = require('striptags');
+const sanitizeContent = require('./../external/sanitizeContent');
 const {
     PlatformMarkStart,
     PlatformMarkEnd,
@@ -10,24 +12,29 @@ const {
     ContentChunkHeadingMarkEnd,
 } = require('./richTextLabels');
 
+function getItemRecordsCreator() {
+    return new ItemRecordsCreator(sanitizeContent);
+}
+
 class ItemRecordsCreator {
-    constructor() {
+    constructor(sanitizeContent) {
         this.itemRecords = [];
+        this.sanitizeContent = sanitizeContent;
     }
 
-    createItemRecords(item, textToIndex) {
+    async createItemRecords(item, textToIndex) {
         const contentSplitByHeadings = textToIndex.split('<h2>');
         this.itemRecords = [];
 
-        contentSplitByHeadings.forEach(singleHeadingContent => {
+        for (const singleHeadingContent of contentSplitByHeadings) {
             const { heading, content } = this.splitHeadingAndContent(singleHeadingContent, '</h2>');
 
             if (content.includes(ContentChunkMarkStart)) {
-                this.indexContentSplitByContentChunks(content, heading, item);
+                await this.indexContentSplitByContentChunks(content, heading, item);
             } else {
-                this.indexLeftoverContent(content, heading, item);
+                await this.indexLeftoverContent(content, heading, item);
             }
-        });
+        }
 
         return this.itemRecords;
     }
@@ -46,48 +53,64 @@ class ItemRecordsCreator {
             }
     }
 
-    indexContentSplitByContentChunks(content, heading, item) {
+    async indexContentSplitByContentChunks(content, heading, item) {
         const contentSplitByContentChunks = content.split(ContentChunkMarkStart);
         let lastContentChunkHeading = heading;
 
-            contentSplitByContentChunks.forEach(singleContentChunkContent => {
+        for (const singleContentChunkContent of contentSplitByContentChunks) {
+            lastContentChunkHeading = await this.resolveAndIndexContentChunkItem(
+                singleContentChunkContent,
+                item,
+                lastContentChunkHeading);
+
             const contentChunkClosingTagIndex = singleContentChunkContent.indexOf(ContentChunkMarkEnd);
-            const contentChunkContent = this.retrieveItemContent(singleContentChunkContent, contentChunkClosingTagIndex);
-
-            if (this.isNonEmpty(contentChunkContent)) {
-                lastContentChunkHeading = this.indexContentChunkItem(contentChunkContent, item, lastContentChunkHeading);
-            }
-
             const leftoverContent = this.retrieveLeftoverContent(
                 singleContentChunkContent,
                 contentChunkClosingTagIndex,
                 ContentChunkMarkEnd);
-            const leftoverContentHeading = this.isNonEmpty(lastContentChunkHeading)
-                                           ? lastContentChunkHeading
-                                           : heading;
-            this.indexLeftoverContent(leftoverContent, leftoverContentHeading, item);
-        });
+
+            const leftoverContentHeading = this.getCurrentHeading(lastContentChunkHeading, heading);
+            await this.indexLeftoverContent(leftoverContent, leftoverContentHeading, item);
+        }
     }
 
     retrieveItemContent(content, itemClosingTagIndex) {
         return content.substring(0, itemClosingTagIndex).trim();
     }
 
-    indexContentChunkItem(contentChunkContent, item, lastContentChunkHeading) {
-        const {
-            contentWithoutPlatformLabel,
-            itemWithPlatform,
-        } = this.resolvePlatformElement(contentChunkContent, item);
+    async resolveAndIndexContentChunkItem(singleContentChunkContent, item, lastContentChunkHeading) {
+        const contentChunkClosingTagIndex = singleContentChunkContent.indexOf(ContentChunkMarkEnd);
+        const contentChunkContent = this.retrieveItemContent(singleContentChunkContent, contentChunkClosingTagIndex);
 
+        if (this.isNonEmpty(contentChunkContent)) {
+            const {
+                contentWithoutPlatformLabel,
+                itemWithPlatform,
+            } = this.resolvePlatformElement(contentChunkContent, item);
+
+            lastContentChunkHeading = await this.indexContentChunkItem(
+                contentWithoutPlatformLabel,
+                lastContentChunkHeading,
+                itemWithPlatform);
+        }
+
+        return lastContentChunkHeading
+    }
+
+    async indexContentChunkItem(contentWithoutPlatformLabel, lastContentChunkHeading, itemWithPlatform) {
         const contentChunkContentSplitByHeadings = contentWithoutPlatformLabel.split(ContentChunkHeadingMarkStart);
 
-        contentChunkContentSplitByHeadings.forEach(singleHeadingContentChunkContent => {
+        for (const singleHeadingContentChunkContent of contentChunkContentSplitByHeadings) {
             const { heading, content } = this.splitHeadingAndContent(singleHeadingContentChunkContent, ContentChunkHeadingMarkEnd);
-            const currentHeading = this.isNonEmpty(heading) ? heading : lastContentChunkHeading;
+            const currentHeading = this.getCurrentHeading(heading, lastContentChunkHeading);
 
-            this.indexContentSplitByInnerItems(content, currentHeading, itemWithPlatform);
-            lastContentChunkHeading = heading;
-        });
+            await this.indexContentSplitByInnerItems(
+                content,
+                currentHeading,
+                itemWithPlatform);
+
+            lastContentChunkHeading = currentHeading;
+        }
 
         return lastContentChunkHeading;
     }
@@ -98,50 +121,58 @@ class ItemRecordsCreator {
             .replace(itemMarkEnd, ' ');
     }
 
-    indexLeftoverContent(content, heading, item) {
+    getCurrentHeading(currentHeading, previousHeading) {
+        return this.isNonEmpty(currentHeading)
+               ? currentHeading
+               : previousHeading;
+    }
+
+    async indexLeftoverContent(content, heading, item) {
         if (content.includes(InnerItemMarkStart)) {
-            this.indexContentSplitByInnerItems(content, heading, item);
+            await this.indexContentSplitByInnerItems(content, heading, item);
         } else {
-            this.indexLeftoverContentWithoutInnerItems(content, heading, item);
+            await this.indexLeftoverContentWithoutInnerItems(content, heading, item);
         }
     }
 
-    indexContentSplitByInnerItems(singleHeadingContent, heading, item) {
+    async indexContentSplitByInnerItems(singleHeadingContent, heading, item) {
         const contentSplitByInnerItems = singleHeadingContent.split(InnerItemMarkStart);
 
-        contentSplitByInnerItems.forEach(content => {
+        for (const content of contentSplitByInnerItems) {
             const innerItemClosingTagIndex = content.indexOf(InnerItemMarkEnd);
             const innerItemContent = this.retrieveItemContent(content, innerItemClosingTagIndex);
 
             if (this.isNonEmpty(innerItemContent)) {
-                this.indexInnerItem(innerItemContent, heading, item);
+                await this.indexInnerItem(innerItemContent, heading, item);
             }
 
             const leftoverContent = this.retrieveLeftoverContent(
                 content,
                 innerItemClosingTagIndex,
                 InnerItemMarkEnd);
-            this.indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item);
-        });
-    }
-
-    indexInnerItem(innerItemContent, heading, item) {
-        if (innerItemContent.includes(PlatformMarkStart)) {
-            const {
-                contentWithoutPlatformLabel,
-                itemWithPlatform,
-            } = this.resolvePlatformElement(innerItemContent, item);
-            this.addItemRecord(contentWithoutPlatformLabel, heading, itemWithPlatform);
-        } else {
-            this.addItemRecord(innerItemContent, heading, item);
+            await this.indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item);
         }
     }
 
-    indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item) {
+    async indexInnerItem(innerItemContent, heading, item) {
+        const contentWithHeadingsInCodeSamples = replaceHeadingMarksWithTags(innerItemContent);
+
+        if (contentWithHeadingsInCodeSamples.includes(PlatformMarkStart)) {
+            const {
+                contentWithoutPlatformLabel,
+                itemWithPlatform,
+            } = this.resolvePlatformElement(contentWithHeadingsInCodeSamples, item);
+            await this.addItemRecord(contentWithoutPlatformLabel, heading, itemWithPlatform);
+        } else {
+            await this.addItemRecord(contentWithHeadingsInCodeSamples, heading, item);
+        }
+    }
+
+    async indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item) {
         const contentWithoutMarkdown = striptags(leftoverContent).trim();
 
         if (this.isNonEmpty(contentWithoutMarkdown)) {
-            this.addItemRecord(contentWithoutMarkdown, heading, item);
+            await this.addItemRecord(contentWithoutMarkdown, heading, item);
         }
     }
 
@@ -178,16 +209,17 @@ class ItemRecordsCreator {
         };
     }
 
-    addItemRecord(content, heading, item) {
+    async addItemRecord(content, heading, item) {
         const title = item.title && item.title.value;
         const id = item.system.id;
         const codename = item.system.codename;
         const order = this.itemRecords.length + 1;
         const objectID = codename + '_' + order;
         const platforms = this.getPlatforms(item);
+        const sanitizedContent = await this.sanitizeContent(content);
 
         this.itemRecords.push({
-            content: this.sanitizeContent(content),
+            content: sanitizedContent,
             id,
             title,
             heading,
@@ -212,23 +244,9 @@ class ItemRecordsCreator {
     isNonEmpty(content) {
         return content !== null && content !== '';
     }
-
-    sanitizeContent(content) {
-        return content
-            .replace(/\n/g, ' ')
-            .replace(/\s{2}/g, ' ')
-            .replace(/&nbsp;/g, ' ')
-            .replace(/&amp;/g, '&')
-            .replace(/&gt;/g, '>')
-            .replace(/&lt;/g, '<')
-            .replace(/{~/g, '')
-            .replace(/~}/g, '')
-            .replace(/{@icon-check@}/g, ' ')
-            .replace(/{@icon-calendar@}/g, ' ')
-            .replace(/{@icon-light-bulb@}/g, ' ')
-            .replace(/{@icon-cancel@}/g, ' ')
-            .trim();
-    }
 }
 
-module.exports = ItemRecordsCreator;
+module.exports = {
+    getItemRecordsCreator,
+    ItemRecordsCreator,
+};

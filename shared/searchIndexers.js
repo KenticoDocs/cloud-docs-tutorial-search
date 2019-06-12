@@ -1,8 +1,8 @@
 const getSearchIndex = require('./external/searchIndex');
 const getKenticoClient = require('./external/kenticoClient');
-const ItemRecordsCreator = require('./utils/itemRecordsCreator');
+const { getItemRecordsCreator } = require('./utils/itemRecordsCreator');
 const resolveItemInRichText = require('./utils/richTextResolver');
-const insertLinkedCodeSamples = require('./utils/codeSamplesUtils');
+const { insertLinkedCodeSamples } = require('./utils/codeSamplesUtils');
 const getRootCodenamesOfSingleItem = require('./utils/rootItemsGetter');
 const { ROOT_CONTENT_TYPES, ALL_CONTENT_TYPES } = require('./external/constants');
 const { CodeSampleMarkStart } = require('./utils/richTextLabels');
@@ -92,9 +92,9 @@ async function resolveAndIndexItem(item, linkedItems) {
 }
 
 async function indexItem(item, text) {
-    const itemRecordsCreator = new ItemRecordsCreator();
+    const itemRecordsCreator = getItemRecordsCreator();
 
-    const itemRecords = itemRecordsCreator.createItemRecords(item, text);
+    const itemRecords = await itemRecordsCreator.createItemRecords(item, text);
     await getSearchIndex().saveObjects(itemRecords);
 }
 

@@ -4,6 +4,7 @@ const keys = {
     searchAppId: '',
     adminApiKey: '',
     index: '',
+    sanitizeContentEndpoint: process.env['SanitizeContentEndpoint'],
 };
 
 const getEnvironmentVariable = (variableName, isTest) =>
