@@ -1,26 +1,18 @@
-const keys = {
-    kenticoProjectId: '',
-    securedApiKey: '',
-    searchAppId: '',
-    adminApiKey: '',
-    index: '',
-    sanitizeContentEndpoint: process.env['SanitizeContentEndpoint'],
-};
+class Configuration {
+    static set(isTest) {
+        Configuration.keys = {
+            azureContainerName: Configuration.getEnvironmentVariable('Azure.ContainerName', isTest),
+            azureStorageAccountName: Configuration.getEnvironmentVariable('Azure.StorageAccountName'),
+            azureStorageKey: Configuration.getEnvironmentVariable('Azure.StorageKey'),
+            kenticoProjectId: Configuration.getEnvironmentVariable('KC.ProjectId', isTest),
+            securedApiKey: Configuration.getEnvironmentVariable('KC.SecuredApiKey', isTest),
+            clearIndexUrl: Configuration.getEnvironmentVariable('Azure.ClearIndexUrl', isTest),
+        }
+    }
 
-const getEnvironmentVariable = (variableName, isTest) =>
-    process.env[`${variableName}${isTest ? '.Test' : ''}`];
-
-function setupConfiguration(test) {
-    const isTest = test === 'enabled';
-
-    keys.kenticoProjectId = getEnvironmentVariable('KC.ProjectId', isTest);
-    keys.securedApiKey = getEnvironmentVariable('KC.SecuredApiKey', isTest);
-    keys.searchAppId = getEnvironmentVariable('Search.AppId', isTest);
-    keys.adminApiKey = getEnvironmentVariable('Search.ApiKey', isTest);
-    keys.index = getEnvironmentVariable('Search.IndexName', isTest);
+    static getEnvironmentVariable(variableName, isTest) {
+        return process.env[`${variableName}${isTest ? '.Test' : ''}`] || '';
+    }
 }
 
-module.exports = {
-    setupConfiguration,
-    keys,
-};
+module.exports = Configuration;

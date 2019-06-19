@@ -1,6 +1,5 @@
 const { replaceHeadingMarksWithTags } = require('./codeSamplesUtils');
 const striptags = require('striptags');
-const sanitizeContent = require('./../external/sanitizeContent');
 const {
     PlatformMarkStart,
     PlatformMarkEnd,
@@ -13,13 +12,12 @@ const {
 } = require('./richTextLabels');
 
 function getItemRecordsCreator() {
-    return new ItemRecordsCreator(sanitizeContent);
+    return new ItemRecordsCreator();
 }
 
 class ItemRecordsCreator {
-    constructor(sanitizeContent) {
+    constructor() {
         this.itemRecords = [];
-        this.sanitizeContent = sanitizeContent;
     }
 
     async createItemRecords(item, textToIndex) {
@@ -216,10 +214,9 @@ class ItemRecordsCreator {
         const order = this.itemRecords.length + 1;
         const objectID = codename + '_' + order;
         const platforms = this.getPlatforms(item);
-        const sanitizedContent = await this.sanitizeContent(content);
 
         this.itemRecords.push({
-            content: sanitizedContent,
+            content,
             id,
             title,
             heading,
@@ -227,6 +224,7 @@ class ItemRecordsCreator {
             order,
             objectID,
             platforms,
+            section: 'tutorials'
         });
     }
 

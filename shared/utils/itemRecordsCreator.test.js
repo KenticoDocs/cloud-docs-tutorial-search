@@ -118,6 +118,7 @@ describe('searchableArticleCreator', () => {
         objectID: 'first_tutorial_1',
         id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         platforms: [],
+        section: 'tutorials',
     };
 
     const secondParagraph = {
@@ -129,6 +130,7 @@ describe('searchableArticleCreator', () => {
         objectID: 'first_tutorial_2',
         id: '59c40872-521f-4883-ae6e-4d11b77797e4',
         platforms: [],
+        section: 'tutorials',
     };
 
     const itemRecordsCreator = new ItemRecordsCreator(sanitizeContent);
@@ -180,6 +182,7 @@ describe('searchableArticleCreator', () => {
                     'javascript',
                     'java',
                 ],
+                section: 'tutorials',
             }, {
                 content: 'After signing in to your Kentico Cloud account you will see your sample project to play around with.',
                 title: 'Tutorial',
@@ -192,6 +195,7 @@ describe('searchableArticleCreator', () => {
                     'javascript',
                     'java',
                 ],
+                section: 'tutorials',
             }];
 
         const actualResult = await itemRecordsCreator.createItemRecords(
@@ -211,6 +215,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_1',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
+            section: 'tutorials',
         }, {
             content: 'Some paragraph between two components',
             title: 'Tutorial',
@@ -220,6 +225,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_2',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
+            section: 'tutorials',
         }, {
             content: 'Text about Kentico Cloud',
             title: 'Tutorial',
@@ -229,6 +235,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_3',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
+            section: 'tutorials',
         }, {
             content: 'Callout number 2 Very useful advice about KC',
             title: 'Tutorial',
@@ -238,6 +245,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_4',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
+            section: 'tutorials',
         }, {
             content: 'Callout number 3',
             title: 'Tutorial',
@@ -247,6 +255,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_5',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
+            section: 'tutorials',
         }, {
             content: 'Some paragraph between a component and a heading',
             title: 'Tutorial',
@@ -256,6 +265,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_6',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
+            section: 'tutorials',
         }, {
             content: 'Before going any further, make sure you have the following.',
             title: 'Tutorial',
@@ -265,6 +275,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_7',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
+            section: 'tutorials',
         }, {
             content: 'When you run the application for the first time, you will see a Configuration page. Use it to connect the app to your sample project in Kentico Cloud.',
             title: 'Tutorial',
@@ -274,6 +285,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_8',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
+            section: 'tutorials',
         }, {
             content: ' alert(\'Hello, world!\');',
             title: 'Tutorial',
@@ -283,6 +295,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_9',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: ['js'],
+            section: 'tutorials',
         }];
 
         const actualResult = await itemRecordsCreator.createItemRecords(
@@ -302,6 +315,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_1',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
+            section: 'tutorials',
         }, {
             content: 'content chunk text',
             title: 'Tutorial',
@@ -311,6 +325,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_2',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: ['java', 'javascript', '_net'],
+            section: 'tutorials',
         }, {
             content: 'Callout inside a content chunk item',
             title: 'Tutorial',
@@ -320,6 +335,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_3',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: ['java', 'javascript', '_net'],
+            section: 'tutorials',
         }, {
             content: ' Code sample inside of a content chunk item',
             title: 'Tutorial',
@@ -329,6 +345,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_4',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: ['typescript'],
+            section: 'tutorials',
         }, {
             content: 'Text that ends a content chunk.',
             title: 'Tutorial',
@@ -338,6 +355,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_5',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: ['java', 'javascript', '_net'],
+            section: 'tutorials',
         }, {
             content: 'end of an article',
             title: 'Tutorial',
@@ -347,6 +365,7 @@ describe('searchableArticleCreator', () => {
             objectID: 'first_tutorial_6',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
             platforms: [],
+            section: 'tutorials',
         }];
 
         const actualResult = await itemRecordsCreator.createItemRecords(
