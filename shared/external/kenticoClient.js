@@ -3,7 +3,7 @@ const Article = require('../models/article');
 const Scenario = require('../models/scenario');
 const CodeSamples = require('../models/code_samples');
 const CodeSample = require('../models/code_sample');
-const { keys } = require('./configuration');
+const Configuration = require('./configuration');
 
 const typeResolvers = [
     new KenticoCloud.TypeResolver('article', () => new Article()),
@@ -14,9 +14,9 @@ const typeResolvers = [
 
 function getKenticoClient() {
     return new KenticoCloud.DeliveryClient({
-        projectId: keys.kenticoProjectId,
+        projectId: Configuration.keys.kenticoProjectId,
         enableSecuredMode: true,
-        securedApiKey: keys.securedApiKey,
+        securedApiKey: Configuration.keys.securedApiKey,
         typeResolvers,
         globalHeaders: [
             {

@@ -3,17 +3,18 @@
 | [![Build Status](https://travis-ci.com/KenticoDocs/cloud-docs-tutorial-search.svg?branch=master)](https://travis-ci.com/KenticoDocs/cloud-docs-tutorial-search/branches) [![codebeat badge](https://codebeat.co/badges/9d7be753-0c7d-4e00-b073-51fad504a4ae)](https://codebeat.co/projects/github-com-kenticodocs-cloud-docs-tutorial-search-master) | [![Build Status](https://travis-ci.com/KenticoDocs/cloud-docs-tutorial-search.svg?branch=develop)](https://travis-ci.com/KenticoDocs/cloud-docs-tutorial-search/branches) [![codebeat badge](https://codebeat.co/badges/aa7e8e01-8e31-45fd-9d9c-3bfa5baabd09)](https://codebeat.co/projects/github-com-kenticodocs-cloud-docs-tutorial-search-develop) |
 
 
-# Kentico Cloud Documentation - Search Service
+# Kentico Cloud Documentation - Tutorial Search
 Backend service for Kentico Cloud [documentation portal](https://docs.kenticocloud.com/), which utilizes Kentico Cloud as a source of its content.
 
-In order to provide an exquisite search experience, this service is responsible for indexing content of the documentation portal.
-It responds to notifications from [Dispatcher](https://github.com/Kentico/kentico-cloud-docs-dispatcher) and indexes updated content on [Algolia](https://www.algolia.com/) accordingly.
+In order to provide an exquisite search experience, this service is responsible for indexing content of the documentation portal's tutorials.
+It responds to events sent by [Dispatcher](https://github.com/KenticoDocs/cloud-docs-dispatcher) and stores the content ready to index on [Algolia](https://www.algolia.com/) in an [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/).
 
 ## Overview
 1. This project is a JavaScript Azure Functions application.
 2. It is subscribed to an Azure [Event Grid](https://azure.microsoft.com/en-us/services/event-grid/) topic and listens for events. Each event contains information about the content that was changed.
 3. After receiving an event, it fetches the content from Kentico Cloud using [Kentico Cloud Delivery SDK](https://github.com/Kentico/kentico-cloud-js/tree/master/packages/delivery).
-4. The fetched content is then split into smaller records and finally indexed on Algolia with [algoliasearch](https://github.com/algolia/algoliasearch-client-javascript).
+4. The fetched content is then split into smaller [Algolia-compatible records](https://www.algolia.com/doc/faq/basics/what-is-a-record/). 
+5. Finally the records are stored in an Azure Blob Storage, where the following [Indexing Sync](https://github.com/KenticoDocs/cloud-docs-index-sync) service can access it and update the index on Algolia accordingly.
 
 ## Setup
 
@@ -33,10 +34,10 @@ It responds to notifications from [Dispatcher](https://github.com/Kentico/kentic
 #### Required Keys
 * `KC.ProjectId` - Kentico Cloud project ID
 * `KC.SecuredApiKey` - Kentico Cloud secured delivery API key
-* `Search.ApiKey` - Algolia admin API key
-* `Search.AppId` - Algolia application ID
-* `Search.IndexName` - Index name in Algolia application
-* `SanitizeContentEndpoint` - Endpoint of the [`kcd-sanitize-content` Azure function](https://github.com/KenticoDocs/cloud-docs-common-utils)
+* `Azure.StorageKey` - Azure Storage key
+* `Azure.StorageAccountName` - Azure Storage account name
+* `Azure.ContainerName` - Azure Storage container namr
+* `CleanIndexUrl` - URL of the [`kcd-clear-index` Azure function](https://github.com/KenticoDocs/cloud-docs-index-sync)
 
 ## Testing
 * Run `yarn run test` in the terminal.
