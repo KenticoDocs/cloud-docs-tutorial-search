@@ -15,7 +15,7 @@ function validateEvent(event) {
 module.exports = async (context, eventGridEvent) => {
     try {
         if (validateEvent(eventGridEvent)) {
-            Configuration.set(eventGridEvent.data.test === 'enabled');
+            Configuration.set(eventGridEvent.data.test);
             const items = getRelevantItems(eventGridEvent.data.webhook.items, ALL_CONTENT_TYPES);
             await SplitService.splitItemsToRecords(items);
         } else {
