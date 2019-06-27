@@ -1,10 +1,11 @@
-const indexers = require('../shared/searchIndexers');
-const { setupConfiguration } = require('../shared/external/configuration');
+const SplitService = require('../shared/splitToRecords');
+const Configuration = require('../shared/external/configuration');
 
 module.exports = async (context, request) => {
     try {
-        setupConfiguration(request.query.test);
-        await indexers.reindexAllItems();
+        Configuration.set(request.query.test);
+
+        await SplitService.splitAllItemsToRecords();
 
         context.res = {
             status: 200,

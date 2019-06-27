@@ -1,6 +1,6 @@
 const getRelevantItems = require('../shared/utils/itemFilter');
-const indexers = require('../shared/searchIndexers');
-const { setupConfiguration } = require('../shared/external/configuration');
+const SplitService = require('../shared/splitToRecords');
+const Configuration = require('../shared/external/configuration');
 const {
     VALID_OPERATIONS,
     ALL_CONTENT_TYPES,
@@ -15,9 +15,9 @@ function validateEvent(event) {
 module.exports = async (context, eventGridEvent) => {
     try {
         if (validateEvent(eventGridEvent)) {
-            setupConfiguration(eventGridEvent.data.test);
+            Configuration.set(eventGridEvent.data.test);
             const items = getRelevantItems(eventGridEvent.data.webhook.items, ALL_CONTENT_TYPES);
-            await indexers.reindexItems(items);
+            await SplitService.splitItemsToRecords(items);
         } else {
             throw new Error('Validation failed. Unsupported event.');
         }
