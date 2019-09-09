@@ -10,7 +10,7 @@ const { storeRecordsToBlobStorage } = require('./external/storeRecordsToBlobStor
 const {
     ROOT_CONTENT_TYPES,
     ALL_CONTENT_TYPES,
-    EXCLUDED_FROM_SEARCH
+    EXCLUDED_FROM_SEARCH,
 } = require('./external/constants');
 
 class SplitService {

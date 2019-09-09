@@ -12,12 +12,11 @@ async function storeRecordsToBlobStorage(itemRecords, item, initialize = false) 
         pipeline,
     );
     const containerUrl = BlobStorage.ContainerURL.fromServiceURL(serviceUrl, Configuration.keys.azureContainerName);
-    const blobURL = BlobStorage.BlobURL.fromContainerURL(containerUrl, item.system.id);
-    const blockBlobURL = BlobStorage.BlockBlobURL.fromBlobURL(blobURL);
+    const blobURL = BlobStorage.BlockBlobURL.fromContainerURL(containerUrl, item.system.id);
 
     const blob = getBlob(itemRecords, item, initialize);
 
-     await blockBlobURL.upload(
+     await blobURL.upload(
          BlobStorage.Aborter.none,
          blob,
          blob.length,

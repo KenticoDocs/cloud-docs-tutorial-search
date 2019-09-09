@@ -36,8 +36,8 @@ It responds to events sent by [Dispatcher](https://github.com/KenticoDocs/cloud-
 * `KC.SecuredApiKey` - Kentico Cloud secured delivery API key
 * `Azure.StorageKey` - Azure Storage key
 * `Azure.StorageAccountName` - Azure Storage account name
-* `Azure.ContainerName` - Azure Storage container namr
-* `CleanIndexUrl` - URL of the [`kcd-clear-index` Azure function](https://github.com/KenticoDocs/cloud-docs-index-sync)
+* `Azure.ContainerName` - Azure Storage container name
+* `Azure.ClearIndexUrl` - URL of the [`kcd-clear-index` Azure function](https://github.com/KenticoDocs/cloud-docs-index-sync)
 
 ## Testing
 * Run `yarn run test` in the terminal.
