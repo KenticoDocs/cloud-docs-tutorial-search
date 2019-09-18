@@ -12,7 +12,8 @@ async function storeRecordsToBlobStorage(itemRecords, item, initialize = false) 
         pipeline,
     );
     const containerUrl = BlobStorage.ContainerURL.fromServiceURL(serviceUrl, Configuration.keys.azureContainerName);
-    const blobURL = BlobStorage.BlockBlobURL.fromContainerURL(containerUrl, item.system.id);
+    const blobName = getBlobName(item.system.id);
+    const blobURL = BlobStorage.BlockBlobURL.fromContainerURL(containerUrl, blobName);
 
     const blob = getBlob(itemRecords, item, initialize);
 
@@ -21,6 +22,10 @@ async function storeRecordsToBlobStorage(itemRecords, item, initialize = false) 
          blob,
          blob.length,
      );
+}
+
+function getBlobName(id) {
+    return `${id}.json`;
 }
 
 function getBlob(itemRecords, item, initialize) {
