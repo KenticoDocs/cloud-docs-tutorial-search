@@ -33,7 +33,7 @@ function getBlob(itemRecords, item, initialize) {
         itemRecords,
         codename: item.system.codename,
         id: item.system.id,
-        initialize
+        operation: initialize ? 'INITIALIZE' : 'UPDATE'
     });
 }
 
