@@ -33,8 +33,19 @@ function getBlob(itemRecords, item, initialize) {
         itemRecords,
         codename: item.system.codename,
         id: item.system.id,
-        operation: initialize ? 'INITIALIZE' : 'UPDATE'
+        operation: getOperation(itemRecords, initialize),
+        section: 'tutorials',
     });
+}
+
+function getOperation(itemRecords, initialize) {
+    if (initialize) {
+        return 'INITIALIZE';
+    } else if (itemRecords.length === 0) {
+        return 'DELETE';
+    } else {
+        return 'UPDATE';
+    }
 }
 
 module.exports = {
