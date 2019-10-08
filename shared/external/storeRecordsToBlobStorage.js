@@ -12,16 +12,20 @@ async function storeRecordsToBlobStorage(itemRecords, item, initialize = false) 
         pipeline,
     );
     const containerUrl = BlobStorage.ContainerURL.fromServiceURL(serviceUrl, Configuration.keys.azureContainerName);
-    const blobURL = BlobStorage.BlobURL.fromContainerURL(containerUrl, item.system.id);
-    const blockBlobURL = BlobStorage.BlockBlobURL.fromBlobURL(blobURL);
+    const blobName = getBlobName(item.system.id);
+    const blobURL = BlobStorage.BlockBlobURL.fromContainerURL(containerUrl, blobName);
 
     const blob = getBlob(itemRecords, item, initialize);
 
-     await blockBlobURL.upload(
+     await blobURL.upload(
          BlobStorage.Aborter.none,
          blob,
          blob.length,
      );
+}
+
+function getBlobName(id) {
+    return `${id}.json`;
 }
 
 function getBlob(itemRecords, item, initialize) {
@@ -29,8 +33,19 @@ function getBlob(itemRecords, item, initialize) {
         itemRecords,
         codename: item.system.codename,
         id: item.system.id,
-        initialize
+        operation: getOperation(itemRecords, initialize),
+        section: 'tutorials',
     });
+}
+
+function getOperation(itemRecords, initialize) {
+    if (initialize) {
+        return 'INITIALIZE';
+    } else if (itemRecords.length === 0) {
+        return 'DELETE';
+    } else {
+        return 'UPDATE';
+    }
 }
 
 module.exports = {
