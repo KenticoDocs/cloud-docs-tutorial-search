@@ -31,7 +31,7 @@ const linkedItems = {
             codename: 'first_import',
         },
         code: {
-            value: 'import { DeliveryClient } from \'kentico-cloud-delivery\';',
+            value: 'import { DeliveryClient } from \'kentico-kontent-delivery\';',
         },
         platform: {
             value: [{

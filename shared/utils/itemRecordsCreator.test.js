@@ -50,7 +50,7 @@ const longArticle = {
     ...shortArticle,
     content: {
         name: 'Content',
-        value: shortArticle.content.value + '<h2>More options</h2> <p>To make further app development easier, we recommend using the Kentico Cloud model generator for .NET to create strongly-typed models representing your content types. To learn more about this approach generally, see <a href="https://developer.kenticocloud.com/docs/strongly-typed-models">Using strongly typed models</a>.</p>',
+        value: shortArticle.content.value + '<h2>More options</h2> <p>To make further app development easier, we recommend using the Kentico Cloud model generator for .NET to create strongly-typed models representing your content types. To learn more about this approach generally, see <a href="https://kontent.ai/docs/strongly-typed-models">Using strongly typed models</a>.</p>',
     },
 };
 

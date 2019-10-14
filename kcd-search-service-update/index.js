@@ -7,7 +7,7 @@ const {
 } = require('../shared/external/constants');
 
 function validateEvent(event) {
-    return event.eventType === 'kentico-cloud' &&
+    return event.eventType === 'kentico-kontent' &&
         event.data.webhook.items &&
         VALID_OPERATIONS.includes(event.subject);
 }
