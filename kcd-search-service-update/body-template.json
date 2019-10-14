@@ -1,0 +1,20 @@
+{
+  "data": {
+    "test": "disabled",
+    "webhook": {
+      "items": [
+        {
+          "language": "default",
+          "codename": "<codename>",
+          "type": "<type>"
+        }
+      ],
+      "taxonomies": []
+    }
+  },
+  "dataVersion": "1.0",
+  "eventTime": "2019-10-14T09:19:17.19Z",
+  "eventType": "kentico-kontent",
+  "id": "<GUID>",
+  "subject": "publish"
+}
