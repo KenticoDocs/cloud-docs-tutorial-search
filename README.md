@@ -1,27 +1,27 @@
-| [master](https://github.com/Kentico/kentico-cloud-docs-search/tree/master) | [develop](https://github.com/Kentico/kentico-cloud-docs-search/tree/develop) |
+| [master](https://github.com/KenticoDocs/kontent-docs-tutorial-search/tree/master) | [develop](https://github.com/KenticoDocs/kontent-docs-tutorial-search/tree/develop) |
 |:---:|:---:|
-| [![Build Status](https://travis-ci.com/KenticoDocs/cloud-docs-tutorial-search.svg?branch=master)](https://travis-ci.com/KenticoDocs/cloud-docs-tutorial-search/branches) [![codebeat badge](https://codebeat.co/badges/9d7be753-0c7d-4e00-b073-51fad504a4ae)](https://codebeat.co/projects/github-com-kenticodocs-cloud-docs-tutorial-search-master) | [![Build Status](https://travis-ci.com/KenticoDocs/cloud-docs-tutorial-search.svg?branch=develop)](https://travis-ci.com/KenticoDocs/cloud-docs-tutorial-search/branches) [![codebeat badge](https://codebeat.co/badges/aa7e8e01-8e31-45fd-9d9c-3bfa5baabd09)](https://codebeat.co/projects/github-com-kenticodocs-cloud-docs-tutorial-search-develop) |
+| [![Build Status](https://travis-ci.com/KenticoDocs/kontent-docs-tutorial-search.svg?branch=master)](https://travis-ci.com/KenticoDocs/kontent-docs-tutorial-search/branches) [![codebeat badge](https://codebeat.co/badges/42250639-ea84-495e-8a36-2d4eb2584978)](https://codebeat.co/projects/github-com-kenticodocs-kontent-docs-tutorial-search-master) | [![Build Status](https://travis-ci.com/KenticoDocs/kontent-docs-tutorial-search.svg?branch=develop)](https://travis-ci.com/KenticoDocs/kontent-docs-tutorial-search/branches) [![codebeat badge](https://codebeat.co/badges/b493280f-f67c-43fc-8cbe-af39166e4f40)](https://codebeat.co/projects/github-com-kenticodocs-kontent-docs-tutorial-search-develop) |
 
 
-# Kentico Cloud Documentation - Tutorial Search
-Backend service for Kentico Cloud [documentation portal](https://docs.kenticocloud.com/), which utilizes Kentico Cloud as a source of its content.
+# Kentico Kontent Documentation - Tutorial Search
+Backend service for Kentico Kontent [documentation portal](https://docs.kontent.ai/), which utilizes Kentico Kontent as a source of its content.
 
 In order to provide an exquisite search experience, this service is responsible for indexing content of the documentation portal's tutorials.
-It responds to events sent by [Dispatcher](https://github.com/KenticoDocs/cloud-docs-dispatcher) and stores the content ready to index on [Algolia](https://www.algolia.com/) in an [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/).
+It responds to events sent by [Dispatcher](https://github.com/KenticoDocs/kontent-docs-dispatcher) and stores the content ready to index on [Algolia](https://www.algolia.com/) in an [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/).
 
 ## Overview
 1. This project is a JavaScript Azure Functions application.
 2. It is subscribed to an Azure [Event Grid](https://azure.microsoft.com/en-us/services/event-grid/) topic and listens for events. Each event contains information about the content that was changed.
-3. After receiving an event, it fetches the content from Kentico Cloud using [Kentico Cloud Delivery SDK](https://github.com/Kentico/kentico-cloud-js/tree/master/packages/delivery).
+3. After receiving an event, it fetches the content from Kentico Kontent using [Kentico Kontent Delivery SDK](https://github.com/Kentico/kontent-delivery-sdk-js).
 4. The fetched content is then split into smaller [Algolia-compatible records](https://www.algolia.com/doc/faq/basics/what-is-a-record/). 
-5. Finally the records are stored in an Azure Blob Storage, where the following [Indexing Sync](https://github.com/KenticoDocs/cloud-docs-index-sync) service can access it and update the index on Algolia accordingly.
+5. Finally the records are stored in an Azure Blob Storage, where the following [Indexing Sync](https://github.com/KenticoDocs/kontent-docs-index-sync) service can access it and update the index on Algolia accordingly.
 
 ## Setup
 
 ### Prerequisites
 1. Node (+yarn) installed
 2. Visual Studio Code installed
-3. Subscriptions on MS Azure, Kentico Cloud and Algolia
+3. Subscriptions on MS Azure, Kentico Kontent and Algolia
 
 ### Instructions
 1. Open Visual Studio Code and install the prerequisites according to the [following steps](https://code.visualstudio.com/tutorials/functions-extension/getting-started).
@@ -32,12 +32,12 @@ It responds to events sent by [Dispatcher](https://github.com/KenticoDocs/cloud-
 6. Deploy to Azure using Azure Functions extension tab, or run locally by pressing `Ctrl + F5` in Visual Studio Code.
 
 #### Required Keys
-* `KC.ProjectId` - Kentico Cloud project ID
-* `KC.SecuredApiKey` - Kentico Cloud secured delivery API key
+* `KC.ProjectId` - Kentico Kontent project ID
+* `KC.SecuredApiKey` - Kentico Kontent secured delivery API key
 * `Azure.StorageKey` - Azure Storage key
 * `Azure.StorageAccountName` - Azure Storage account name
 * `Azure.ContainerName` - Azure Storage container name
-* `Azure.ClearIndexUrl` - URL of the [`kcd-clear-index` Azure function](https://github.com/KenticoDocs/cloud-docs-index-sync)
+* `Azure.ClearIndexUrl` - URL of the [`kcd-clear-index` Azure function](https://github.com/KenticoDocs/kontent-docs-index-sync)
 
 ## Testing
 * Run `yarn run test` in the terminal.

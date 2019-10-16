@@ -1,21 +1,21 @@
 {
-  "name": "kentico-cloud-docs-search",
+  "name": "kentico-kontent-docs-search",
   "version": "1.0.0",
-  "description": "Kentico Cloud documentation - search service",
+  "description": "Kentico Kontent documentation - Tutorial Search",
   "scripts": {
     "test": "jest",
     "eslint": "npx eslint ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kentico/kentico-cloud-docs-search.git"
+    "url": "git+https://github.com/KenticoDocs/kontent-docs-tutorial-search.git"
   },
   "author": "Kentico",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Kentico/kentico-cloud-docs-search/issues"
+    "url": "https://github.com/KenticoDocs/kontent-docs-tutorial-search/issues"
   },
-  "homepage": "https://github.com/Kentico/kentico-cloud-docs-search#readme",
+  "homepage": "https://github.com/KenticoDocs/kontent-docs-tutorial-search#readme",
   "dependencies": {
     "@azure/storage-blob": "^10.3.0",
     "algoliasearch": "^3.31.0",
