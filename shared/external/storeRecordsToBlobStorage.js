@@ -2,33 +2,25 @@ const BlobStorage = require('@azure/storage-blob');
 const Configuration = require('./configuration');
 
 async function storeRecordsToBlobStorage(itemRecords, item, initialize = false) {
-    const sharedKeyCredential = new BlobStorage.SharedKeyCredential(
-        Configuration.keys.azureStorageAccountName,
-        Configuration.keys.azureStorageKey,
-    );
-    const pipeline = BlobStorage.StorageURL.newPipeline(sharedKeyCredential);
-    const serviceUrl = new BlobStorage.ServiceURL(
-        `https://${Configuration.keys.azureStorageAccountName}.blob.core.windows.net`,
-        pipeline,
-    );
-    const containerUrl = BlobStorage.ContainerURL.fromServiceURL(serviceUrl, Configuration.keys.azureContainerName);
+    // Create the BlobServiceClient object which will be used to create a container client
+    const blobServiceClient = await BlobStorage.BlobServiceClient.fromConnectionString(Configuration.keys.azureWebJobsStorage);
+
+    // Get a reference to a container
+    const containerClient = await blobServiceClient.getContainerClient(Configuration.keys.azureContainerName);
+
     const blobName = getBlobName(item.system.id);
-    const blobURL = BlobStorage.BlockBlobURL.fromContainerURL(containerUrl, blobName);
+    const blobData = getBlobData(itemRecords, item, initialize);
 
-    const blob = getBlob(itemRecords, item, initialize);
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-     await blobURL.upload(
-         BlobStorage.Aborter.none,
-         blob,
-         blob.length,
-     );
+    const uploadBlobResponse = await blockBlobClient.upload(blobData, blobData.length);
 }
 
 function getBlobName(id) {
     return `${id}.json`;
 }
 
-function getBlob(itemRecords, item, initialize) {
+function getBlobData(itemRecords, item, initialize) {
     return JSON.stringify({
         itemRecords,
         codename: item.system.codename,

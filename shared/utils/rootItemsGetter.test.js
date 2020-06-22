@@ -5,48 +5,40 @@ const allItems = [{
         codename: 'hello_world',
         type: 'callout',
     },
-    elements: {
         content: {
             value: 'callout content',
             modular_content: [],
         },
-    },
 }, {
     system: {
         codename: 'some_chunk',
         type: 'content_chunk',
     },
-    elements: {
         content: {
             modular_content: ['hello_world'],
         },
-    },
 }, {
     system: {
         codename: 'root_article',
         type: 'article',
     },
-    elements: {
         content: {
             modular_content: [],
         },
         introduction: {
             modular_content: ['some_chunk'],
         },
-    },
 }, {
     system: {
         codename: 'root_scenario',
         type: 'scenario',
     },
-    elements: {
         content: {
             modular_content: ['hello_world'],
         },
         introduction: {
             modular_content: [],
         },
-    },
 }];
 
 const allItemsWithCodeSamples = [{
@@ -54,37 +46,31 @@ const allItemsWithCodeSamples = [{
         codename: 'hello_world_samples',
         type: 'code_samples',
     },
-    elements: {
         code_samples: {
             value: ['hello_world'],
         },
-    },
 }, {
     system: {
         codename: 'code_sample_chunk',
         type: 'content_chunk',
     },
-    elements: {
         content: {
             modular_content: ['hello_world_samples'],
         },
         introduction: {
             modular_content: [],
         },
-    },
 }, {
     system: {
         codename: 'main_article',
         type: 'article',
     },
-    elements: {
         content: {
             modular_content: [],
         },
         introduction: {
             modular_content: ['code_sample_chunk'],
         },
-    },
 }];
 
 describe('getRootCodenamesOfSingleItem', () => {

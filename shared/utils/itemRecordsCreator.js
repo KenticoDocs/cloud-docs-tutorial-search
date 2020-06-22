@@ -256,11 +256,11 @@ class ItemRecordsCreator {
         const itemType = item.system.type;
         // term definitions are indexed under shared codename
         if (itemType === TERM_DEFINITION_CONTENT_TYPE) {
-            return item.elements.term.value;
+            return item.term.value;
         }
           // release notes are indexed under shared codename
         if (itemType === RELEASE_NOTE_CONTENT_TYPE) {
-            return item.elements.title.value;
+            return item.title.value;
         }
 
         // other items use parsed heading

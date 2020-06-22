@@ -2,9 +2,8 @@ class Configuration {
     static set(test) {
         const isTest = test === 'enabled';
         Configuration.keys = {
-            azureContainerName: Configuration.getEnvironmentVariable('Azure.ContainerName', isTest),
-            azureStorageAccountName: Configuration.getEnvironmentVariable('Azure.StorageAccountName'),
-            azureStorageKey: Configuration.getEnvironmentVariable('Azure.StorageKey'),
+            azureWebJobsStorage: Configuration.getEnvironmentVariable('AzureWebJobsStorage'),
+            azureContainerName: Configuration.getEnvironmentVariable('Azure.ContainerName'),
             kenticoProjectId: Configuration.getEnvironmentVariable('KC.ProjectId', isTest),
             securedApiKey: Configuration.getEnvironmentVariable('KC.SecuredApiKey', isTest),
             clearIndexUrl: Configuration.getClearIndexUrl(isTest),

@@ -17,21 +17,21 @@
   },
   "homepage": "https://github.com/KenticoDocs/kontent-docs-tutorial-search#readme",
   "dependencies": {
-    "@azure/storage-blob": "^10.3.0",
-    "algoliasearch": "^3.31.0",
-    "axios": "^0.19.0",
-    "kentico-cloud-delivery": "5.7.1",
-    "rxjs": "^6.3.3",
-    "striptags": "^3.1.1"
+    "@azure/storage-blob": "12.1.2",
+    "algoliasearch": "4.3.0",
+    "axios": "0.19.2",
+    "@kentico/kontent-delivery": "9.1.1",
+    "rxjs": "6.5.5",
+    "striptags": "3.1.1"
   },
   "devDependencies": {
-    "eslint": "^5.13.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jest": "^22.2.2",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "jest": "^23.6.0"
+    "eslint": "7.3.0",
+    "eslint-config-standard": "14.1.1",
+    "eslint-plugin-import": "2.21.2",
+    "eslint-plugin-jest": "23.16.0",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.1",
+    "jest": "26.0.1"
   }
 }

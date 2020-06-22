@@ -41,7 +41,7 @@ function resolveContentChunkHeadings(content) {
 function resolveCodeSamplesItem(item) {
     let codeSamplesContent = '';
 
-    item.elements.code_samples.value.forEach(codeSampleCodename => {
+    item.code_samples.value.forEach(codeSampleCodename => {
         codeSamplesContent += getCodeSampleLabel(codeSampleCodename);
     });
 

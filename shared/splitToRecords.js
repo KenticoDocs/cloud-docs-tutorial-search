@@ -1,5 +1,5 @@
 const axios = require('axios');
-const getKenticoClient = require('./external/kenticoClient');
+const getDeliveryClient = require('./external/kenticoClient');
 const getRootCodenamesOfSingleItem = require('./utils/rootItemsGetter');
 const resolveItemInRichText = require('./utils/richTextResolver');
 const Configuration = require('./external/configuration');
@@ -20,14 +20,14 @@ class SplitService {
     static async splitAllItemsToRecords() {
         await axios.get(Configuration.keys.clearIndexUrl);
 
-        await getKenticoClient()
+        await getDeliveryClient()
             .items()
             .types(ROOT_CONTENT_TYPES)
             .depthParameter(4)
             .queryConfig({
                 richTextResolver: resolveItemInRichText,
             })
-            .getPromise()
+            .toPromise()
             .then(async (response) => {
                 for (const item of response.items) {
                     await processItem(item, response.linkedItems, true);
@@ -40,13 +40,13 @@ class SplitService {
     static async splitItemsToRecords(items) {
         const codenames = await getCodenamesOfRootItemsToIndex(items);
 
-        await codenames.forEach(codename => getKenticoClient()
+        await codenames.forEach(codename => getDeliveryClient()
             .item(codename)
             .depthParameter(4)
             .queryConfig({
                 richTextResolver: resolveItemInRichText,
             })
-            .getPromise()
+            .toPromise()
             .then(async (response) => {
                 await processItem(response.item, response.linkedItems);
 
@@ -78,22 +78,22 @@ async function getCodenamesOfRootItemsToIndex(items) {
 }
 
 async function getAllItems() {
-    return getKenticoClient()
+    return getDeliveryClient()
         .items()
         .types(ALL_CONTENT_TYPES)
         .depthParameter(0)
-        .getPromise()
+        .toPromise()
         .then(response =>
             response.items.concat(response.linkedItems),
         );
 }
 
 function getTextToIndexForTermDefinition(item) {
-    return item.definition.getHtml();
+    return item.definition.resolveHtml();
 }
 
 function getTextToIndexForReleaseNote(item, linkedItems) {
-    let textToIndex = item.content.getHtml();
+    let textToIndex = item.content.resolveHtml();
 
     if (textToIndex.includes(CodeSampleMarkStart)) {
         textToIndex = insertLinkedCodeSamples(textToIndex, linkedItems);
@@ -103,7 +103,7 @@ function getTextToIndexForReleaseNote(item, linkedItems) {
 }
 
 function getTextToIndexDefault(item, linkedItems) {
-    let textToIndex = item.introduction.getHtml() + ' ' + item.content.getHtml();
+    let textToIndex = item.introduction.resolveHtml() + ' ' + item.content.resolveHtml();
 
     if (textToIndex.includes(CodeSampleMarkStart)) {
         textToIndex = insertLinkedCodeSamples(textToIndex, linkedItems);
@@ -128,7 +128,7 @@ async function createRecordsFromItem(item, text) {
 }
 
 function isItemExcludedFromSearch(item) {
-    if (item.elements && item.elements.visibility && item.elements.visibility.value) {
+    if (item.elements && item.visibility && item.visibility.value) {
         // content item has exclude from search element = index it based on that value
         return item
         .elements
