@@ -3,7 +3,8 @@
         "KC.ProjectId": "",
         "KC.SecuredApiKey": "",
         "AzureWebJobsStorage": "",
-        "Azure.ContainerName": ""
+        "Azure.ContainerName": "",
+        "Azure.ClearIndexUrl": ""
     },
     "IsEncrypted": false
 }

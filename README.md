@@ -34,8 +34,7 @@ It responds to events sent by [Dispatcher](https://github.com/KenticoDocs/konten
 #### Required Keys
 * `KC.ProjectId` - Kentico Kontent project ID
 * `KC.SecuredApiKey` - Kentico Kontent secured delivery API key
-* `Azure.StorageKey` - Azure Storage key
-* `Azure.StorageAccountName` - Azure Storage account name
+* `AzureWebJobsStorage` - Connection string to Azure blob storage
 * `Azure.ContainerName` - Azure Storage container name
 * `Azure.ClearIndexUrl` - URL of the [`kcd-clear-index` Azure function](https://github.com/KenticoDocs/kontent-docs-index-sync)
 
