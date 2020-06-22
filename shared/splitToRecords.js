@@ -11,6 +11,9 @@ const {
     ROOT_CONTENT_TYPES,
     ALL_CONTENT_TYPES,
     EXCLUDED_FROM_SEARCH,
+    ALWAYS_INCLUDE_CONTENT_TYPES_IN_SEARCH,
+    TERM_DEFINITION_CONTENT_TYPE,
+    RELEASE_NOTE_CONTENT_TYPE
 } = require('./external/constants');
 
 class SplitService {
@@ -85,7 +88,21 @@ async function getAllItems() {
         );
 }
 
-async function getResolvedTextToIndex(item, linkedItems) {
+function getTextToIndexForTermDefinition(item) {
+    return item.definition.getHtml();
+}
+
+function getTextToIndexForReleaseNote(item, linkedItems) {
+    let textToIndex = item.content.getHtml();
+
+    if (textToIndex.includes(CodeSampleMarkStart)) {
+        textToIndex = insertLinkedCodeSamples(textToIndex, linkedItems);
+    }
+
+    return textToIndex;
+}
+
+function getTextToIndexDefault(item, linkedItems) {
     let textToIndex = item.introduction.getHtml() + ' ' + item.content.getHtml();
 
     if (textToIndex.includes(CodeSampleMarkStart)) {
@@ -95,16 +112,38 @@ async function getResolvedTextToIndex(item, linkedItems) {
     return textToIndex;
 }
 
+async function getResolvedTextToIndex(item, linkedItems) {
+    if (item.system.type === TERM_DEFINITION_CONTENT_TYPE) {
+        return getTextToIndexForTermDefinition(item);
+    }
+    if (item.system.type === RELEASE_NOTE_CONTENT_TYPE) {
+        return getTextToIndexForReleaseNote(item, linkedItems);
+    }
+
+    return getTextToIndexDefault(item, linkedItems);
+}
+
 async function createRecordsFromItem(item, text) {
     return getItemRecordsCreator().createItemRecords(item, text);
 }
 
 function isItemExcludedFromSearch(item) {
-    return item
+    if (item.elements && item.elements.visibility && item.elements.visibility.value) {
+        // content item has exclude from search element = index it based on that value
+        return item
         .elements
         .visibility
         .value
         .some(taxonomyTerm => taxonomyTerm.codename === EXCLUDED_FROM_SEARCH);
+    }
+    // content item does not have visibility value
+    if (ALWAYS_INCLUDE_CONTENT_TYPES_IN_SEARCH.includes(item.system.type)) {
+        // item should be indexed
+        return false;
+    }
+
+    // do not index item
+    return true;
 }
 
 async function handleError(error, codename) {
