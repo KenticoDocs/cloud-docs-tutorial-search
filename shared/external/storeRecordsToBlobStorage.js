@@ -13,7 +13,7 @@ async function storeRecordsToBlobStorage(itemRecords, item, initialize = false) 
 
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-    const uploadBlobResponse = await blockBlobClient.upload(blobData, blobData.length);
+    await blockBlobClient.upload(blobData, blobData.length);
 }
 
 function getBlobName(id) {

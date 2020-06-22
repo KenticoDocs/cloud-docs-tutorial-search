@@ -7,7 +7,8 @@
         "comma-dangle": "off",
         "operator-linebreak": "off",
         "space-before-function-paren": "off",
-        "no-throw-literal": "off"
+        "no-throw-literal": "off",
+        "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }]
     },
     "env": {
         "jest/globals": true

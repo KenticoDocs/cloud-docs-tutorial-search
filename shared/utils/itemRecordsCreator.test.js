@@ -98,7 +98,7 @@ const articleWithContentChunkAndCodeSample = {
     ...shortArticle,
     content: {
         name: 'Content',
-        value: `start of an article`
+        value: 'start of an article'
             + `${ContentChunkMarkStart}${PlatformMarkStart}java,javascript,_net${PlatformMarkEnd}`
             + `${ContentChunkHeadingMarkStart}Content chunk heading${ContentChunkHeadingMarkEnd}content chunk text`
             + `${InnerItemMarkStart}Callout inside a content chunk item${InnerItemMarkEnd}`
