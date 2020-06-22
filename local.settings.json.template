@@ -1,0 +1,9 @@
+{
+    "Values": {
+        "KC.ProjectId": "",
+        "KC.SecuredApiKey": "",
+        "AzureWebJobsStorage": "",
+        "Azure.ContainerName": ""
+    },
+    "IsEncrypted": false
+}
