@@ -108,7 +108,6 @@ function getTextToIndexDefault(item, linkedItems) {
     let textToIndex = item.introduction.resolveHtml() + ' ' + item.content.resolveHtml();
 
     if (textToIndex.includes(CodeSampleMarkStart)) {
-  
         textToIndex = insertLinkedCodeSamples(textToIndex, linkedItems);
     }
 
