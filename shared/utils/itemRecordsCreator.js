@@ -268,16 +268,6 @@ class ItemRecordsCreator {
     }
 
     getIndexCodenameForItem(item) {
-        const itemType = item.system.type;
-        // term definitions are indexed under shared codename
-        if (itemType === TERM_DEFINITION_CONTENT_TYPE) {
-            return TERM_DEFINITION_CONTENT_TYPE;
-        }
-          // release notes are indexed under shared codename
-        if (itemType === RELEASE_NOTE_CONTENT_TYPE) {
-            return RELEASE_NOTE_CONTENT_TYPE;
-        }
-
         // other items use their codenames
         return item.system.codename;
     }
