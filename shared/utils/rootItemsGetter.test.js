@@ -7,7 +7,7 @@ const allItems = [{
     },
         content: {
             value: 'callout content',
-            modular_content: [],
+            linkedItemCodenames: [],
         },
 }, {
     system: {
@@ -15,7 +15,7 @@ const allItems = [{
         type: 'content_chunk',
     },
         content: {
-            modular_content: ['hello_world'],
+            linkedItemCodenames: ['hello_world'],
         },
 }, {
     system: {
@@ -23,10 +23,10 @@ const allItems = [{
         type: 'article',
     },
         content: {
-            modular_content: [],
+            linkedItemCodenames: [],
         },
         introduction: {
-            modular_content: ['some_chunk'],
+            linkedItemCodenames: ['some_chunk'],
         },
 }, {
     system: {
@@ -34,10 +34,10 @@ const allItems = [{
         type: 'scenario',
     },
         content: {
-            modular_content: ['hello_world'],
+            linkedItemCodenames: ['hello_world'],
         },
         introduction: {
-            modular_content: [],
+            linkedItemCodenames: [],
         },
 }];
 
@@ -47,7 +47,13 @@ const allItemsWithCodeSamples = [{
         type: 'code_samples',
     },
         codeSamples: {
-            value: ['hello_world'],
+            value: [
+                {
+                    system: {
+                        codename: 'hello_world'
+                    }
+                }
+            ]
         },
 }, {
     system: {
@@ -55,10 +61,10 @@ const allItemsWithCodeSamples = [{
         type: 'content_chunk',
     },
         content: {
-            modular_content: ['hello_world_samples'],
+            linkedItemCodenames: ['hello_world_samples'],
         },
         introduction: {
-            modular_content: [],
+            linkedItemCodenames: [],
         },
 }, {
     system: {
@@ -66,18 +72,18 @@ const allItemsWithCodeSamples = [{
         type: 'article',
     },
         content: {
-            modular_content: [],
+            linkedItemCodenames: [],
         },
         introduction: {
-            modular_content: ['code_sample_chunk'],
+            linkedItemCodenames: ['code_sample_chunk'],
         },
 }];
 
 describe('getRootCodenamesOfSingleItem', () => {
     it('returns both root items - article and scenario', () => {
         const item = {
-            codename: 'hello_world',
-            type: 'callout',
+                codename: 'hello_world',
+                type: 'callout',
         };
         const expectedResult = ['root_scenario', 'root_article'];
 
@@ -88,8 +94,8 @@ describe('getRootCodenamesOfSingleItem', () => {
 
     it('returns root of a nested code_sample item', () => {
         const item = {
-            codename: 'hello_world',
-            type: 'code_sample',
+                codename: 'hello_world',
+                type: 'code_sample',
         };
         const expectedResult = ['main_article'];
 
@@ -100,8 +106,8 @@ describe('getRootCodenamesOfSingleItem', () => {
 
     it('returns an empty array when it finds no root items', () => {
         const item = {
-            codename: 'some_codename',
-            type: 'some_type',
+                codename: 'some_codename',
+                type: 'some_type',
         };
         const expectedResult = [];
 

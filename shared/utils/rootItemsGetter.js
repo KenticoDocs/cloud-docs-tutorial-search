@@ -51,11 +51,11 @@ function checkIfItemIsParent(item, codename) {
             return item.codeSamples.value.map(m => m.system.codename).includes(codename);
         case 'article':
         case 'scenario':
-            return item.content.modular_content.includes(codename) ||
-                item.introduction.modular_content.includes(codename);
+            return item.content.linkedItemCodenames.includes(codename) ||
+                item.introduction.linkedItemCodenames.includes(codename);
         case 'callout':
         case 'content_chunk':
-            return item.content.modular_content.includes(codename);
+            return item.content.linkedItemCodenames.includes(codename);
         default:
             return false;
     }
