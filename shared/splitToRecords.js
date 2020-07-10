@@ -16,6 +16,8 @@ const {
     RELEASE_NOTE_CONTENT_TYPE
 } = require('./external/constants');
 
+const DEPTH_FOR_ITEMS_FETCH = 10;
+
 class SplitService {
     static async splitAllItemsToRecords() {
         await axios.get(Configuration.keys.clearIndexUrl);
@@ -23,7 +25,7 @@ class SplitService {
         await getDeliveryClient()
             .items()
             .types(ROOT_CONTENT_TYPES)
-            .depthParameter(4)
+            .depthParameter(DEPTH_FOR_ITEMS_FETCH)
             .queryConfig({
                 richTextResolver: resolveItemInRichText,
             })
@@ -42,7 +44,7 @@ class SplitService {
 
         await codenames.forEach(codename => getDeliveryClient()
             .item(codename)
-            .depthParameter(4)
+            .depthParameter(DEPTH_FOR_ITEMS_FETCH)
             .queryConfig({
                 richTextResolver: resolveItemInRichText,
             })
@@ -106,6 +108,7 @@ function getTextToIndexDefault(item, linkedItems) {
     let textToIndex = item.introduction.resolveHtml() + ' ' + item.content.resolveHtml();
 
     if (textToIndex.includes(CodeSampleMarkStart)) {
+  
         textToIndex = insertLinkedCodeSamples(textToIndex, linkedItems);
     }
 
