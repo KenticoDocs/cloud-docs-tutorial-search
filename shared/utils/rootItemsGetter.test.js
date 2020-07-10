@@ -46,7 +46,7 @@ const allItemsWithCodeSamples = [{
         codename: 'hello_world_samples',
         type: 'code_samples',
     },
-        code_samples: {
+        codeSamples: {
             value: ['hello_world'],
         },
 }, {

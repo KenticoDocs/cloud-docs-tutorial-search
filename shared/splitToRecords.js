@@ -128,10 +128,9 @@ async function createRecordsFromItem(item, text) {
 }
 
 function isItemExcludedFromSearch(item) {
-    if (item.elements && item.visibility && item.visibility.value) {
+    if (item.visibility && item.visibility.value) {
         // content item has exclude from search element = index it based on that value
         return item
-        .elements
         .visibility
         .value
         .some(taxonomyTerm => taxonomyTerm.codename === EXCLUDED_FROM_SEARCH);

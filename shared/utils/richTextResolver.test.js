@@ -71,7 +71,7 @@ const codeSamplesItem = {
         codename: 'hello_world',
         type: 'code_samples',
     },
-        code_samples: {
+        codeSamples: {
             value: [
                 'first_sample',
                 'second_sample',
