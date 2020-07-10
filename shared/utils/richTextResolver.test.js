@@ -73,18 +73,24 @@ const codeSamplesItem = {
     },
         codeSamples: {
             value: [
-                {system: {
+                {
+system: {
                     codename: 'first_sample',
                     type: 'code_sample',
-                }},
-                {system: {
+                }
+},
+                {
+system: {
                     codename: 'second_sample',
                     type: 'code_sample',
-                }},
-                {system: {
+                }
+},
+                {
+system: {
                     codename: 'hello_world',
                     type: 'code_sample',
-                }}
+                }
+}
             ],
         },
 };

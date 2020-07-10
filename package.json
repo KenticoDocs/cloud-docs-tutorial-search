@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Kentico Kontent documentation - Tutorial Search",
   "scripts": {
-    "test": "jest",
-    "eslint": "npx eslint ."
+    "test": "jest && npm run eslint",
+    "eslint": "npx eslint .",
+    "eslint:fix": "npx eslint . --fix"
   },
   "repository": {
     "type": "git",
