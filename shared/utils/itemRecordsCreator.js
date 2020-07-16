@@ -217,7 +217,7 @@ class ItemRecordsCreator {
         const id = item.system.id;
         const codename = this.getIndexCodenameForItem(item);
         const order = this.itemRecords.length + 1;
-        const objectID = codename + '_' + order;
+        const objectID = this.getIndexObjectIdForItem(item, order);
         const platforms = this.getPlatforms(item);
 
         this.itemRecords.push({
@@ -267,8 +267,22 @@ class ItemRecordsCreator {
         return parsedHeading;
     }
 
+    getIndexObjectIdForItem(item, order) {
+        return item.system.codename + '_' + order;
+    }
+
     getIndexCodenameForItem(item) {
-        // other items use their codenames
+        const itemType = item.system.type;
+
+        // term definitions are indexed under shared codename
+        if (itemType === TERM_DEFINITION_CONTENT_TYPE) {
+            return TERM_DEFINITION_CONTENT_TYPE;
+        }
+          // release notes are indexed under shared codename
+        if (itemType === RELEASE_NOTE_CONTENT_TYPE) {
+            return RELEASE_NOTE_CONTENT_TYPE;
+        }
+
         return item.system.codename;
     }
 
