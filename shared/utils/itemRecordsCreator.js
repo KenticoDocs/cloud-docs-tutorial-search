@@ -277,7 +277,7 @@ class ItemRecordsCreator {
         // term definitions are indexed under shared codename
         if (itemType === TERM_DEFINITION_CONTENT_TYPE) {
             // hardcoded for now, to be changed once web is updated
-            return 'terminology'; 
+            return 'terminology';
         }
           // release notes are indexed under shared codename
         if (itemType === RELEASE_NOTE_CONTENT_TYPE) {
