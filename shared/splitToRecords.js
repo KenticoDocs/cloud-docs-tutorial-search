@@ -85,8 +85,15 @@ async function getAllItems() {
         .types(ALL_CONTENT_TYPES)
         .depthParameter(0)
         .toPromise()
-        .then(response =>
-            response.items.concat(response.linkedItems),
+        .then(response => {
+                const items = response.items;
+
+                for (const linkedItemKey in response.linkedItems) {
+                    items.push(response.linkedItems[linkedItemKey]);
+                }
+
+                return items;
+            }
         );
 }
 
