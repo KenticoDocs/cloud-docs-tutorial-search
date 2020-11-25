@@ -19,9 +19,9 @@
   "homepage": "https://github.com/KenticoDocs/kontent-docs-tutorial-search#readme",
   "dependencies": {
     "@azure/storage-blob": "12.1.2",
+    "@kentico/kontent-delivery": "9.1.1",
     "algoliasearch": "4.3.0",
     "axios": "0.19.2",
-    "@kentico/kontent-delivery": "9.1.1",
     "rxjs": "6.5.5",
     "striptags": "3.1.1"
   },

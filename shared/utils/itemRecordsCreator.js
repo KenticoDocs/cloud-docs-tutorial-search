@@ -212,7 +212,6 @@ class ItemRecordsCreator {
     }
 
     async addItemRecord(content, heading, item) {
-        const resolvedHeading = this.geHeadingForItem(heading, item);
         const title = this.geTitleForItem(item);
         const id = item.system.id;
         const codename = this.getIndexCodenameForItem(item);
@@ -224,7 +223,7 @@ class ItemRecordsCreator {
             content,
             id,
             title,
-            heading: resolvedHeading,
+            heading,
             codename,
             order,
             objectID,
@@ -235,36 +234,20 @@ class ItemRecordsCreator {
 
     geTitleForItem(item) {
         const itemType = item.system.type;
-        // term definitions use custom title
         if (itemType === TERM_DEFINITION_CONTENT_TYPE) {
-            return 'Terminology';
+            return item.term.value;
         }
         if (itemType === RELEASE_NOTE_CONTENT_TYPE) {
-            return 'Product changelog';
+            return item.title.value;
         }
 
         if (item.title) {
-            // if element has title element use it as title for index
+            // if item has title element use it as title for index
             return item.title.value;
         }
 
         // default to system name
         return item.system.name;
-    }
-
-    geHeadingForItem(parsedHeading, item) {
-        const itemType = item.system.type;
-        // term definitions are indexed under shared codename
-        if (itemType === TERM_DEFINITION_CONTENT_TYPE) {
-            return item.term.value;
-        }
-          // release notes are indexed under shared codename
-        if (itemType === RELEASE_NOTE_CONTENT_TYPE) {
-            return item.title.value;
-        }
-
-        // other items use parsed heading
-        return parsedHeading;
     }
 
     getIndexObjectIdForItem(item, order) {
