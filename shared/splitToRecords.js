@@ -1,4 +1,6 @@
 const axios = require('axios');
+const KenticoKontent = require('@kentico/kontent-delivery');
+
 const getDeliveryClient = require('./external/kenticoClient');
 const getRootCodenamesOfSingleItem = require('./utils/rootItemsGetter');
 const resolveItemInRichText = require('./utils/richTextResolver');
@@ -155,7 +157,7 @@ function isItemExcludedFromSearch(item) {
 }
 
 async function handleError(error, codename) {
-    if (error.errorCode === 100) {
+    if (error instanceof KenticoKontent.DeliveryError && error.errorCode === 100) {
         const notFoundItem = {
             system: {
                 codename,
