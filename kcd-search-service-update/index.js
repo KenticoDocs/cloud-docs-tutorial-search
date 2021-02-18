@@ -5,9 +5,10 @@ const {
     VALID_OPERATIONS,
     ALL_CONTENT_TYPES,
 } = require('../shared/external/constants');
+const eventType = 'kentico-kontent';
 
 function validateEvent(event) {
-    return event.eventType === 'kentico-kontent' &&
+    return event.eventType === eventType &&
         event.data.webhook.items &&
         VALID_OPERATIONS.includes(event.subject);
 }
