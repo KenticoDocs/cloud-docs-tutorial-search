@@ -8,6 +8,7 @@ const {
     ContentChunkMarkEnd,
     ContentChunkHeadingMarkStart,
     ContentChunkHeadingMarkEnd,
+    IsCodeSampleIdentifierMarkup,
 } = require('./richTextLabels');
 
 async function sanitizeContent(content) {
@@ -102,7 +103,7 @@ const articleWithContentChunkAndCodeSample = {
             + `${ContentChunkMarkStart}${PlatformMarkStart}java,javascript,_net${PlatformMarkEnd}`
             + `${ContentChunkHeadingMarkStart}Content chunk heading${ContentChunkHeadingMarkEnd}content chunk text`
             + `${InnerItemMarkStart}Callout inside a content chunk item${InnerItemMarkEnd}`
-            + `${InnerItemMarkStart}${PlatformMarkStart}typescript${PlatformMarkEnd}Code sample inside of a content chunk item ${InnerItemMarkEnd}`
+            + `${InnerItemMarkStart}${IsCodeSampleIdentifierMarkup}${PlatformMarkStart}typescript${PlatformMarkEnd}Code sample inside of a content chunk item ${InnerItemMarkEnd}`
             + `${ContentChunkHeadingMarkStart}Another content chunk heading${ContentChunkHeadingMarkEnd}Text that ends a content chunk. ${ContentChunkMarkEnd}`
             + `end of an article`,
     },
@@ -117,6 +118,7 @@ describe('searchableArticleCreator', () => {
         order: 1,
         objectID: 'first_tutorial_1',
         id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+        isCodeSample: false,
         platforms: [],
         section: 'tutorials',
     };
@@ -129,6 +131,7 @@ describe('searchableArticleCreator', () => {
         order: 2,
         objectID: 'first_tutorial_2',
         id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+        isCodeSample: false,
         platforms: [],
         section: 'tutorials',
     };
@@ -178,6 +181,7 @@ describe('searchableArticleCreator', () => {
                 order: 3,
                 objectID: 'first_tutorial_3',
                 id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+                isCodeSample: false,
                 platforms: [
                     'javascript',
                     'java',
@@ -191,6 +195,7 @@ describe('searchableArticleCreator', () => {
                 order: 4,
                 objectID: 'first_tutorial_4',
                 id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+                isCodeSample: false,
                 platforms: [
                     'javascript',
                     'java',
@@ -214,6 +219,7 @@ describe('searchableArticleCreator', () => {
             order: 1,
             objectID: 'first_tutorial_1',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: [],
             section: 'tutorials',
         }, {
@@ -224,6 +230,7 @@ describe('searchableArticleCreator', () => {
             order: 2,
             objectID: 'first_tutorial_2',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: [],
             section: 'tutorials',
         }, {
@@ -234,6 +241,7 @@ describe('searchableArticleCreator', () => {
             order: 3,
             objectID: 'first_tutorial_3',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: [],
             section: 'tutorials',
         }, {
@@ -244,6 +252,7 @@ describe('searchableArticleCreator', () => {
             order: 4,
             objectID: 'first_tutorial_4',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: [],
             section: 'tutorials',
         }, {
@@ -254,6 +263,7 @@ describe('searchableArticleCreator', () => {
             order: 5,
             objectID: 'first_tutorial_5',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: [],
             section: 'tutorials',
         }, {
@@ -264,6 +274,7 @@ describe('searchableArticleCreator', () => {
             order: 6,
             objectID: 'first_tutorial_6',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: [],
             section: 'tutorials',
         }, {
@@ -274,6 +285,7 @@ describe('searchableArticleCreator', () => {
             order: 7,
             objectID: 'first_tutorial_7',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: [],
             section: 'tutorials',
         }, {
@@ -284,6 +296,7 @@ describe('searchableArticleCreator', () => {
             order: 8,
             objectID: 'first_tutorial_8',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: [],
             section: 'tutorials',
         }, {
@@ -294,6 +307,7 @@ describe('searchableArticleCreator', () => {
             order: 9,
             objectID: 'first_tutorial_9',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: ['js'],
             section: 'tutorials',
         }];
@@ -314,6 +328,7 @@ describe('searchableArticleCreator', () => {
             order: 1,
             objectID: 'first_tutorial_1',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: [],
             section: 'tutorials',
         }, {
@@ -324,6 +339,7 @@ describe('searchableArticleCreator', () => {
             order: 2,
             objectID: 'first_tutorial_2',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: ['java', 'javascript', '_net'],
             section: 'tutorials',
         }, {
@@ -334,6 +350,7 @@ describe('searchableArticleCreator', () => {
             order: 3,
             objectID: 'first_tutorial_3',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: ['java', 'javascript', '_net'],
             section: 'tutorials',
         }, {
@@ -344,6 +361,7 @@ describe('searchableArticleCreator', () => {
             order: 4,
             objectID: 'first_tutorial_4',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: true,
             platforms: ['typescript'],
             section: 'tutorials',
         }, {
@@ -354,6 +372,7 @@ describe('searchableArticleCreator', () => {
             order: 5,
             objectID: 'first_tutorial_5',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: ['java', 'javascript', '_net'],
             section: 'tutorials',
         }, {
@@ -364,6 +383,7 @@ describe('searchableArticleCreator', () => {
             order: 6,
             objectID: 'first_tutorial_6',
             id: '59c40872-521f-4883-ae6e-4d11b77797e4',
+            isCodeSample: false,
             platforms: [],
             section: 'tutorials',
         }];
