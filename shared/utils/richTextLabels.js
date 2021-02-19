@@ -10,6 +10,7 @@ const ContentChunkMarkStart = '#~content_chunk#';
 const ContentChunkMarkEnd = '#content_chunk~#';
 const ContentChunkHeadingMarkStart = '#~content_chunk_heading#';
 const ContentChunkHeadingMarkEnd = '#content_chunk_heading~#';
+const IsCodeSampleIdentifierMarkup = '#~isCodeSample~#';
 
 function getPlatformLabel(platform) {
     if (platform.length > 0) {
@@ -25,8 +26,8 @@ function getContentChunkLabel(content) {
     return ContentChunkMarkStart + content + ContentChunkMarkEnd;
 }
 
-function getInnerItemLabel(content) {
-    return InnerItemMarkStart + content + InnerItemMarkEnd;
+function getInnerItemLabel(content, isCodeSample) {
+    return InnerItemMarkStart + (isCodeSample ? IsCodeSampleIdentifierMarkup : '') + content + InnerItemMarkEnd;
 }
 
 function getCodeSampleLabel(codename) {
@@ -50,4 +51,5 @@ module.exports = {
     ContentChunkMarkEnd,
     ContentChunkHeadingMarkStart,
     ContentChunkHeadingMarkEnd,
+    IsCodeSampleIdentifierMarkup
 };

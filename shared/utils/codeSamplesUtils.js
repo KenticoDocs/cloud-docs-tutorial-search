@@ -29,9 +29,9 @@ function insertLabelledCodeSampleContent(codeSample) {
         const platform = codeSample.platform.value;
         const platformLabel = getPlatformLabel(platform);
 
-        return getInnerItemLabel(platformLabel + content);
+        return getInnerItemLabel(platformLabel + content, true);
     } else {
-        return getInnerItemLabel(content);
+        return getInnerItemLabel(content, true);
     }
 }
 

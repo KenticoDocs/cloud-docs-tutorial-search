@@ -8,6 +8,7 @@ const {
     CodeSampleMarkEnd,
     CodeSampleHeadingMarkStart,
     CodeSampleHeadingMarkEnd,
+    IsCodeSampleIdentifierMarkup
 } = require('./richTextLabels');
 
 const linkedItems = {
@@ -88,7 +89,7 @@ describe('insertLinkedCodeSamples', () => {
     const incorrectCodeSample = `Hello! ${CodeSampleMarkStart}hello${CodeSampleMarkEnd}. Start by ${CodeSampleMarkStart}import${CodeSampleMarkEnd}`;
 
     it('adds code sample content with platforms to content', () => {
-        const expectedResult = `Hello world: ${InnerItemMarkStart}${dotNetPlatformLabel}${linkedItems[1].code.value}${InnerItemMarkEnd}. Start by ${InnerItemMarkStart}${jsPlatformLabel}${linkedItems[2].code.value}${InnerItemMarkEnd} and authetication ${InnerItemMarkStart}Authorization: Bearer <YOUR_API_KEY>${InnerItemMarkEnd}`;
+        const expectedResult = `Hello world: ${InnerItemMarkStart}${IsCodeSampleIdentifierMarkup}${dotNetPlatformLabel}${linkedItems[1].code.value}${InnerItemMarkEnd}. Start by ${InnerItemMarkStart}${IsCodeSampleIdentifierMarkup}${jsPlatformLabel}${linkedItems[2].code.value}${InnerItemMarkEnd} and authetication ${InnerItemMarkStart}${IsCodeSampleIdentifierMarkup}Authorization: Bearer <YOUR_API_KEY>${InnerItemMarkEnd}`;
 
         const actualResult = codeSamplesUtils.insertLinkedCodeSamples(codeSample, linkedItems);
 
@@ -96,7 +97,7 @@ describe('insertLinkedCodeSamples', () => {
     });
 
     it('replaces a heading in code sample with markings', () => {
-        const expectedResult = `Hello world: ${InnerItemMarkStart}${dotNetPlatformLabel}${CodeSampleHeadingMarkStart}@Model.Title${CodeSampleHeadingMarkEnd}${InnerItemMarkEnd}.`;
+        const expectedResult = `Hello world: ${InnerItemMarkStart}${IsCodeSampleIdentifierMarkup}${dotNetPlatformLabel}${CodeSampleHeadingMarkStart}@Model.Title${CodeSampleHeadingMarkEnd}${InnerItemMarkEnd}.`;
 
         const actualResult = codeSamplesUtils.insertLinkedCodeSamples(codeSampleWithHeading, linkedItems);
 

@@ -9,6 +9,7 @@ const {
     ContentChunkMarkEnd,
     ContentChunkHeadingMarkStart,
     ContentChunkHeadingMarkEnd,
+    IsCodeSampleIdentifierMarkup
 } = require('./richTextLabels');
 const {
     TERM_DEFINITION_CONTENT_TYPE,
@@ -218,6 +219,11 @@ class ItemRecordsCreator {
         const order = this.itemRecords.length + 1;
         const objectID = this.getIndexObjectIdForItem(item, order);
         const platforms = this.getPlatforms(item);
+        const isCodeSample = content.includes(IsCodeSampleIdentifierMarkup);
+
+        if (isCodeSample) {
+            content = content.replace(IsCodeSampleIdentifierMarkup, '');
+        }
 
         this.itemRecords.push({
             content,
@@ -228,7 +234,8 @@ class ItemRecordsCreator {
             order,
             objectID,
             platforms,
-            section: 'tutorials'
+            section: 'tutorials',
+            isCodeSample: isCodeSample
         });
     }
 
