@@ -13,7 +13,8 @@ const {
 } = require('./richTextLabels');
 const {
     TERM_DEFINITION_CONTENT_TYPE,
-    RELEASE_NOTE_CONTENT_TYPE
+    RELEASE_NOTE_CONTENT_TYPE,
+    TRAINING_COURSE_CONTENT_TYPE
 } = require('../external/constants');
 
 function getItemRecordsCreator() {
@@ -126,8 +127,8 @@ class ItemRecordsCreator {
 
     getCurrentHeading(currentHeading, previousHeading) {
         return this.isNonEmpty(currentHeading)
-               ? currentHeading
-               : previousHeading;
+            ? currentHeading
+            : previousHeading;
     }
 
     async indexLeftoverContent(content, heading, item) {
@@ -234,9 +235,16 @@ class ItemRecordsCreator {
             order,
             objectID,
             platforms,
-            section: 'tutorials',
+            section: this.getSection(item),
             isCodeSample: isCodeSample
         });
+    }
+
+    getSection(item) {
+        if (item.system.type === TRAINING_COURSE_CONTENT_TYPE) {
+            return 'training';
+        }
+        return 'tutorials'
     }
 
     geTitleForItem(item) {
@@ -269,7 +277,7 @@ class ItemRecordsCreator {
             // hardcoded for now, to be changed once web is updated
             return 'terminology';
         }
-          // release notes are indexed under shared codename
+        // release notes are indexed under shared codename
         if (itemType === RELEASE_NOTE_CONTENT_TYPE) {
             // hardcoded for now, to be changed once web is updated
             return 'product_changelog';

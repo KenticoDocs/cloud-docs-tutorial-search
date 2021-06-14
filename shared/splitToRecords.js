@@ -15,7 +15,8 @@ const {
     EXCLUDED_FROM_SEARCH,
     ALWAYS_INCLUDE_CONTENT_TYPES_IN_SEARCH,
     TERM_DEFINITION_CONTENT_TYPE,
-    RELEASE_NOTE_CONTENT_TYPE
+    RELEASE_NOTE_CONTENT_TYPE,
+    TRAINING_COURSE_CONTENT_TYPE
 } = require('./external/constants');
 
 const DEPTH_FOR_ITEMS_FETCH = 10;
@@ -113,6 +114,17 @@ function getTextToIndexForReleaseNote(item, linkedItems) {
     return textToIndex;
 }
 
+function getTextToIndexForTrainingCourse(item, linkedItems) {
+    if (item.system.type !== TRAINING_COURSE_CONTENT_TYPE) {
+        throw Error(`Content item '${item.system.type}' is not of training type '${TRAINING_COURSE_CONTENT_TYPE}'. It is '${item.system.type}'`);
+    }
+    const title = item.title.value;
+    const description = item.description.resolveHtml();
+    const introduction = item.introduction.resolveHtml();
+
+    return `${title} ${description} ${introduction}`;
+}
+
 function getTextToIndexDefault(item, linkedItems) {
     let textToIndex = item.introduction.resolveHtml() + ' ' + item.content.resolveHtml();
 
@@ -130,6 +142,9 @@ async function getResolvedTextToIndex(item, linkedItems) {
     if (item.system.type === RELEASE_NOTE_CONTENT_TYPE) {
         return getTextToIndexForReleaseNote(item, linkedItems);
     }
+    if (item.system.type === TRAINING_COURSE_CONTENT_TYPE) {
+        return getTextToIndexForTrainingCourse(item, linkedItems);
+    }
 
     return getTextToIndexDefault(item, linkedItems);
 }
@@ -139,6 +154,10 @@ async function createRecordsFromItem(item, text) {
 }
 
 function isItemExcludedFromSearch(item) {
+    if (item.system.type === TRAINING_COURSE_CONTENT_TYPE) {
+        // always index training courses
+        return false;
+    }
     if (item.visibility && item.visibility.value) {
         // content item has exclude from search element = index it based on that value
         return item
