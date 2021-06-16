@@ -1,12 +1,12 @@
 const BlobStorage = require('@azure/storage-blob');
 const Configuration = require('./configuration');
 
-async function storeRecordsToBlobStorage(itemRecords, item, initialize = false) {
+async function storeRecordsToBlobStorageAsync(itemRecords, item, initialize = false) {
     // Create the BlobServiceClient object which will be used to create a container client
-    const blobServiceClient = await BlobStorage.BlobServiceClient.fromConnectionString(Configuration.keys.azureWebJobsStorage);
+    const blobServiceClient = BlobStorage.BlobServiceClient.fromConnectionString(Configuration.keys.azureWebJobsStorage);
 
     // Get a reference to a container
-    const containerClient = await blobServiceClient.getContainerClient(Configuration.keys.azureContainerName);
+    const containerClient = blobServiceClient.getContainerClient(Configuration.keys.azureContainerName);
 
     const blobName = getBlobName(item.system.id);
     const blobData = getBlobData(itemRecords, item, initialize);
@@ -41,5 +41,5 @@ function getOperation(itemRecords, initialize) {
 }
 
 module.exports = {
-    storeRecordsToBlobStorage,
+    storeRecordsToBlobStorageAsync,
 };

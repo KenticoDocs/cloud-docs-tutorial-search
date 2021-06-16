@@ -5,7 +5,7 @@ module.exports = async (context, request) => {
     try {
         Configuration.set(request.query.test);
 
-        await SplitService.splitAllItemsToRecords();
+        await SplitService.splitAllItemsToRecordsAsync();
 
         context.res = {
             status: 200,

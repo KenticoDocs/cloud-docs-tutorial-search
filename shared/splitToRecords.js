@@ -8,7 +8,7 @@ const Configuration = require('./external/configuration');
 const { getItemRecordsCreator } = require('./utils/itemRecordsCreator');
 const { insertLinkedCodeSamples } = require('./utils/codeSamplesUtils');
 const { CodeSampleMarkStart } = require('./utils/richTextLabels');
-const { storeRecordsToBlobStorage } = require('./external/storeRecordsToBlobStorage');
+const { storeRecordsToBlobStorageAsync } = require('./external/storeRecordsToBlobStorage');
 const {
     ROOT_CONTENT_TYPES,
     ALL_CONTENT_TYPES,
@@ -22,56 +22,57 @@ const {
 const DEPTH_FOR_ITEMS_FETCH = 10;
 
 class SplitService {
-    static async splitAllItemsToRecords() {
+    static async splitAllItemsToRecordsAsync() {
         await axios.get(Configuration.keys.clearIndexUrl);
 
-        await getDeliveryClient()
+        const response = await getDeliveryClient()
             .items()
             .types(ROOT_CONTENT_TYPES)
             .depthParameter(DEPTH_FOR_ITEMS_FETCH)
             .queryConfig({
                 richTextResolver: resolveItemInRichText,
             })
-            .toPromise()
-            .then(async (response) => {
-                for (const item of response.items) {
-                    await processItem(item, response.linkedItems, true);
-                }
+            .toPromise();
 
-                return response;
-            });
+        for (const item of response.items) {
+            await processItemAsync(item, response.linkedItems, true);
+        }
+
+        return response;
     }
 
-    static async splitItemsToRecords(items) {
-        const codenames = await getCodenamesOfRootItemsToIndex(items);
+    static async splitItemsToRecordsAsync(items) {
+        const codenames = await getCodenamesOfRootItemsToIndexAsync(items);
+        const client = getDeliveryClient();
 
-        await codenames.forEach(codename => getDeliveryClient()
-            .item(codename)
-            .depthParameter(DEPTH_FOR_ITEMS_FETCH)
-            .queryConfig({
-                richTextResolver: resolveItemInRichText,
-            })
-            .toPromise()
-            .then(async (response) => {
-                await processItem(response.item, response.linkedItems);
+        for (const codename of codenames) {
+            try {
+                const response = await client.item(codename)
+                    .depthParameter(DEPTH_FOR_ITEMS_FETCH)
+                    .queryConfig({
+                        richTextResolver: resolveItemInRichText,
+                    })
+                    .toPromise();
 
-                return response;
-            })
-            .catch((error) => handleError(error, codename)));
+                await processItemAsync(response.item, response.linkedItems);
+            } catch (error) {
+                await handleErrorAsync(error, codename)
+            }
+        }
     }
 }
 
-async function processItem(item, linkedItems, initialize = false) {
+async function processItemAsync(item, linkedItems, initialize = false) {
     if (!isItemExcludedFromSearch(item)) {
         const textToIndex = getResolvedTextToIndex(item, linkedItems);
         const records = createRecordsFromItem(item, textToIndex);
 
-        await storeRecordsToBlobStorage(records, item, initialize);
+        await storeRecordsToBlobStorageAsync(records, item, initialize);
     }
 }
 
-async function getCodenamesOfRootItemsToIndex(items) {
-    const allItems = await getAllItems();
+async function getCodenamesOfRootItemsToIndexAsync(items) {
+    const allItems = await getAllItemsAsync();
     const rootCodenames = new Set();
 
     items.forEach((item) => {
@@ -82,7 +83,7 @@ async function getCodenamesOfRootItemsToIndex(items) {
     return rootCodenames;
 }
 
-async function getAllItems() {
+async function getAllItemsAsync() {
     return getDeliveryClient()
         .items()
         .types(ALL_CONTENT_TYPES)
@@ -175,7 +176,7 @@ function isItemExcludedFromSearch(item) {
     return true;
 }
 
-async function handleError(error, codename) {
+async function handleErrorAsync(error, codename) {
     if (error instanceof KenticoKontent.DeliveryError && error.errorCode === 100) {
         const notFoundItem = {
             system: {
@@ -183,7 +184,7 @@ async function handleError(error, codename) {
                 id: 'not_found_' + codename,
             },
         };
-        await storeRecordsToBlobStorage([], notFoundItem);
+        await storeRecordsToBlobStorageAsync([], notFoundItem);
     } else {
         throw error;
     }

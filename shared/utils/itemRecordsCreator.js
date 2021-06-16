@@ -46,7 +46,6 @@ class ItemRecordsCreator {
         }
 
         return this.itemRecords;
-
     }
 
     splitHeadingAndContent(content, headingMarkEnd) {

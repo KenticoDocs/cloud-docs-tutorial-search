@@ -18,7 +18,7 @@ module.exports = async (context, eventGridEvent) => {
         if (validateEvent(eventGridEvent)) {
             Configuration.set(eventGridEvent.data.test);
             const items = getRelevantItems(eventGridEvent.data.webhook.items, ALL_CONTENT_TYPES);
-            await SplitService.splitItemsToRecords(items);
+            await SplitService.splitItemsToRecordsAsync(items);
         } else {
             throw new Error('Validation failed. Unsupported event.');
         }
