@@ -10,7 +10,7 @@ In order to provide an exquisite search experience, this service is responsible 
 It responds to events sent by [Dispatcher](https://github.com/KenticoDocs/kontent-docs-dispatcher) and stores the content ready to index on [Algolia](https://www.algolia.com/) in an [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/).
 
 ## Overview
-1. This project is a JavaScript Azure Functions application.
+1. This project is a Typescript Azure Functions application.
 2. It is subscribed to an Azure [Event Grid](https://azure.microsoft.com/en-us/services/event-grid/) topic and listens for events. Each event contains information about the content that was changed.
 3. After receiving an event, it fetches the content from Kentico Kontent using [Kentico Kontent Delivery SDK](https://github.com/Kentico/kontent-delivery-sdk-js).
 4. The fetched content is then split into smaller [Algolia-compatible records](https://www.algolia.com/doc/faq/basics/what-is-a-record/). 

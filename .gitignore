@@ -17,6 +17,8 @@ project.lock.json
 /packages
 /TestResults
 
+dist/
+
 /tools/NuGet.exe
 /App_Data
 /secrets

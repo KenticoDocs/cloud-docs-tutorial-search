@@ -1,5 +1,7 @@
 #!/bin/bash
 
+yarn build
+
 cd "$(dirname "${BASH_SOURCE[0]}")/.." \
     || exit 1
 
@@ -9,7 +11,7 @@ prepare_site_dir() {
     declare -r files=(
         kcd-search-service-initialize
         kcd-search-service-update
-        shared
+        dist
         extensions.csproj
         host.json
         package.json
