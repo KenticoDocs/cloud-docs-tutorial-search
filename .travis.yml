@@ -6,8 +6,8 @@ install: yarn install --pure-lockfile
 jobs:
   include:
     - stage: "Tests"
-      name: "ESLint"
-      script: yarn eslint
+      name: "TSLint"
+      script: yarn tslint
     - stage: "Tests"
       name: "Test"
       script: yarn test
