@@ -63,8 +63,8 @@ class SplitService {
 
 async function processItem(item, linkedItems, initialize = false) {
     if (!isItemExcludedFromSearch(item)) {
-        const textToIndex = await getResolvedTextToIndex(item, linkedItems);
-        const records = await createRecordsFromItem(item, textToIndex);
+        const textToIndex = getResolvedTextToIndex(item, linkedItems);
+        const records = createRecordsFromItem(item, textToIndex);
 
         await storeRecordsToBlobStorage(records, item, initialize);
     }
@@ -89,14 +89,14 @@ async function getAllItems() {
         .depthParameter(0)
         .toPromise()
         .then(response => {
-                const items = response.items;
+            const items = response.items;
 
-                for (const linkedItemKey in response.linkedItems) {
-                    items.push(response.linkedItems[linkedItemKey]);
-                }
-
-                return items;
+            for (const linkedItemKey in response.linkedItems) {
+                items.push(response.linkedItems[linkedItemKey]);
             }
+
+            return items;
+        }
         );
 }
 
@@ -135,7 +135,7 @@ function getTextToIndexDefault(item, linkedItems) {
     return textToIndex;
 }
 
-async function getResolvedTextToIndex(item, linkedItems) {
+function getResolvedTextToIndex(item, linkedItems) {
     if (item.system.type === TERM_DEFINITION_CONTENT_TYPE) {
         return getTextToIndexForTermDefinition(item);
     }
@@ -149,7 +149,7 @@ async function getResolvedTextToIndex(item, linkedItems) {
     return getTextToIndexDefault(item, linkedItems);
 }
 
-async function createRecordsFromItem(item, text) {
+function createRecordsFromItem(item, text) {
     return getItemRecordsCreator().createItemRecords(item, text);
 }
 
@@ -161,9 +161,9 @@ function isItemExcludedFromSearch(item) {
     if (item.visibility && item.visibility.value) {
         // content item has exclude from search element = index it based on that value
         return item
-        .visibility
-        .value
-        .some(taxonomyTerm => taxonomyTerm.codename === EXCLUDED_FROM_SEARCH);
+            .visibility
+            .value
+            .some(taxonomyTerm => taxonomyTerm.codename === EXCLUDED_FROM_SEARCH);
     }
     // content item does not have visibility value
     if (ALWAYS_INCLUDE_CONTENT_TYPES_IN_SEARCH.includes(item.system.type)) {

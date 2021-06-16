@@ -138,27 +138,27 @@ describe('searchableArticleCreator', () => {
 
     const itemRecordsCreator = new ItemRecordsCreator(sanitizeContent);
 
-    test('creates a correct single article chunk and sanitizes its content', async () => {
+    test('creates a correct single article chunk and sanitizes its content', () => {
         const expectedResult = [firstParagraph];
 
-        const actualResult = await itemRecordsCreator.createItemRecords(
+        const actualResult = itemRecordsCreator.createItemRecords(
             shortArticle,
             shortArticle.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
 
-    test('splits a longer article into 2 chunks and sanitizes their content', async () => {
+    test('splits a longer article into 2 chunks and sanitizes their content', () => {
         const expectedResult = [firstParagraph, secondParagraph];
 
-        const actualResult = await itemRecordsCreator.createItemRecords(
+        const actualResult = itemRecordsCreator.createItemRecords(
             longArticle,
             longArticle.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
 
-    test('splits article with an inner item and multiple platforms correctly', async () => {
+    test('splits article with an inner item and multiple platforms correctly', () => {
         const expectedResult = [
             {
                 ...firstParagraph,
@@ -203,14 +203,14 @@ describe('searchableArticleCreator', () => {
                 section: 'tutorials',
             }];
 
-        const actualResult = await itemRecordsCreator.createItemRecords(
+        const actualResult = itemRecordsCreator.createItemRecords(
             articleWithInnerItemAndMultiplePlatforms,
             articleWithInnerItemAndMultiplePlatforms.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
 
-    test('handles indexing of multiple components in an article', async () => {
+    test('handles indexing of multiple components in an article', () => {
         const expectedResult = [{
             content: 'Callout number 1',
             title: 'Tutorial',
@@ -312,14 +312,14 @@ describe('searchableArticleCreator', () => {
             section: 'tutorials',
         }];
 
-        const actualResult = await itemRecordsCreator.createItemRecords(
+        const actualResult = itemRecordsCreator.createItemRecords(
             articleWithMultipleCallouts,
             articleWithMultipleCallouts.content.value);
 
         expect(actualResult).toEqual(expectedResult);
     });
 
-    test('handles indexing of content chunk item, assigns platform element and headings within content chunk correctly', async () => {
+    test('handles indexing of content chunk item, assigns platform element and headings within content chunk correctly', () => {
         const expectedResult = [{
             content: 'start of an article',
             title: 'Tutorial',
@@ -388,7 +388,7 @@ describe('searchableArticleCreator', () => {
             section: 'tutorials',
         }];
 
-        const actualResult = await itemRecordsCreator.createItemRecords(
+        const actualResult = itemRecordsCreator.createItemRecords(
             articleWithContentChunkAndCodeSample,
             articleWithContentChunkAndCodeSample.content.value);
 

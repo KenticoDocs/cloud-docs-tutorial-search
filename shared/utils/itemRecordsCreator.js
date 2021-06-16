@@ -26,21 +26,27 @@ class ItemRecordsCreator {
         this.itemRecords = [];
     }
 
-    async createItemRecords(item, textToIndex) {
-        const contentSplitByHeadings = textToIndex.split('<h2>');
+    createItemRecords(item, textToIndex) {
         this.itemRecords = [];
 
-        for (const singleHeadingContent of contentSplitByHeadings) {
-            const { heading, content } = this.splitHeadingAndContent(singleHeadingContent, '</h2>');
+        if (item.system.type === TRAINING_COURSE_CONTENT_TYPE) {
+            this.indexTrainingContent(textToIndex, item);
+        } else {
+            const contentSplitByHeadings = textToIndex.split('<h2>');
 
-            if (content.includes(ContentChunkMarkStart)) {
-                await this.indexContentSplitByContentChunks(content, heading, item);
-            } else {
-                await this.indexLeftoverContent(content, heading, item);
+            for (const singleHeadingContent of contentSplitByHeadings) {
+                const { heading, content } = this.splitHeadingAndContent(singleHeadingContent, '</h2>');
+
+                if (content.includes(ContentChunkMarkStart)) {
+                    this.indexContentSplitByContentChunks(content, heading, item);
+                } else {
+                    this.indexLeftoverContent(content, heading, item);
+                }
             }
         }
 
         return this.itemRecords;
+
     }
 
     splitHeadingAndContent(content, headingMarkEnd) {
@@ -57,12 +63,12 @@ class ItemRecordsCreator {
             }
     }
 
-    async indexContentSplitByContentChunks(content, heading, item) {
+    indexContentSplitByContentChunks(content, heading, item) {
         const contentSplitByContentChunks = content.split(ContentChunkMarkStart);
         let lastContentChunkHeading = heading;
 
         for (const singleContentChunkContent of contentSplitByContentChunks) {
-            lastContentChunkHeading = await this.resolveAndIndexContentChunkItem(
+            lastContentChunkHeading = this.resolveAndIndexContentChunkItem(
                 singleContentChunkContent,
                 item,
                 lastContentChunkHeading);
@@ -74,7 +80,7 @@ class ItemRecordsCreator {
                 ContentChunkMarkEnd);
 
             const leftoverContentHeading = this.getCurrentHeading(lastContentChunkHeading, heading);
-            await this.indexLeftoverContent(leftoverContent, leftoverContentHeading, item);
+            this.indexLeftoverContent(leftoverContent, leftoverContentHeading, item);
         }
     }
 
@@ -82,7 +88,7 @@ class ItemRecordsCreator {
         return content.substring(0, itemClosingTagIndex).trim();
     }
 
-    async resolveAndIndexContentChunkItem(singleContentChunkContent, item, lastContentChunkHeading) {
+    resolveAndIndexContentChunkItem(singleContentChunkContent, item, lastContentChunkHeading) {
         const contentChunkClosingTagIndex = singleContentChunkContent.indexOf(ContentChunkMarkEnd);
         const contentChunkContent = this.retrieveItemContent(singleContentChunkContent, contentChunkClosingTagIndex);
 
@@ -92,7 +98,7 @@ class ItemRecordsCreator {
                 itemWithPlatform,
             } = this.resolvePlatformElement(contentChunkContent, item);
 
-            lastContentChunkHeading = await this.indexContentChunkItem(
+            lastContentChunkHeading = this.indexContentChunkItem(
                 contentWithoutPlatformLabel,
                 lastContentChunkHeading,
                 itemWithPlatform);
@@ -101,14 +107,14 @@ class ItemRecordsCreator {
         return lastContentChunkHeading
     }
 
-    async indexContentChunkItem(contentWithoutPlatformLabel, lastContentChunkHeading, itemWithPlatform) {
+    indexContentChunkItem(contentWithoutPlatformLabel, lastContentChunkHeading, itemWithPlatform) {
         const contentChunkContentSplitByHeadings = contentWithoutPlatformLabel.split(ContentChunkHeadingMarkStart);
 
         for (const singleHeadingContentChunkContent of contentChunkContentSplitByHeadings) {
             const { heading, content } = this.splitHeadingAndContent(singleHeadingContentChunkContent, ContentChunkHeadingMarkEnd);
             const currentHeading = this.getCurrentHeading(heading, lastContentChunkHeading);
 
-            await this.indexContentSplitByInnerItems(
+            this.indexContentSplitByInnerItems(
                 content,
                 currentHeading,
                 itemWithPlatform);
@@ -131,15 +137,25 @@ class ItemRecordsCreator {
             : previousHeading;
     }
 
-    async indexLeftoverContent(content, heading, item) {
+    indexLeftoverContent(content, heading, item) {
         if (content.includes(InnerItemMarkStart)) {
-            await this.indexContentSplitByInnerItems(content, heading, item);
+            this.indexContentSplitByInnerItems(content, heading, item);
         } else {
-            await this.indexLeftoverContentWithoutInnerItems(content, heading, item);
+            this.indexLeftoverContentWithoutInnerItems(content, heading, item);
         }
     }
 
-    async indexContentSplitByInnerItems(singleHeadingContent, heading, item) {
+    indexTrainingContent(textToIndex, item) {
+        if (item.system.type !== TRAINING_COURSE_CONTENT_TYPE) {
+            throw Error(`Cannot index training content due to invalid training content item`);
+        }
+
+        const textToIndexWithoutTags = striptags(textToIndex).trim();
+
+        this.addItemRecord(textToIndexWithoutTags, item.title.value, item);
+    }
+
+    indexContentSplitByInnerItems(singleHeadingContent, heading, item) {
         const contentSplitByInnerItems = singleHeadingContent.split(InnerItemMarkStart);
 
         for (const content of contentSplitByInnerItems) {
@@ -147,18 +163,18 @@ class ItemRecordsCreator {
             const innerItemContent = this.retrieveItemContent(content, innerItemClosingTagIndex);
 
             if (this.isNonEmpty(innerItemContent)) {
-                await this.indexInnerItem(innerItemContent, heading, item);
+                this.indexInnerItem(innerItemContent, heading, item);
             }
 
             const leftoverContent = this.retrieveLeftoverContent(
                 content,
                 innerItemClosingTagIndex,
                 InnerItemMarkEnd);
-            await this.indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item);
+            this.indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item);
         }
     }
 
-    async indexInnerItem(innerItemContent, heading, item) {
+    indexInnerItem(innerItemContent, heading, item) {
         const contentWithHeadingsInCodeSamples = replaceHeadingMarksWithTags(innerItemContent);
 
         if (contentWithHeadingsInCodeSamples.includes(PlatformMarkStart)) {
@@ -166,17 +182,17 @@ class ItemRecordsCreator {
                 contentWithoutPlatformLabel,
                 itemWithPlatform,
             } = this.resolvePlatformElement(contentWithHeadingsInCodeSamples, item);
-            await this.addItemRecord(contentWithoutPlatformLabel, heading, itemWithPlatform);
+            this.addItemRecord(contentWithoutPlatformLabel, heading, itemWithPlatform);
         } else {
-            await this.addItemRecord(contentWithHeadingsInCodeSamples, heading, item);
+            this.addItemRecord(contentWithHeadingsInCodeSamples, heading, item);
         }
     }
 
-    async indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item) {
+    indexLeftoverContentWithoutInnerItems(leftoverContent, heading, item) {
         const contentWithoutMarkdown = striptags(leftoverContent).trim();
 
         if (this.isNonEmpty(contentWithoutMarkdown)) {
-            await this.addItemRecord(contentWithoutMarkdown, heading, item);
+            this.addItemRecord(contentWithoutMarkdown, heading, item);
         }
     }
 
@@ -213,7 +229,7 @@ class ItemRecordsCreator {
         };
     }
 
-    async addItemRecord(content, heading, item) {
+    addItemRecord(content, heading, item) {
         const title = this.geTitleForItem(item);
         const id = item.system.id;
         const codename = this.getIndexCodenameForItem(item);
