@@ -13,6 +13,8 @@ export const ContentChunkMarkEnd = '#content_chunk~#';
 export const ContentChunkHeadingMarkStart = '#~content_chunk_heading#';
 export const ContentChunkHeadingMarkEnd = '#content_chunk_heading~#';
 export const IsCodeSampleIdentifierMarkup = '#~isCodeSample~#';
+export const AnchorTagMarkStart = '{#a';
+export const AnchorTagMarkEnd = '#}';
 
 export function getPlatformLabel(platform: ElementModels.TaxonomyTerm[]) {
     if (platform.length > 0) {

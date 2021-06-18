@@ -9,7 +9,9 @@ import {
     ContentChunkMarkEnd,
     ContentChunkHeadingMarkStart,
     ContentChunkHeadingMarkEnd,
-    IsCodeSampleIdentifierMarkup
+    IsCodeSampleIdentifierMarkup,
+    AnchorTagMarkStart,
+    AnchorTagMarkEnd
 } from './richTextLabels';
 import {
     TERM_DEFINITION_CONTENT_TYPE,
@@ -239,6 +241,20 @@ export class ItemRecordsCreator {
         };
     }
 
+    removeCustomAnchorTagMarkup(content: string): string {
+        const anchorTagRegex = new RegExp(`${AnchorTagMarkStart}([a-zA-Z-]*)${AnchorTagMarkEnd}`);
+        const match = anchorTagRegex.exec(content);
+
+        if (match && match.length >= 1) {
+            content = content.replace(match[0], '');
+
+            // recursively go through all matches
+            return this.removeCustomAnchorTagMarkup(content);
+        }
+
+        return content;
+    }
+
     addItemRecord(content: string, heading: string, item: ContentItem) {
         const title = this.geTitleForItem(item);
         const id = item.system.id;
@@ -248,9 +264,13 @@ export class ItemRecordsCreator {
         const platforms = this.getPlatforms(item);
         const isCodeSample = content.includes(IsCodeSampleIdentifierMarkup);
 
+        // remove code sample markup
         if (isCodeSample) {
             content = content.replace(IsCodeSampleIdentifierMarkup, '');
         }
+
+        // remove custom anchor text markup - e.g. "Duplicate content types{#a-duplicating-content-types#}" should become just "Duplicate content types"
+        content = this.removeCustomAnchorTagMarkup(content);
 
         this.itemRecords.push({
             content,
