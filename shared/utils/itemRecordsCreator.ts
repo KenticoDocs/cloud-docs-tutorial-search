@@ -45,19 +45,15 @@ export class ItemRecordsCreator {
     createItemRecords(item: ContentItem, textToIndex: string): IItemRecord[] {
         this.itemRecords = [];
 
-        if (item.system.type === TRAINING_COURSE_CONTENT_TYPE) {
-            this.indexTrainingContent(textToIndex, item);
-        } else {
-            const contentSplitByHeadings = textToIndex.split('<h2>');
+        const contentSplitByHeadings = textToIndex.split('<h2>');
 
-            for (const singleHeadingContent of contentSplitByHeadings) {
-                const { heading, content } = this.splitHeadingAndContent(singleHeadingContent, '</h2>');
+        for (const singleHeadingContent of contentSplitByHeadings) {
+            const { heading, content } = this.splitHeadingAndContent(singleHeadingContent, '</h2>');
 
-                if (content.includes(ContentChunkMarkStart)) {
-                    this.indexContentSplitByContentChunks(content, heading, item);
-                } else {
-                    this.indexLeftoverContent(content, heading, item);
-                }
+            if (content.includes(ContentChunkMarkStart)) {
+                this.indexContentSplitByContentChunks(content, heading, item);
+            } else {
+                this.indexLeftoverContent(content, heading, item);
             }
         }
 
@@ -165,16 +161,6 @@ export class ItemRecordsCreator {
         } else {
             this.indexLeftoverContentWithoutInnerItems(content, heading, item);
         }
-    }
-
-    indexTrainingContent(textToIndex: string, item: ContentItem) {
-        if (item.system.type !== TRAINING_COURSE_CONTENT_TYPE) {
-            throw Error(`Cannot index training content due to invalid training content item`);
-        }
-
-        const textToIndexWithoutTags = striptags(textToIndex).trim();
-
-        this.addItemRecord(textToIndexWithoutTags, item.title.value, item);
     }
 
     indexContentSplitByInnerItems(singleHeadingContent: string, heading: string, item: ContentItem) {

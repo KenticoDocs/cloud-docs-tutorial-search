@@ -124,11 +124,10 @@ function getTextToIndexForTrainingCourse(item: ContentItem, linkedItems: IConten
             `Content item '${item.system.type}' is not of training type '${TRAINING_COURSE_CONTENT_TYPE}'. It is '${item.system.type}'`
         );
     }
-    const title = item.title.value;
     const description = item.description.resolveHtml();
     const introduction = item.introduction.resolveHtml();
 
-    return `${title} ${description} ${introduction}`;
+    return `${introduction} ${description}`;
 }
 
 function getTextToIndexDefault(item: ContentItem, linkedItems: IContentItemsContainer) {
