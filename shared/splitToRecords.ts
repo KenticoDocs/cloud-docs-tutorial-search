@@ -1,4 +1,10 @@
-import { ContentItem, DeliveryError, IContentItemsContainer, TaxonomyTerms } from '@kentico/kontent-delivery';
+import {
+    ContentItem,
+    ContentItemSystemAttributes,
+    DeliveryError,
+    IContentItemsContainer,
+    TaxonomyTerms
+} from '@kentico/kontent-delivery';
 
 import axios from 'axios';
 
@@ -181,6 +187,20 @@ function isItemExcludedFromSearch(item: ContentItem) {
 
 async function handleErrorAsync(error: any, codename: string) {
     if (error instanceof DeliveryError && error.errorCode === 100) {
+        const notFoundItem: ContentItem = new ContentItem();
+
+        notFoundItem.system = new ContentItemSystemAttributes({
+            codename,
+            collection: 'x',
+            id: 'not_found_' + codename, // needed to remove records from algolia
+            language: 'x',
+            lastModified: new Date(),
+            name: 'x',
+            sitemapLocations: [],
+            type: 'x'
+        });
+        await storeRecordsToBlobStorageAsync([], notFoundItem);
+
         throw Error(`Item with codename '${codename}' was not found in delivery API`);
     } else {
         throw error;
