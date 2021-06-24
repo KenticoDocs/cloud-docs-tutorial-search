@@ -200,8 +200,6 @@ async function handleErrorAsync(error: any, codename: string) {
             type: 'x'
         });
         await storeRecordsToBlobStorageAsync([], notFoundItem);
-
-        throw Error(`Item with codename '${codename}' was not found in delivery API`);
     } else {
         throw error;
     }
