@@ -2,6 +2,7 @@
 |:---:|:---:|
 | [![Build Status](https://travis-ci.com/KenticoDocs/kontent-docs-tutorial-search.svg?branch=master)](https://travis-ci.com/KenticoDocs/kontent-docs-tutorial-search/branches) [![codebeat badge](https://codebeat.co/badges/42250639-ea84-495e-8a36-2d4eb2584978)](https://codebeat.co/projects/github-com-kenticodocs-kontent-docs-tutorial-search-master) | [![Build Status](https://travis-ci.com/KenticoDocs/kontent-docs-tutorial-search.svg?branch=develop)](https://travis-ci.com/KenticoDocs/kontent-docs-tutorial-search/branches) [![codebeat badge](https://codebeat.co/badges/b493280f-f67c-43fc-8cbe-af39166e4f40)](https://codebeat.co/projects/github-com-kenticodocs-kontent-docs-tutorial-search-develop) |
 
+[develop](https://github.com/KenticoDocs/kontent-docs-tutorial-search/actions/workflows/main.yml/badge.svg?branch=develop)
 
 # Kentico Kontent Documentation - Tutorial Search
 Backend service for Kentico Kontent [documentation portal](https://docs.kontent.ai/), which utilizes Kentico Kontent as a source of its content.
