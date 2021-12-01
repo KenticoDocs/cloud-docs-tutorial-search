@@ -23,7 +23,7 @@ export const eventGridTrigger: AzureFunction = async (
         } else {
             throw new Error('Validation failed. Unsupported event.');
         }
-    } catch (error) {
+    } catch (error: any) {
         /** This try-catch is required for correct logging of exceptions in Azure */
         throw `Message: ${error.message} \nStack Trace: ${error.stack}`;
     }

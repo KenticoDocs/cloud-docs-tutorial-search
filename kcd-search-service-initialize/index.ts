@@ -12,7 +12,7 @@ export const httpTrigger: AzureFunction = async (context: Context, request: Http
             status: 200,
             body: 'Initialization successful'
         };
-    } catch (error) {
+    } catch (error: any) {
         /** This try-catch is required for correct logging of exceptions in Azure */
         throw `Message: ${error.message} \nStack Trace: ${error.stack}`;
     }
