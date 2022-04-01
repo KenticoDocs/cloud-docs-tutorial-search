@@ -2,14 +2,16 @@ export const VALID_OPERATIONS = ['publish', 'upsert', 'restore_publish', 'unpubl
 
 export const TERM_DEFINITION_CONTENT_TYPE = 'term_definition';
 export const RELEASE_NOTE_CONTENT_TYPE = 'release_note';
-export const TRAINING_COURSE_CONTENT_TYPE = 'training_course';
+export const TRAINING_COURSE_CONTENT_TYPE = 'training_course2';
+export const TRAINING_TEST_CONTENT_TYPE = 'training_certification_test';
 
 export const ROOT_CONTENT_TYPES = [
     'article',
     'scenario',
     TERM_DEFINITION_CONTENT_TYPE,
     RELEASE_NOTE_CONTENT_TYPE,
-    TRAINING_COURSE_CONTENT_TYPE
+    TRAINING_COURSE_CONTENT_TYPE,
+    TRAINING_TEST_CONTENT_TYPE
 ];
 export const ALL_CONTENT_TYPES = ROOT_CONTENT_TYPES.concat(['callout', 'content_chunk', 'code_sample', 'code_samples']);
 export const EXCLUDED_FROM_SEARCH = 'excluded_from_search';

@@ -19,7 +19,8 @@ import {
     ALWAYS_INCLUDE_CONTENT_TYPES_IN_SEARCH,
     TERM_DEFINITION_CONTENT_TYPE,
     RELEASE_NOTE_CONTENT_TYPE,
-    TRAINING_COURSE_CONTENT_TYPE
+    TRAINING_COURSE_CONTENT_TYPE,
+    TRAINING_TEST_CONTENT_TYPE
 } from './external/constants';
 import { Configuration } from './external/configuration';
 import { getDeliveryClient } from './external/kenticoClient';
@@ -124,6 +125,18 @@ function getTextToIndexForReleaseNote(item: ContentItem, linkedItems: IContentIt
     return textToIndex;
 }
 
+function getTextToIndexForTrainingTest(item: ContentItem, linkedItems: IContentItemsContainer) {
+    if (item.system.type !== TRAINING_TEST_CONTENT_TYPE) {
+        throw Error(
+            `Content item '${item.system.type}' is not of training type '${TRAINING_TEST_CONTENT_TYPE}'. It is '${item.system.type}'`
+        );
+    }
+    const description = item.description.resolveHtml();
+    const introduction = item.introduction.resolveHtml();
+
+    return `${description} ${introduction}`;
+}
+
 function getTextToIndexForTrainingCourse(item: ContentItem, linkedItems: IContentItemsContainer) {
     if (item.system.type !== TRAINING_COURSE_CONTENT_TYPE) {
         throw Error(
@@ -131,9 +144,8 @@ function getTextToIndexForTrainingCourse(item: ContentItem, linkedItems: IConten
         );
     }
     const description = item.description.resolveHtml();
-    const introduction = item.introduction.resolveHtml();
 
-    return `${introduction} ${description}`;
+    return `${description}`;
 }
 
 function getTextToIndexDefault(item: ContentItem, linkedItems: IContentItemsContainer) {
@@ -156,6 +168,9 @@ function getResolvedTextToIndex(item: ContentItem, linkedItems: IContentItemsCon
     if (item.system.type === TRAINING_COURSE_CONTENT_TYPE) {
         return getTextToIndexForTrainingCourse(item, linkedItems);
     }
+    if (item.system.type === TRAINING_TEST_CONTENT_TYPE) {
+        return getTextToIndexForTrainingTest(item, linkedItems);
+    }
 
     return getTextToIndexDefault(item, linkedItems);
 }
@@ -165,8 +180,9 @@ function createRecordsFromItem(item: ContentItem, text: string) {
 }
 
 function isItemExcludedFromSearch(item: ContentItem) {
-    if (item.system.type === TRAINING_COURSE_CONTENT_TYPE) {
-        // always index training courses
+    if (item.system.type === TRAINING_COURSE_CONTENT_TYPE ||
+        item.system.type === TRAINING_TEST_CONTENT_TYPE) {
+        // always index training courses and tests
         return false;
     }
     if (item.visibility && item.visibility.value) {
