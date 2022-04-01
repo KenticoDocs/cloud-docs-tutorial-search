@@ -16,7 +16,8 @@ import {
 import {
     TERM_DEFINITION_CONTENT_TYPE,
     RELEASE_NOTE_CONTENT_TYPE,
-    TRAINING_COURSE_CONTENT_TYPE
+    TRAINING_COURSE_CONTENT_TYPE,
+    TRAINING_TEST_CONTENT_TYPE
 } from '../external/constants';
 import { ContentItem, Elements } from '@kentico/kontent-delivery';
 
@@ -287,7 +288,8 @@ export class ItemRecordsCreator {
     }
 
     getSection(item: ContentItem) {
-        if (item.system.type === TRAINING_COURSE_CONTENT_TYPE) {
+        if (item.system.type === TRAINING_COURSE_CONTENT_TYPE ||
+            item.system.type === TRAINING_TEST_CONTENT_TYPE) {
             return 'training';
         }
         return 'tutorials';
